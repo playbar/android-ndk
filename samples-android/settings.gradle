@@ -1,0 +1,9 @@
+include ':ButtonClicker',
+        ':CollectAllTheStarsNative',
+        ':Minimalist',
+        ':TbmpSkeletonNative',
+        ':Teapot',
+        ':TrivialQuestNative',
+        ':Common/cpufeatures',
+        ':Common/native_app_glue',
+        ':Common/gpg-sdk'

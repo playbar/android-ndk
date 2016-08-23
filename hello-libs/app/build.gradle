@@ -4,6 +4,7 @@
 // libs will be created into hello-libs/distribution directory
 apply plugin: 'com.android.model.application'
 
+
 // Root of 3rd party lib(s): location could be anywhere on the host system
 def lib_distribution_root = '../distribution'
 model {
