@@ -55,10 +55,15 @@ model {
                     srcDir '../Common/jui_helper'
                 }
             }
+            jniLibs{
+                source{
+                    srcDir "${gpg_cpp_path}/lib"
+                }
+            }
         }
     }
     android.ndk {
-        platformVersion = 11
+        platformVersion = 23
         moduleName = "ButtonClickerNativeActivity"
         stl = "${stlportType}_${stllinkType}"
         ldLibs.addAll(["atomic", "log", "android", "EGL", "GLESv2", "z"])

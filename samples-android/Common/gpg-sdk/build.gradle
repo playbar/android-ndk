@@ -1,6 +1,7 @@
 /*
     sub module to download the Google Play games
  */
+
 project.ext {
     gpg_sdk_link = 'https://developers.google.com/games/services/downloads/gpg-cpp-sdk.v2.1.zip'
 }
@@ -47,4 +48,4 @@ task clean() {
     }
 }
 
-defaultTasks = ['download_and_stage_gpg_sdk']
+//defaultTasks = ['download_and_stage_gpg_sdk']
