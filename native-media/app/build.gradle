@@ -1,29 +1,33 @@
-apply plugin: 'com.android.model.application'
+apply plugin: 'com.android.application'
 
-model {
-    android {
-        compileSdkVersion = 23
-        buildToolsVersion = '23.0.2'
+ android {
+     compileSdkVersion 23
+     buildToolsVersion '23.0.2'
 
-        defaultConfig {
-            applicationId = 'com.example.nativemedia'
-            minSdkVersion.apiLevel = 14
-            targetSdkVersion.apiLevel = 22
-        }
+     defaultConfig {
+        applicationId 'com.example.nativemedia'
+        minSdkVersion 14
+        targetSdkVersion 22
         ndk {
-            platformVersion = 14
-            moduleName = 'native-media-jni'
-            toolchain = 'clang'
-            CFlags.add('-UNDEBUG')
-            ldLibs.addAll(['android','OpenMAXAL','log'])
-            // skipping mips / mips64
-            abiFilters.addAll(['armeabi','armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'])
+            abiFilters 'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'arm64-v8a'
         }
-        buildTypes {
-            release {
-                minifyEnabled = false
-                proguardFiles.add(file('proguard-rules.txt'))
+        externalNativeBuild {
+            cmake {
+                arguments '-DANDROID_PLATFORM=android-14',
+                    '-DANDROID_TOOLCHAIN=clang', '-DANDROID_STL=gnustl_static'
             }
         }
-    }
+     }
+     buildTypes {
+         release {
+             minifyEnabled false
+             proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                           'proguard-rules.pro'
+         }
+     }
+     externalNativeBuild {
+         cmake {
+             path 'src/main/cpp/CMakeLists.txt'
+         }
+     }
 }

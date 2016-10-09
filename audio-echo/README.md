@@ -3,12 +3,11 @@ Audio-Echo
 The sample demos how to use OpenSL ES to create a player and recorder in Android Fast Audio Path, and connect them to loopback audio. On most android devices, there is a optimized audio path that is tuned up for low latency purpose. The sample creates player/recorder to work in this highly optimized audio path(sometimes called native audio path, [low latency path](http://stackoverflow.com/questions/14842803/low-latency-audio-playback-on-android?rq=1), or fast audio path). The application is validated against the following configurations:
   *   Android L    AndroidOne
   *   Android M    Nexus 5, Nexus 9
-
-This sample uses the new [Gradle Experimental Android plugin](http://tools.android.com/tech-docs/new-build-system/gradle-experimental) with C++ support.
+This sample uses the new Android Studio with CMake support, and shows how to use shared stl lib with android studio version 2.2.0, see CMakeLists.txt for details
 
 Pre-requisites
 --------------
-- Android Studio 1.3+ with [NDK](https://developer.android.com/ndk/) bundle.
+- Android Studio 2.2+ with [NDK](https://developer.android.com/ndk/) bundle.
 
 Getting Started
 ---------------
