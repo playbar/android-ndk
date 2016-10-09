@@ -7,3 +7,4 @@ build
 .DS_Store
 externalNativeBuild
 
+samples-android/Common/gpg-sdk/gpg-cpp-sdk

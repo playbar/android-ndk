@@ -38,22 +38,41 @@ class GLES3JNIView extends GLSurfaceView {
         super(context);
         // Pick an EGLConfig with RGB8 color, 16-bit depth, no stencil,
         // supporting OpenGL ES 2.0 or later backwards-compatible versions.
-        setEGLConfigChooser(8, 8, 8, 0, 16, 0);
-        setEGLContextClientVersion(2);
+//        setEGLContextFactory(new ContextFactory());
+//        setEGLConfigChooser(8, 8, 8, 0, 16, 0);
+        setEGLConfigChooser( 5, 6, 5, 0, 0, 0);
+        setEGLContextClientVersion(3);
         setRenderer(new Renderer());
+    }
+
+    private static class ContextFactory implements GLSurfaceView.EGLContextFactory {
+        private static int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
+        public EGLContext createContext(EGL10 egl, EGLDisplay display, EGLConfig eglConfig) {
+            Log.w(TAG, "creating OpenGL ES 2.0 context");
+            int[] attrib_list = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL10.EGL_NONE };
+            EGLContext context = egl.eglCreateContext(display, eglConfig, EGL10.EGL_NO_CONTEXT, attrib_list);
+            return context;
+        }
+
+        public void destroyContext(EGL10 egl, EGLDisplay display, EGLContext context) {
+            egl.eglDestroyContext(display, context);
+        }
     }
 
     private static class Renderer implements GLSurfaceView.Renderer {
         public void onDrawFrame(GL10 gl) {
-            GLES3JNILib.step();
+            Log.e("GLES3JNIView", "onDrawFrame");
+//            GLES3JNILib.step();
         }
 
         public void onSurfaceChanged(GL10 gl, int width, int height) {
-            GLES3JNILib.resize(width, height);
+            Log.e("GLES3JNIView", "onSurfaceChanged");
+//            GLES3JNILib.resize(width, height);
         }
 
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-            GLES3JNILib.init();
+            Log.e("GLES3JNIView", "onSurfaceCreated");
+//            GLES3JNILib.init();
         }
     }
 }
