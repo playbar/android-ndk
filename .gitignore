@@ -8,3 +8,6 @@ build
 externalNativeBuild
 
 samples-android/Common/gpg-sdk/gpg-cpp-sdk
+teapots/choreographer-30fps/.externalNativeBuild
+teapots/classic-teapot/.externalNativeBuild
+teapots/more-teapots/.externalNativeBuild

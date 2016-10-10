@@ -14,7 +14,7 @@ apply plugin: 'com.android.application'
          externalNativeBuild {
             cmake {
                 arguments '-DANDROID_TOOLCHAIN=clang', '-DANDROID_STL=gnustl_static',
-                          '-DANDROID_PLATFORM=android-21'
+                          '-DANDROID_PLATFORM=android-19'
             }
          }
      }
