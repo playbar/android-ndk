@@ -16,13 +16,18 @@
  */
 #include <string.h>
 #include <jni.h>
+#include <android/log.h>
+#include <assert.h>
+#include <errno.h>
+#include "my_log.h"
 
-/* This is a trivial JNI example where we use a native method
- * to return a new VM String. See the corresponding Java source
- * file located at:
- *
- *   hello-jni/app/src/main/java/com/example/hellojni/HelloJni.java
- */
+#define LOG_TAG "test"
+#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
+#define LOGW(...) __android_log_print(ANDROID_LOG_WARN, LOG_TAG, __VA_ARGS__)
+#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
+
+extern JavaVM *gs_jvm;
+
 JNIEXPORT jstring JNICALL
 Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
                                                   jobject thiz )
@@ -59,5 +64,27 @@ Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
 #define ABI "unknown"
 #endif
 
+//    MY_LOG_VERBOSE("The stringFromJNI is called");
+    LOGE( "The stringFromJNI is called");
+//    MY_LOG_DEBUG("env=%p thiz=%p", env, thiz);
+    MY_LOG_DEBUG("%s", "=========>test");
+//    MY_LOG_ASSERT(0!=env, "JNIEnv cannot be NULL");
+//    MY_LOG_INFO("REturning a new string");
+
+    if( JNI_OK == (*env)->MonitorEnter(env, thiz)){
+        LOGE("MonitorEnterr");
+    }
+
+//    if( 0 != errno )
+//    {
+//        __android_log_assert("0!=errno","hello-jni", "There is an error.");
+//    }
+
+    int i = 0;
+    ++i;
+    if(JNI_OK == (*env)->MonitorExit(env, thiz)){
+        LOGE("MonitorExit");
+    }
+//    (*env)->ExceptionClear(env);
     return (*env)->NewStringUTF(env, "Hello from JNI !  Compiled with ABI " ABI ".");
 }
