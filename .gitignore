@@ -12,3 +12,6 @@ teapots/choreographer-30fps/.externalNativeBuild
 teapots/classic-teapot/.externalNativeBuild
 teapots/more-teapots/.externalNativeBuild
 hello-jni/app/.externalNativeBuild
+native-thread/app/.externalNativeBuild
+.gitignore
+native-thread/.google

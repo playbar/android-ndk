@@ -23,6 +23,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/system_properties.h>
 
 #define LOG_TAG "test"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
@@ -58,12 +59,47 @@ void testcode6()
     }
 }
 
+void testProperties()
+{
+    char value[PROP_VALUE_MAX];
+    if(0 == __system_property_get("ro.product.model", value))
+    {
+        LOGE("error");
+    }
+    else
+    {
+        LOGW("product model: %s", value);
+    }
+
+    const prop_info *property;
+    property = __system_property_find("ro.product.model");
+    if( NULL == property )
+    {
+        LOGE("error");
+    }
+    else
+    {
+        char name[PROP_NAME_MAX];
+        char value[PROP_VALUE_MAX];
+        if( 0 == __system_property_read(property, name, value))
+        {
+            LOGE("is empty");
+        }
+        else
+        {
+            LOGW("%s, %s", name, value);
+        }
+    }
+    return;
+}
+
 JNIEXPORT jstring JNICALL
 Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
                                                   jobject thiz )
 {
 
-    testcode6();
+    testProperties();
+//    testcode6();
 
 //    MY_LOG_VERBOSE("The stringFromJNI is called");
 //    LOGE( "The stringFromJNI is called");
@@ -86,6 +122,9 @@ Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
 
     getpid();
     getuid();
+
+    char *username = getlogin();
+    LOGE("%s", username);
 
 //    char *buffer;
 //    size_t i;
