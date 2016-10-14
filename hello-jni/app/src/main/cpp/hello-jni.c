@@ -20,54 +20,55 @@
 #include <assert.h>
 #include <errno.h>
 #include "my_log.h"
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #define LOG_TAG "test"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 #define LOGW(...) __android_log_print(ANDROID_LOG_WARN, LOG_TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
+#define ABI "armeabi-v7a"
 
 extern JavaVM *gs_jvm;
+
+void testcode6()
+{
+    FILE *stream;
+    stream = popen("pwd", "r");
+    char ch[1024];
+    fgets(ch, 1024, stream);
+    LOGW("pwd: %s",ch);
+    pclose(stream);
+    stream = popen("ls", "r");
+    if( NULL == stream )
+    {
+        LOGE("Unable to execute the command");
+    }
+    else
+    {
+        char buffer[1024];
+        int status;
+        while( NULL != fgets(buffer, 1024, stream))
+        {
+            LOGE("read: %s", buffer);
+        }
+        status = pclose(stream);
+        LOGW("process exited with status %d", status);
+    }
+}
 
 JNIEXPORT jstring JNICALL
 Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
                                                   jobject thiz )
 {
-#if defined(__arm__)
-    #if defined(__ARM_ARCH_7A__)
-    #if defined(__ARM_NEON__)
-      #if defined(__ARM_PCS_VFP)
-        #define ABI "armeabi-v7a/NEON (hard-float)"
-      #else
-        #define ABI "armeabi-v7a/NEON"
-      #endif
-    #else
-      #if defined(__ARM_PCS_VFP)
-        #define ABI "armeabi-v7a (hard-float)"
-      #else
-        #define ABI "armeabi-v7a"
-      #endif
-    #endif
-  #else
-   #define ABI "armeabi"
-  #endif
-#elif defined(__i386__)
-#define ABI "x86"
-#elif defined(__x86_64__)
-#define ABI "x86_64"
-#elif defined(__mips64)  /* mips64el-* toolchain defines __mips__ too */
-#define ABI "mips64"
-#elif defined(__mips__)
-#define ABI "mips"
-#elif defined(__aarch64__)
-#define ABI "arm64-v8a"
-#else
-#define ABI "unknown"
-#endif
+
+    testcode6();
 
 //    MY_LOG_VERBOSE("The stringFromJNI is called");
-    LOGE( "The stringFromJNI is called");
+//    LOGE( "The stringFromJNI is called");
 //    MY_LOG_DEBUG("env=%p thiz=%p", env, thiz);
-    MY_LOG_DEBUG("%s", "=========>test");
+//    MY_LOG_DEBUG("%s", "=========>test");
 //    MY_LOG_ASSERT(0!=env, "JNIEnv cannot be NULL");
 //    MY_LOG_INFO("REturning a new string");
 
@@ -75,13 +76,31 @@ Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
         LOGE("MonitorEnterr");
     }
 
+    int result = 0;
+//    system("pwd");
+    result = system("mkdir /data/data/com.example.hellojni/temp");
+    if( -1 == result || 127 == result )
+    {
+        LOGE("error");
+    }
+
+    getpid();
+    getuid();
+
+//    char *buffer;
+//    size_t i;
+//    buffer = (char*)malloc(4);
+//    for(i = 0; i < 5; ++i )
+//    {
+//        buffer[i] = 'a';
+//    }
+//    free(buffer);
+
 //    if( 0 != errno )
 //    {
 //        __android_log_assert("0!=errno","hello-jni", "There is an error.");
 //    }
 
-    int i = 0;
-    ++i;
     if(JNI_OK == (*env)->MonitorExit(env, thiz)){
         LOGE("MonitorExit");
     }
