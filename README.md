@@ -3,9 +3,7 @@ NDK Samples [![Build Status](https://travis-ci.org/googlesamples/android-ndk.svg
 
 This repository contains [Android NDK][0] samples with Android Studio [C++ integration](https://www.youtube.com/watch?v=f7ihSQ44WO0&feature=youtu.be).
 
-There are 2 branches:
-- master-cmake: uses the new [Gradle CMake support](http://tools.android.com/tech-docs/external-c-builds)
-- master: uses the new [Gradle Experimental Android plugin](http://tools.android.com/tech-docs/new-build-system/gradle-experimental)
+These samples uses the new [CMake Android plugin](http://tools.android.com/tech-docs/external-c-builds) with C++ support.
 
 Additional Android Studio samples:    
 - [Google Play Game Samples with Android Studio](https://github.com/playgameservices/cpp-android-basic-samples)
@@ -19,11 +17,11 @@ Known Issues
 
 For samples using `Android.mk` build system with `ndk-build` see the [android-mk](https://github.com/googlesamples/android-ndk/tree/android-mk) branch.
 
-Debugging
----------
-- [hello-jni-codelab](https://codelabs.developers.google.com/codelabs/android-studio-jni/index.html?index=..%2F..%2Findex#0)
-- [REFERENCE.md](REFERENCE.md) 
-
+Build Steps
+----------
+- With Android Studio: use "Import Project(Eclipse ADT, Gradle, etc)" or "File" > "Import Projec"t option
+- On Command Line/Terminal:  make sure set up ANDROID_HOME and ANDROID_NDK_HOME to local installation of SDK and NDK, then go to individual sample dir, and use "gradlew assembleDebug"
+ 
 Support
 -------
 
