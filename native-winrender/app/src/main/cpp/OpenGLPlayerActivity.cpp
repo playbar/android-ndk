@@ -1,14 +1,14 @@
 extern "C" {
-#include "avilib/avilib.h"
+#include <avilib.h>
 }
 
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
+#include <GLES/gl.h>
+#include <GLES/glext.h>
 
 #include <malloc.h>
 
 #include "Common.h"
-#include "OpenGLPlayerActivity.h"
+#include "com_apress_aviplayer_OpenGLPlayerActivity.h"
 
 struct Instance
 {
@@ -80,11 +80,11 @@ void Java_com_apress_aviplayer_OpenGLPlayerActivity_initSurface(
 	int frameHeight = AVI_video_height((avi_t*) avi);
 
 	// Crop the texture rectangle
-	//GLint rect[] = {0, frameHeight, frameWidth, -frameHeight};
-	//glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, rect);
+	GLint rect[] = {0, frameHeight, frameWidth, -frameHeight};
+	glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, rect);
 
 	// Full color
-	//glColor(1.0, 1.0, 1.0, 1.0);
+	glColor4f(1.0, 1.0, 1.0, 1.0);
 
 	// Generate an empty texture
 	glTexImage2D(GL_TEXTURE_2D,
@@ -135,9 +135,9 @@ jboolean Java_com_apress_aviplayer_OpenGLPlayerActivity_render(
 			instance->buffer);
 
 	// Draw texture
-	//glDrawTex(0, 0, 0,
-	//		AVI_video_width((avi_t*) avi),
-	//		AVI_video_height((avi_t*) avi));
+	glDrawTexiOES(0, 0, 0,
+			AVI_video_width((avi_t*) avi),
+			AVI_video_height((avi_t*) avi));
 
 exit:
 	return isFrameRead;

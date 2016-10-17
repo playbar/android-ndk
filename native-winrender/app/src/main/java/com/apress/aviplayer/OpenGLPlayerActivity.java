@@ -14,8 +14,7 @@ import android.os.Bundle;
  * 
  * @author Onur Cinar
  */
-public class OpenGLPlayerActivity extends AbstractPlayerActivity
-{
+public class OpenGLPlayerActivity extends AbstractPlayerActivity {
 	/** Is playing. */
 	private final AtomicBoolean isPlaying = new AtomicBoolean();
 
@@ -30,8 +29,7 @@ public class OpenGLPlayerActivity extends AbstractPlayerActivity
 	 * 
 	 * @param savedInstanceState saved state.
 	 */
-    public void onCreate(Bundle savedInstanceState)
-	{
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_gl_player);
         
@@ -88,8 +86,7 @@ public class OpenGLPlayerActivity extends AbstractPlayerActivity
 	/**
 	 * Request rendering based on the frame rate.
 	 */
-	private final Runnable player = new Runnable()
-	{
+	private final Runnable player = new Runnable() {
 		public void run() {
 			// Calculate the delay using the frame rate
 			long frameDelay = (long) (1000 / getFrameRate(avi));
