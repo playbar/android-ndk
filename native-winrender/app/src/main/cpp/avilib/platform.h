@@ -1,7 +1,7 @@
 /*
  * platform.h -- platform utilities wrapper for stream handling libraries
  *               (avilib, wavilib) in transcode.
- * (C) 2007-2010 - Francesco Romani <fromani -at- gmail -dot- com>
+ * (C) 2007-2009 - Francesco Romani <fromani -at- gmail -dot- com>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty.  In no event will the authors be held liable for any damages
@@ -23,10 +23,7 @@
 #ifndef PLATFORM_H
 #define PLATFORM_H
 
-#ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif
-
 
 #ifdef OS_DARWIN
 #include <sys/uio.h>

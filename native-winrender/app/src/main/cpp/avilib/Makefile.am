@@ -2,8 +2,7 @@
 
 AM_CPPFLAGS = \
 	$(PTHREAD_CFLAGS) \
-	$(XIO_CFLAGS) \
-	-I$(top_srcdir)
+	$(XIO_CFLAGS)
 
 noinst_LTLIBRARIES = libavi.la libwav.la
 

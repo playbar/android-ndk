@@ -1,6 +1,6 @@
 /*
  * platform_posix.c -- plain POSIX platform wrappers.
- * (C) 2007-2010 - Francesco Romani <fromani -at- gmail -dot- com>
+ * (C) 2007-2009 - Francesco Romani <fromani -at- gmail -dot- com>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty.  In no event will the authors be held liable for any damages

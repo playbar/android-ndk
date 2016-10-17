@@ -1,6 +1,6 @@
 /*
  * wavlib.h - simple WAV I/O library interface
- * Copyright (C) 2006-2010 Francesco Romani <fromani at gmail dot com>
+ * Copyright (C) 2006-2009 Francesco Romani <fromani at gmail dot com>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty.  In no event will the authors be held liable for any damages

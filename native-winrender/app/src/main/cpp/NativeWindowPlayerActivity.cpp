@@ -16,6 +16,9 @@ void Java_com_apress_aviplayer_NativeWindowPlayerActivity_init(
 {
 	// Get the native window from the surface
 	ANativeWindow* nativeWindow = ANativeWindow_fromSurface(env, surface);
+	int w = ANativeWindow_getWidth(nativeWindow);
+	int h = ANativeWindow_getHeight(nativeWindow);
+	int format = ANativeWindow_getFormat(nativeWindow);
 	if (0 == nativeWindow)
 	{
 		ThrowException(env, "java/io/RuntimeException",
