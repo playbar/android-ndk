@@ -17,3 +17,5 @@ native-thread/app/.externalNativeBuild
 native-thread/.google
 native-echo/app/.externalNativeBuild
 native-echo/.google
+native-bitmaprender/.google
+native-bitmaprender/app/.externalNativeBuild

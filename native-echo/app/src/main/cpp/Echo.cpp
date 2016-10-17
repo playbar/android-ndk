@@ -196,7 +196,7 @@ static void BindSocketToPort(
 	address.sin_family = PF_INET;
 
 	// Bind to all addresses
-	address.sin_addr.s_addr = htonl(INADDR_ANY);
+	address.sin_addr.s_addr = inet_addr("127.0.0.1");
 
 	// Convert port to network byte order
 	address.sin_port = htons(port);
