@@ -15,3 +15,5 @@ hello-jni/app/.externalNativeBuild
 native-thread/app/.externalNativeBuild
 .gitignore
 native-thread/.google
+native-echo/app/.externalNativeBuild
+native-echo/.google
