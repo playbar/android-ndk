@@ -1,0 +1,11 @@
+<resources>
+
+    <string name="app_name">WAV Player</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="file_name_hint">WAV file</string>
+    <string name="play_button">Play</string>
+    <string name="error_alert_title">Error Occurred</string>
+    <string name="file_name">8k16bitpcm.wav</string>
+
+</resources>

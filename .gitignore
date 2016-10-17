@@ -21,3 +21,4 @@ native-bitmaprender/.google
 native-bitmaprender/app/.externalNativeBuild
 native-glesrender/app/.externalNativeBuild
 native-winrender/app/.externalNativeBuild
+native-wavplayer/app/.externalNativeBuild
