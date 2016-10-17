@@ -4,6 +4,7 @@ extern "C" {
 
 #include <android/bitmap.h>
 
+#include "BrightnessFilter.h"
 #include "Common.h"
 #include "BitmapPlayerActivity.h"
 
@@ -28,6 +29,9 @@ jboolean Java_com_apress_aviplayer_BitmapPlayerActivity_render(
 
 	// Read AVI frame bytes to bitmap
 	frameSize = AVI_read_frame((avi_t*) avi, frameBuffer, &keyFrame);
+
+	// Apply the brigthness filter
+	brightnessFilter((unsigned short*) frameBuffer, frameSize/2, 1);
 
 	// Unlock bitmap
 	if (0 > AndroidBitmap_unlockPixels(env, bitmap))

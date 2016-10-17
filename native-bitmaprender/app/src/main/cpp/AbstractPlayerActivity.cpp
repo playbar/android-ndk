@@ -2,6 +2,10 @@ extern "C" {
 #include "avilib/avilib.h"
 }
 
+#ifdef MY_ANDROID_NDK_PROFILER_ENABLED
+#include <prof.h>
+#endif
+
 #include "Common.h"
 #include "AbstractPlayerActivity.h"
 
@@ -11,6 +15,11 @@ jlong Java_com_apress_aviplayer_AbstractPlayerActivity_open(
 		jstring fileName)
 {
 	avi_t* avi = 0;
+
+#ifdef MY_ANDROID_NDK_PROFILER_ENABLED
+	// Start collecting the samples
+	monstartup("libAVIPlayer.so");
+#endif
 
 	// Get the file name as a C string
 	const char* cFileName = env->GetStringUTFChars(fileName, 0);
@@ -65,4 +74,9 @@ void Java_com_apress_aviplayer_AbstractPlayerActivity_close(
 		jlong avi)
 {
 	AVI_close((avi_t*) avi);
+
+#ifdef MY_ANDROID_NDK_PROFILER_ENABLED
+	// Store the collected data
+	moncleanup();
+#endif
 }
