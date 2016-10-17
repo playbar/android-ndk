@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -72,6 +71,10 @@ public class MainActivity extends Activity implements OnClickListener {
 		case R.id.bitmap_player_radio:
 			intent = new Intent(this, BitmapPlayerActivity.class);
 			break;
+
+		case R.id.open_gl_player_radio:
+			intent = new Intent(this, OpenGLPlayerActivity.class);
+			break;
 			
 		default:
 			throw new UnsupportedOperationException("radioId=" + radioId);
@@ -80,11 +83,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		// Under the external storage
 		File file = new File(Environment.getExternalStorageDirectory(), 
 				fileNameEdit.getText().toString());
-
-		if (file.exists() )
-		{
-			Log.e("test", "file exist");
-		}
+		
 		// Put AVI file name as extra
 		intent.putExtra(AbstractPlayerActivity.EXTRA_FILE_NAME, 
 				file.getAbsolutePath());

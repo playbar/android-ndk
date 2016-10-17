@@ -19,3 +19,4 @@ native-echo/app/.externalNativeBuild
 native-echo/.google
 native-bitmaprender/.google
 native-bitmaprender/app/.externalNativeBuild
+native-glesrender/app/.externalNativeBuild
