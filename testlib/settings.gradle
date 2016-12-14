@@ -1,1 +1,1 @@
-include ':classic-teapot', ':more-teapots'
+include ':classic-teapot', ':demo'
