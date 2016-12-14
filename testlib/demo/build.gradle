@@ -1,39 +1,31 @@
 apply plugin: 'com.android.application'
 
-
 android {
-    compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    compileSdkVersion 24
+    buildToolsVersion "25.0.1"
 
     defaultConfig {
-        applicationId  'com.sample.moreteapots'
-        minSdkVersion   17
-        targetSdkVersion 22
-        ndk {
-            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a','x86'
-        }
-        externalNativeBuild {
-            cmake {
-                arguments '-DANDROID_PLATFORM=android-19',
-                    '-DANDROID_TOOLCHAIN=gcc', '-DANDROID_STL=c++_static'
-            }
-        }
+        applicationId "com.mj.b4815"
+        minSdkVersion 19
+        targetSdkVersion 24
     }
+
     buildTypes {
         release {
-            minifyEnabled = false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'),
-                          'proguard-rules.pro'
-        }
-    }
-    externalNativeBuild {
-        cmake {
-            path 'src/main/cpp/CMakeLists.txt'
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
 }
+
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
+    compile files('libs/android-query.0.26.7.jar')
+    compile files('libs/MojingSDK.jar')
+    compile files('libs/MojingSDKUnity.jar')
+    compile files('libs/svrApi.jar')
+    compile files('libs/unity-classes.jar')
+    compile files('libs/zc-strings-1.9.2.jar')
+    compile files('libs/ZControllerLib-android-1.9.2.jar')
+    compile files('libs/ZControllerLib-android-ui-1.9.2.jar')
+    compile files('libs/ZControllerLib-common-1.9.2.jar')
 }
