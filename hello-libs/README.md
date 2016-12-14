@@ -1,24 +1,34 @@
 Hello-libs
 =========
-Hello-Libs is an Android sample that demos native lib management in Android Studio.
+Hello-Libs is an Android sample that demos 3rd party native lib management with Android Studio
 
-This sample uses the new [Gradle Experimental Android plugin](http://tools.android.com/tech-docs/new-build-system/gradle-experimental) with external lib support:  
-*    Build JUST a native shared library[for distribution]
-*    Use 3rd party shared library / Static library   
+Introduction
+------------
+This sample uses the new [Android Studio CMake plugin](http://tools.android.com/tech-docs/external-c-builds) with external lib support.
+* how external pre-build static lib (gmath) could be used in app
+* how external pre-built shared lib (gperf) could be used in app
 
-The key points are:
-*    Inform Android Studio where lib/header is
-*    Add lib dependency to application	
-Details are inside projects' build.gradle files
+Description
+-----------
+The sample includes 2 modules but only uses app module:
+*    app -- uses one shared lib and one static lib from $project/distribution/
+*    gen-libs -- generates one shared and one static lib, and copy them into $project/distribution
+For this demo purpose, you do not need to build libs: binaries are included in the project -- the 
+debug library binaries are saved inside distribution folder. If you want, you could build your own with
+gen-libs source, just follow comment in setting.gradle and app/build.gradle  -- do it once, then
+comment them out again so you are not affected by lib building
 
-Sample content:
-*    Create 2 shared libs[on terminal, execute "gradlew :gmath:distributeLib :gperf:distributeLib"]
-*    Copy built libs into distribution directory
-*    Create one application to use libs from the given distribution directory
+The key point is to inform app's CMakeLists.txt
+*    where lib/header are
+*    where lib binaries are and import them as static or shared
+
+Note: for shared lib, with android plugin 2.2.0-alpha3+, once declared as SHARED IMPORTED, Android
+Studio will automatically pack them into apk too! So lib just need tell Android Studio once, it
+will be used both on Host and on Target
 
 Pre-requisites
 --------------
-- Android Studio 2.0+ with [NDK](https://developer.android.com/ndk/) bundle.
+- Android Studio 2.2+ with [NDK](https://developer.android.com/ndk/) bundle.
 
 Getting Started
 ---------------
