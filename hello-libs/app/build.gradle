@@ -2,12 +2,11 @@
 // 1) set up your ndk.dir/sdk.dir in local.properties
 // 2) on terminal, execute "gradlew :gmath:distributeLib :gperf:distributeLib
 // libs will be created into hello-libs/distribution directory
-apply plugin: 'com.android.model.application'
+apply plugin: 'com.android.application'
 
 
 // Root of 3rd party lib(s): location could be anywhere on the host system
 def lib_distribution_root = '../distribution'
-model {
     repositories {
         libs(PrebuiltLibraries) {
             // Configure one pre-built lib: shared
@@ -86,7 +85,6 @@ model {
             }
         }
     }
-}
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])

@@ -39,4 +39,4 @@ include_directories(${distribution_DIR}/gmath/include
                     ${distribution_DIR}/gperf/include)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 add_library(hello-libs SHARED hello-libs.cpp)
-target_link_libraries(hello-libs log android lib_gperf lib_gmath)
+target_link_libraries(hello-libs log android  lib_gmath lib_gperf)
