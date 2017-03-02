@@ -137,12 +137,37 @@ static int engine_init_display(struct engine* engine) {
     engine->height = h;
     engine->state.angle = 0;
 
-    // Check openGL on the system
-    auto opengl_info = {GL_VENDOR, GL_RENDERER, GL_VERSION, GL_EXTENSIONS};
-    for (auto name : opengl_info) {
-        auto info = glGetString(name);
-        LOGI("OpenGL Info: %s", info);
-    }
+//    // Check openGL on the system
+//    auto opengl_info = {GL_VENDOR, GL_RENDERER, GL_VERSION, GL_EXTENSIONS};
+//    for (auto name : opengl_info) {
+//        auto info = glGetString(name);
+//        LOGI("OpenGL Info: %s", info);
+//    }
+
+    auto szglverdor = glGetString(GL_VENDOR);
+    LOGI("GL_VENDOR: %s", szglverdor);
+
+    auto szglrender = glGetString(GL_RENDERER);
+    LOGI("GL_RENDERER: %s", szglrender);
+
+    auto szglversion = glGetString(GL_VERSION);
+    LOGI("GL_VERSION: %s", szglversion);
+
+    auto szglext = glGetString(GL_EXTENSIONS);
+    LOGI("GL_EXTENSIONS: %s", szglext);
+
+    const char *szVer = eglQueryString(display, EGL_VERSION);
+    LOGI("EGL_VERSION: %s", szVer);
+
+    const char *szvendor = eglQueryString(display, EGL_VENDOR );
+    LOGI("EGL_VENDOR:%s", szvendor);
+
+    const char *szextension = eglQueryString(display, EGL_EXTENSIONS);
+    LOGI("EGL_EXTENSIONS:%s", szextension);
+
+    const char *szclientapi = eglQueryString(display, EGL_CLIENT_APIS);
+    LOGI("EGL_CLIENT_APIS:%s", szclientapi);
+
     // Initialize GL state.
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
     glEnable(GL_CULL_FACE);
@@ -155,7 +180,9 @@ static int engine_init_display(struct engine* engine) {
 /**
  * Just the current frame in the display.
  */
-static void engine_draw_frame(struct engine* engine) {
+static void engine_draw_frame(struct engine* engine)
+{
+//    LOGI("begin:%s", __FUNCTION__ );
     if (engine->display == NULL) {
         // No display.
         return;
@@ -167,6 +194,8 @@ static void engine_draw_frame(struct engine* engine) {
     glClear(GL_COLOR_BUFFER_BIT);
 
     eglSwapBuffers(engine->display, engine->surface);
+
+//    LOGI("end:%s", __FUNCTION__ );
 }
 
 /**
@@ -308,9 +337,9 @@ void android_main(struct android_app* state) {
                     ASensorEvent event;
                     while (ASensorEventQueue_getEvents(engine.sensorEventQueue,
                                                        &event, 1) > 0) {
-                        LOGI("accelerometer: x=%f y=%f z=%f",
-                             event.acceleration.x, event.acceleration.y,
-                             event.acceleration.z);
+//                        LOGI("accelerometer: x=%f y=%f z=%f",
+//                             event.acceleration.x, event.acceleration.y,
+//                             event.acceleration.z);
                     }
                 }
             }
