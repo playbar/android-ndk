@@ -17,6 +17,7 @@ package com.example.hellojni;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 public class HelloJni extends AppCompatActivity {
@@ -32,11 +33,18 @@ public class HelloJni extends AppCompatActivity {
         TextView tv = (TextView)findViewById(R.id.hello_textview);
         tv.setText( stringFromJNI() );
     }
+
+    public void onClick(View v){
+        if(v.getId() == R.id.button) {
+            nativeMsg();
+        }
+    }
     /* A native method that is implemented by the
      * 'hello-jni' native library, which is packaged
      * with this application.
      */
     public native String  stringFromJNI();
+    public native void nativeMsg();
 
     /* This is another native method declaration that is *not*
      * implemented by 'hello-jni'. This is simply to show that
@@ -55,7 +63,9 @@ public class HelloJni extends AppCompatActivity {
      * /data/data/com.example.hellojni/lib/libhello-jni.so at
      * installation time by the package manager.
      */
-    static {
+
+    static
+    {
         System.loadLibrary("hello-jni");
     }
 }

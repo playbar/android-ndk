@@ -93,12 +93,30 @@ void testProperties()
     return;
 }
 
+JNIEXPORT void JNICALL
+Java_com_example_hellojni_HelloJni_nativeMsg(JNIEnv* env, jobject thiz)
+{
+    int result = 0;
+//    system("pwd");
+    result = system("mkdir /data/data/com.example.hellojni/temp");
+    if( -1 == result || 127 == result )
+    {
+        LOGE("error");
+    }
+
+    pid_t pid = getpid();
+    uid_t uid = getuid();
+
+    char *username = getlogin();
+    LOGE("F:%s,%s", __FUNCTION__, username);
+}
+
 JNIEXPORT jstring JNICALL
 Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
                                                   jobject thiz )
 {
 
-    testProperties();
+//    testProperties();
 //    testcode6();
 
 //    MY_LOG_VERBOSE("The stringFromJNI is called");
@@ -120,8 +138,8 @@ Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
         LOGE("error");
     }
 
-    getpid();
-    getuid();
+    pid_t pid = getpid();
+    uid_t uid = getuid();
 
     char *username = getlogin();
     LOGE("%s", username);
