@@ -19,6 +19,16 @@ cmake_minimum_required(VERSION 3.4.1)
 set(CMAKE_VERBOSE_MAKEFILE on)
 
 set(webp_src_dir ../libwebp)
+
+if ((NOT EXISTS ${webp_src_dir}) OR (NOT EXISTS ${webp_src_dir}/CMakeLists.txt))
+#    execute_process(COMMAND git clone https://chromium.googlesource.com/webm/libwebp libwebp
+#                    WORKING_DIRECTORY  ${CMAKE_CURRENT_SOURCE_DIR}/..)
+   execute_process(COMMAND git submodule update --init --force --recursive
+                    WORKING_DIRECTORY  ${CMAKE_CURRENT_SOURCE_DIR}/..)
+
+    message("===================Getting libwebp")
+endif()
+
 SET(WEBP_ENABLE_SWAP_16BIT_CSP ON CACHE BOOL
     "Enable byte swap for 16 bit colorspaces." FORCE)
 add_subdirectory(${webp_src_dir} ${webp_src_dir}/build/)
