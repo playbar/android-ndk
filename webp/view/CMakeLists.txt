@@ -19,6 +19,17 @@ cmake_minimum_required(VERSION 3.4.1)
 set(CMAKE_VERBOSE_MAKEFILE on)
 
 set(webp_src_dir ../libwebp)
+# clone the dependency repo.
+# git submodule could also be used if this sample does not need
+#     Android Studio's "Import Android code sample" option
+if ((NOT EXISTS ${webp_src_dir}) OR
+    (NOT EXISTS ${webp_src_dir}/CMakeLists.txt))
+    execute_process(COMMAND git clone
+                            https://chromium.googlesource.com/webm/libwebp
+                            libwebp
+                    WORKING_DIRECTORY  ${CMAKE_CURRENT_SOURCE_DIR}/..)
+endif()
+
 SET(WEBP_ENABLE_SWAP_16BIT_CSP ON CACHE BOOL
     "Enable byte swap for 16 bit colorspaces." FORCE)
 add_subdirectory(${webp_src_dir} ${webp_src_dir}/build/)
@@ -33,7 +44,7 @@ add_library(app-glue STATIC
 include_directories(${webp_src_dir}/examples
                     ${webp_src_dir}/src)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Werror")
 add_library(webp-view SHARED src/main/cpp/webp_decode.cpp
                              src/main/cpp/webp_view.cpp)
 
