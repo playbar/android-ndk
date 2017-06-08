@@ -3,12 +3,12 @@ apply plugin: 'com.android.model.application'
 model {
     android {
         compileSdkVersion = 23
-        buildToolsVersion = '23.0.2'
+        buildToolsVersion = '25.0.0'
 
         defaultConfig {
             applicationId = 'com.mj'
-            minSdkVersion.apiLevel    = 18
-            targetSdkVersion.apiLevel = 22
+            minSdkVersion.apiLevel    = 19
+            targetSdkVersion.apiLevel = 23
         }
         ndk {
             platformVersion = 19

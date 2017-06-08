@@ -3,6 +3,7 @@
 //
 
 #include "ThreadPool.h"
+#include "gles3jni.h"
 #include <iostream>
 
 void CTask::SetData(void * data)
@@ -22,7 +23,8 @@ pthread_cond_t CThreadPool::m_pthreadCond = PTHREAD_COND_INITIALIZER;
 CThreadPool::CThreadPool(int threadNum)
 {
     this->m_iThreadNum = threadNum;
-    cout << "I will create " << threadNum << " threads" << endl;
+    LOGI("I will create %d threads", threadNum );
+//    cout << "I will create " << threadNum << " threads" << endl;
 //    Create();
 }
 
