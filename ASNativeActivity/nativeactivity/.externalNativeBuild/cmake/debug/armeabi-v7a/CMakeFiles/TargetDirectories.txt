@@ -1,3 +1,0 @@
-D:/MyWorks/github/android-ndk/ASNativeActivity/nativeactivity/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/native-activity.dir
-D:/MyWorks/github/android-ndk/ASNativeActivity/nativeactivity/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/edit_cache.dir
-D:/MyWorks/github/android-ndk/ASNativeActivity/nativeactivity/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/rebuild_cache.dir
