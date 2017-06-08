@@ -1,0 +1,240 @@
+﻿  griffin_cpp.cpp
+  griffin.c
+d:\myworks\github\retroarch\input\drivers\winraw_input.c(377): warning C4101: “dst_vid_info”: 未引用的局部变量
+d:\myworks\github\retroarch\input\drivers\winraw_input.c(378): warning C4101: “src_vid_info”: 未引用的局部变量
+d:\myworks\github\retroarch\intl\msg_hash_ja.c(47): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_ja.c(52): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_ja.c(1007): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_ko.c(44): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_ko.c(51): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_ko.c(55): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_ko.c(59): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_ko.c(63): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_ko.c(73): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_ko.c(81): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_ko.c(85): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_ko.c(89): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_ko.c(93): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_ko.c(97): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_ko.c(101): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_ko.c(113): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_ko.c(117): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_ko.c(121): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_ko.c(125): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_ko.c(620): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_ko.c(628): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(35): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(55): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(95): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(128): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(140): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(160): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(172): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(203): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(232): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(251): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(266): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(292): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(314): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(322): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(333): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(341): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(360): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(369): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(391): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(418): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(449): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(462): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(502): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(517): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(532): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(541): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(548): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(559): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(567): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(581): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(613): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(632): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(661): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(674): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(684): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(708): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(727): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(744): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(773): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(789): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(812): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(829): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(855): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(916): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_br.c(931): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(35): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(55): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(95): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(128): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(140): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(160): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(172): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(203): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(232): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(251): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(266): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(292): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(314): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(322): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(333): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(341): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(360): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(369): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(391): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(418): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(449): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(462): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(502): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(517): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(532): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(541): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(548): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(559): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(567): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(581): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(613): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(632): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(661): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(674): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(684): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(708): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(727): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(744): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(773): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(789): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(812): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(829): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(855): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(916): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_pt_pt.c(931): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_vn.c(46): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_vn.c(52): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_vn.c(63): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_vn.c(67): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_vn.c(101): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_vn.c(130): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_vn.c(134): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_vn.c(141): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_vn.c(163): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_vn.c(167): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_vn.c(194): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_vn.c(215): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_vn.c(1413): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(46): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(51): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(58): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(66): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(70): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(76): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(80): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(84): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(88): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(92): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(100): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(121): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(125): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(129): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(133): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(140): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(146): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(154): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(157): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(161): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(165): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(178): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(188): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(192): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(198): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(213): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(224): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(227): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(230): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(239): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(245): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(248): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(266): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(273): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(277): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(286): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(299): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(305): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(310): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(314): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(321): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(327): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(334): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(341): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(366): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(370): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(374): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(378): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(382): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(386): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(390): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(394): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(398): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(402): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(408): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(414): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(418): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(424): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(430): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(436): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(442): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(449): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(454): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(460): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(474): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(478): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(483): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(490): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(494): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(526): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(579): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(605): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(648): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(661): warning C4474: snprintf: 格式字符串中传递的参数太多
+  d:\myworks\github\retroarch\intl\msg_hash_chs.c(661): note: 占位符和其参数预计 0 可变参数，但提供的却是 5 参数
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(669): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(723): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(977): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(1143): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(1172): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(1194): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(1281): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(1402): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(1445): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(1777): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(1815): warning C4819: 该文件包含不能在当前代码页(0)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\myworks\github\retroarch\intl\msg_hash_chs.c(1832): warning C4474: snprintf: 格式字符串中传递的参数太多
+  d:\myworks\github\retroarch\intl\msg_hash_chs.c(1832): note: 占位符和其参数预计 0 可变参数，但提供的却是 3 参数
+d:\myworks\github\retroarch\libretro-common\net\net_http.c(343): warning C4477: “snprintf”: 格式字符串“%I64u”需要类型“unsigned __int64”的参数，但可变参数 1 拥有了类型“std::size_t”
+  d:\myworks\github\retroarch\libretro-common\net\net_http.c(343): note: 请考虑在格式字符串中使用“%zu”
+d:\myworks\github\retroarch\libretro-common\net\net_http.c(345): warning C4477: “snprintf”: 格式字符串“%I64u”需要类型“unsigned __int64”的参数，但可变参数 1 拥有了类型“std::size_t”
+  d:\myworks\github\retroarch\libretro-common\net\net_http.c(345): note: 请考虑在格式字符串中使用“%zu”
+d:\myworks\github\retroarch\menu\menu_displaylist.c(816): warning C4477: “snprintf”: 格式字符串“%Iu”需要类型“unsigned int”的参数，但可变参数 3 拥有了类型“uint64_t”
+  d:\myworks\github\retroarch\menu\menu_displaylist.c(816): note: 请考虑在格式字符串中使用“%llu”
+  d:\myworks\github\retroarch\menu\menu_displaylist.c(816): note: 请考虑在格式字符串中使用“%I64u”
+d:\myworks\github\retroarch\menu\menu_displaylist.c(816): warning C4477: “snprintf”: 格式字符串“%Iu”需要类型“unsigned int”的参数，但可变参数 4 拥有了类型“uint64_t”
+  d:\myworks\github\retroarch\menu\menu_displaylist.c(816): note: 请考虑在格式字符串中使用“%llu”
+  d:\myworks\github\retroarch\menu\menu_displaylist.c(816): note: 请考虑在格式字符串中使用“%I64u”
+d:\myworks\github\retroarch\menu\menu_displaylist.c(823): warning C4477: “snprintf”: 格式字符串“%Iu”需要类型“unsigned int”的参数，但可变参数 3 拥有了类型“uint64_t”
+  d:\myworks\github\retroarch\menu\menu_displaylist.c(823): note: 请考虑在格式字符串中使用“%llu”
+  d:\myworks\github\retroarch\menu\menu_displaylist.c(823): note: 请考虑在格式字符串中使用“%I64u”
+d:\myworks\github\retroarch\menu\menu_displaylist.c(823): warning C4477: “snprintf”: 格式字符串“%Iu”需要类型“unsigned int”的参数，但可变参数 4 拥有了类型“uint64_t”
+  d:\myworks\github\retroarch\menu\menu_displaylist.c(823): note: 请考虑在格式字符串中使用“%llu”
+  d:\myworks\github\retroarch\menu\menu_displaylist.c(823): note: 请考虑在格式字符串中使用“%I64u”
+d:\myworks\github\retroarch\menu\menu_displaylist.c(830): warning C4477: “snprintf”: 格式字符串“%Iu”需要类型“unsigned int”的参数，但可变参数 3 拥有了类型“uint64_t”
+  d:\myworks\github\retroarch\menu\menu_displaylist.c(830): note: 请考虑在格式字符串中使用“%llu”
+  d:\myworks\github\retroarch\menu\menu_displaylist.c(830): note: 请考虑在格式字符串中使用“%I64u”
+d:\myworks\github\retroarch\menu\menu_displaylist.c(830): warning C4477: “snprintf”: 格式字符串“%Iu”需要类型“unsigned int”的参数，但可变参数 4 拥有了类型“uint64_t”
+  d:\myworks\github\retroarch\menu\menu_displaylist.c(830): note: 请考虑在格式字符串中使用“%llu”
+  d:\myworks\github\retroarch\menu\menu_displaylist.c(830): note: 请考虑在格式字符串中使用“%I64u”
+  正在生成代码...
+LINK : fatal error LNK1104: 无法打开文件“d3dx9.lib”

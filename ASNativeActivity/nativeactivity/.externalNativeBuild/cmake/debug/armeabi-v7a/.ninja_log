@@ -1,0 +1,10 @@
+# ninja log v5
+3	121	0	CMakeFiles/native-activity.dir/esTransform.cpp.o	8a02a0b53d7b5727
+2	126	0	CMakeFiles/native-activity.dir/esShader.cpp.o	4567f41c4981058
+4	187	0	CMakeFiles/native-activity.dir/esUtil.cpp.o	4ccd2196430ba04a
+3	196	0	CMakeFiles/native-activity.dir/esShapes.cpp.o	aeeddafa57e875b8
+0	212	0	CMakeFiles/native-activity.dir/android_native_app_glue.c.o	62fccdded5515218
+5	220	0	CMakeFiles/native-activity.dir/esUtil_Android.cpp.o	80891528d29f440b
+121	241	0	CMakeFiles/native-activity.dir/Instancing.cpp.o	98968fe112e5c83d
+126	241	0	CMakeFiles/native-activity.dir/main.cpp.o	881f5a42a79842f6
+241	316	0	D:/MyWorks/github/android-ndk/ASNativeActivity/nativeactivity/build/intermediates/cmake/debug/obj/armeabi-v7a/libnative-activity.so	eef69b128db51425
