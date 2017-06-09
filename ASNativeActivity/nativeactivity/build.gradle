@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-
 android {
     compileSdkVersion = 24
     buildToolsVersion = '25.0.0'
@@ -33,4 +32,9 @@ android {
     }
 }
 
-
+dependencies {
+    compile files('libs/gson-2.7.jar')
+    compile files('libs/commons-codec-1.9.jar')
+    compile files('libs/okhttp-2.1.0.jar')
+    compile files('libs/android-support-v4.jar')
+}
