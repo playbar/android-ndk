@@ -250,6 +250,7 @@ add_library(retroarch-activity SHARED
                 ${RARCH_DIR}/tasks/task_database_cue.c
                 ${RARCH_DIR}/tasks/task_screenshot.c
                 ${RARCH_DIR}/src/playlist.c
+                ${RARCH_DIR}/src/callstack.c
                 ${RARCH_DIR}/menu/menu_driver.c
                 ${RARCH_DIR}/menu/menu_input.c
                 ${RARCH_DIR}/menu/menu_event.c
@@ -332,7 +333,13 @@ add_library(retroarch-activity SHARED
                 ${RARCH_DIR}/deps/miniupnpc/miniupnpc.c
                 ${RARCH_DIR}/deps/miniupnpc/minixml.c
                 ${RARCH_DIR}/deps/miniupnpc/minisoap.c
+            ${RARCH_DIR}/src/CallStackPP.cpp
             ${RARCH_DIR}/griffin/griffin_cpp.cpp
+            ${RARCH_DIR}/gfx/drivers_shader/shader_vulkan.cpp
+            ${RARCH_DIR}/gfx/drivers_shader/glslang_util.cpp
+            ${RARCH_DIR}/gfx/drivers_shader/slang_reflection.cpp
+            ${RARCH_DIR}/deps/SPIRV-Cross/spirv_cross.cpp
+            ${RARCH_DIR}/deps/SPIRV-Cross/spirv_cfg.cpp
             ${DEPS_DIR}/glslang/glslang.cpp
             ${DEPS_DIR}/glslang/glslang/SPIRV/SpvBuilder.cpp
             ${DEPS_DIR}/glslang/glslang/SPIRV/Logger.cpp
