@@ -2,7 +2,9 @@
 #include <unwind.h>
 #include <unistd.h>
 #include <android/log.h>
+#include <dlfcn.h>
 #include "callstack.h"
+#include "log.h"
 
 
 

@@ -14,6 +14,7 @@ import android.os.Environment;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.util.Log;
 
 /**
  * {@link PreferenceActivity} subclass that provides all of the
@@ -43,7 +44,7 @@ public final class MainMenuActivity extends PreferenceActivity
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-
+//		Log.e("Retro", "onCreate");
 		// Bind audio stream to hardware controls.
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 

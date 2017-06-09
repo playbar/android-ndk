@@ -25,6 +25,11 @@ set(DEPS_DIR ${RARCH_DIR}/deps)
 
 SET(HAVE_ZLIB true)
 
+add_library(utils_lib SHARED IMPORTED)
+set_target_properties(utils_lib  PROPERTIES IMPORTED_LOCATION
+    ${CMAKE_SOURCE_DIR}/../jniLibs/${ANDROID_ABI}/libutils.so)
+
+
 ##################################################
 #retroarch-activity so
 MESSAGE(STATUS "Project: retroarch-activity")

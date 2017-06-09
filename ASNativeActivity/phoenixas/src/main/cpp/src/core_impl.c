@@ -26,6 +26,7 @@
 #include <lists/string_list.h>
 #include <string/stdstring.h>
 #include <libretro.h>
+#include <pthread.h>
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,6 +44,7 @@
 #include "verbosity.h"
 #include "gfx/video_driver.h"
 #include "audio/audio_driver.h"
+#include "callstack.h"
 
 struct                     retro_callbacks retro_ctx;
 struct                     retro_core_t current_core;
@@ -69,6 +71,8 @@ static void core_input_state_poll_maybe(void)
 static int16_t core_input_state_poll(unsigned port,
       unsigned device, unsigned idx, unsigned id)
 {
+//    CallStack st;
+   pid_t  pid = pthread_self();
    if (current_core.poll_type == POLL_TYPE_LATE)
    {
       if (!current_core.input_polled)

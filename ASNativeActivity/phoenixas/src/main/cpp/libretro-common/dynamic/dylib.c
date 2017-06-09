@@ -31,6 +31,8 @@
 #include <windows.h>
 #else
 #include <dlfcn.h>
+#include <src/callstack.h>
+
 #endif
 
 #ifdef _WIN32
@@ -76,6 +78,7 @@ dylib_t dylib_load(const char *path)
    }
    last_dyn_error[0] = 0;
 #else
+//    callstacktest();
    dylib_t lib = dlopen(path, RTLD_LAZY);
 #endif
 //   FILE *pFile = fopen(path, "rb");
