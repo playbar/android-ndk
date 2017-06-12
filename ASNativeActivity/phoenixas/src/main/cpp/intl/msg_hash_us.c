@@ -3245,7 +3245,6 @@ const char *msg_hash_to_str_us(enum msg_hash_enums msg) {
 #endif
 
     switch (msg) {
-//#include "msg_hash_us.h"
        MSG_HASH(
           MSG_COMPILER,
           "Compiler"
@@ -3775,8 +3774,10 @@ const char *msg_hash_to_str_us(enum msg_hash_enums msg) {
                 "System name")
        MSG_HASH(MENU_ENUM_LABEL_VALUE_CORE_INPUT_REMAPPING_OPTIONS,
                 "Controls")
-       MSG_HASH(MENU_ENUM_LABEL_VALUE_CORE_LIST,
-                "Load Core")
+//       MSG_HASH(MENU_ENUM_LABEL_VALUE_CORE_LIST,
+//                "Load Core")
+        case MENU_ENUM_LABEL_VALUE_CORE_LIST:
+            return "Load Core";
        MSG_HASH(MENU_ENUM_LABEL_VALUE_CORE_OPTIONS,
                 "Options")
        MSG_HASH(MENU_ENUM_LABEL_VALUE_CORE_SETTINGS,
@@ -5710,8 +5711,10 @@ const char *msg_hash_to_str_us(enum msg_hash_enums msg) {
                 "Input your user name here. This will be used for netplay sessions, among other things.")
        MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_POST_FILTER_RECORD,
                 "Capture the image after filters (but not shaders) are applied. Your video will look as fancy as what you see on your screen.")
-       MSG_HASH(MENU_ENUM_SUBLABEL_CORE_LIST,
-                "Select which core to use.")
+//       MSG_HASH(MENU_ENUM_SUBLABEL_CORE_LIST,
+//                "Select which core to use.")
+        case MENU_ENUM_SUBLABEL_CORE_LIST:
+            return "Select which core to use.";
        MSG_HASH(MENU_ENUM_SUBLABEL_LOAD_CONTENT_LIST,
                 "Select which content to start.")
        MSG_HASH(MENU_ENUM_SUBLABEL_NETWORK_INFORMATION,
