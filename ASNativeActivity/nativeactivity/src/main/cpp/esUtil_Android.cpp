@@ -97,7 +97,7 @@ extern int esMain ( ESContext *esContext );
 //
 //    Main entrypoint for Android application
 //
-void android_main ( struct android_app *pApp )
+void android_main( struct android_app *pApp )
 {
 
    ESContext esContext;

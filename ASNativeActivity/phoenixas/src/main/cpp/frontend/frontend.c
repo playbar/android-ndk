@@ -101,6 +101,8 @@ int rarch_main(int argc, char *argv[], void *data)
    frontend_driver_init_first(args);
    rarch_ctl(RARCH_CTL_INIT, NULL);
 
+   path_set(RARCH_PATH_CORE, "lib2048.so");
+
    if (frontend_driver_is_inited())
    {
       content_ctx_info_t info;

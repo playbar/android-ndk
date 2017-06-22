@@ -3775,8 +3775,8 @@ const char *msg_hash_to_str_us(enum msg_hash_enums msg) {
                 "System name")
        MSG_HASH(MENU_ENUM_LABEL_VALUE_CORE_INPUT_REMAPPING_OPTIONS,
                 "Controls")
-       MSG_HASH(MENU_ENUM_LABEL_VALUE_CORE_LIST,
-                "Load Core")
+        case MENU_ENUM_LABEL_VALUE_CORE_LIST:
+            return "Load Core";
        MSG_HASH(MENU_ENUM_LABEL_VALUE_CORE_OPTIONS,
                 "Options")
        MSG_HASH(MENU_ENUM_LABEL_VALUE_CORE_SETTINGS,

@@ -45,7 +45,7 @@
 #endif
 
 
-#define NUM_INSTANCES   100
+#define NUM_INSTANCES   10
 #define POSITION_LOC    0
 #define COLOR_LOC       1
 #define MVP_LOC         2
@@ -156,11 +156,11 @@ int Init ( ESContext *esContext )
    }
    glBindBuffer ( GL_ARRAY_BUFFER, 0 );
 
-   glClearColor ( 1.0f, 1.0f, 1.0f, 0.0f );
-    
-    glEnable( GL_CULL_FACE );
-    glCullFace( GL_FRONT );
-    glFrontFace( GL_CCW );
+//   glClearColor ( 1.0f, 1.0f, 1.0f, 0.0f );
+
+//    glEnable( GL_CULL_FACE );
+//    glCullFace( GL_FRONT );
+//    glFrontFace( GL_CCW );
     
    return GL_TRUE;
 }
@@ -225,6 +225,15 @@ void Update ( ESContext *esContext, float deltaTime )
    glUnmapBuffer ( GL_ARRAY_BUFFER );
 }
 
+void CheckGLError(const char* label) {
+    int gl_error = glGetError();
+    if (gl_error != GL_NO_ERROR) {
+        LOGE("GL error @ %s: %d", label, gl_error);
+        // Crash immediately to make OpenGL errors obvious.
+        abort();
+    }
+}
+
 ///
 // Draw a triangle using the shader pair created in Init()
 //
@@ -279,6 +288,7 @@ void Draw ( ESContext *esContext )
 
    // Draw the cubes
    glDrawElementsInstanced ( GL_TRIANGLES, userData->numIndices, GL_UNSIGNED_INT, ( const void * ) NULL, NUM_INSTANCES );
+    CheckGLError("Draw");
 }
 
 ///

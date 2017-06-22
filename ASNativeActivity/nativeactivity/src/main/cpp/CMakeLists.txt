@@ -9,7 +9,7 @@ add_library(native-activity SHARED
             esTransform.cpp
             esUtil.cpp
             esUtil_Android.cpp
-            Instancing.cpp
+            Texture2D.cpp
             main.cpp)
 
 target_include_directories(native-activity PRIVATE

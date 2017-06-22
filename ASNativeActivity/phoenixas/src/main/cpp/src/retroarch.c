@@ -2431,7 +2431,8 @@ static enum runloop_state runloop_check_state(
 
       old_quit_key             = quit_key;
 
-      if (time_to_exit(trig_quit_key))
+//      if (time_to_exit(trig_quit_key))
+         if( (runloop_shutdown_initiated || trig_quit_key || !is_alive || bsv_movie_is_end_of_file() || ((runloop_max_frames != 0) && (frame_count >= runloop_max_frames)) || runloop_exec))
       {
          if (runloop_exec)
             runloop_exec = false;
