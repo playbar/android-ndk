@@ -238,8 +238,7 @@ static void menu_display_gl_clear_color(menu_display_ctx_clearcolor_t *clearcolo
    if (!clearcolor)
       return;
 
-   glClearColor(clearcolor->r,
-         clearcolor->g, clearcolor->b, clearcolor->a);
+   glClearColor(clearcolor->r, clearcolor->g, clearcolor->b, clearcolor->a);
    glClear(GL_COLOR_BUFFER_BIT);
 }
 

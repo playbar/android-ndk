@@ -120,7 +120,7 @@ int rarch_main(int argc, char *argv[], void *data)
          return 1;
    }
 
-   ui_companion_driver_init_first();
+//   ui_companion_driver_init_first();
 
    do
    {

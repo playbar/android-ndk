@@ -581,26 +581,18 @@ void input_poll_overlay(input_overlay_t *ol, float opacity, unsigned analog_dpad
    joypad_info.auto_binds          = NULL;
    joypad_info.axis_threshold      = 0.0f;
 
-   memcpy(old_key_state.keys, ol_state->keys,
-         sizeof(ol_state->keys));
+   memcpy(old_key_state.keys, ol_state->keys, sizeof(ol_state->keys));
    memset(ol_state, 0, sizeof(*ol_state));
 
-   device = ol->active->full_screen ?
-      RARCH_DEVICE_POINTER_SCREEN : RETRO_DEVICE_POINTER;
+   device = ol->active->full_screen ? RARCH_DEVICE_POINTER_SCREEN : RETRO_DEVICE_POINTER;
 
    for (i = 0;
-         current_input->input_state(current_input_data, joypad_info,
-            NULL,
-            0, device, i, RETRO_DEVICE_ID_POINTER_PRESSED);
+         current_input->input_state(current_input_data, joypad_info, NULL, 0, device, i, RETRO_DEVICE_ID_POINTER_PRESSED);
          i++)
    {
       input_overlay_state_t polled_data;
-      int16_t x = current_input->input_state(current_input_data, joypad_info,
-            NULL,
-            0, device, i, RETRO_DEVICE_ID_POINTER_X);
-      int16_t y = current_input->input_state(current_input_data, joypad_info,
-            NULL,
-            0, device, i, RETRO_DEVICE_ID_POINTER_Y);
+      int16_t x = current_input->input_state(current_input_data, joypad_info, NULL, 0, device, i, RETRO_DEVICE_ID_POINTER_X);
+      int16_t y = current_input->input_state(current_input_data, joypad_info, NULL, 0, device, i, RETRO_DEVICE_ID_POINTER_Y);
 
       memset(&polled_data, 0, sizeof(struct input_overlay_state));
 
@@ -623,20 +615,16 @@ void input_poll_overlay(input_overlay_t *ol, float opacity, unsigned analog_dpad
       polled = true;
    }
 
-   if (  OVERLAY_GET_KEY(ol_state, RETROK_LSHIFT) ||
-         OVERLAY_GET_KEY(ol_state, RETROK_RSHIFT))
+   if (  OVERLAY_GET_KEY(ol_state, RETROK_LSHIFT) || OVERLAY_GET_KEY(ol_state, RETROK_RSHIFT))
       key_mod |= RETROKMOD_SHIFT;
 
-   if (OVERLAY_GET_KEY(ol_state, RETROK_LCTRL) ||
-       OVERLAY_GET_KEY(ol_state, RETROK_RCTRL))
+   if (OVERLAY_GET_KEY(ol_state, RETROK_LCTRL) || OVERLAY_GET_KEY(ol_state, RETROK_RCTRL))
       key_mod |= RETROKMOD_CTRL;
 
-   if (  OVERLAY_GET_KEY(ol_state, RETROK_LALT) ||
-         OVERLAY_GET_KEY(ol_state, RETROK_RALT))
+   if (  OVERLAY_GET_KEY(ol_state, RETROK_LALT) || OVERLAY_GET_KEY(ol_state, RETROK_RALT))
       key_mod |= RETROKMOD_ALT;
 
-   if (  OVERLAY_GET_KEY(ol_state, RETROK_LMETA) ||
-         OVERLAY_GET_KEY(ol_state, RETROK_RMETA))
+   if (  OVERLAY_GET_KEY(ol_state, RETROK_LMETA) || OVERLAY_GET_KEY(ol_state, RETROK_RMETA))
       key_mod |= RETROKMOD_META;
 
    /* CAPSLOCK SCROLLOCK NUMLOCK */
@@ -649,8 +637,7 @@ void input_poll_overlay(input_overlay_t *ol, float opacity, unsigned analog_dpad
 
          for (j = 0; j < 32; j++)
             if ((orig_bits & (1 << j)) != (new_bits & (1 << j)))
-               input_keyboard_event(new_bits & (1 << j),
-                     i * 32 + j, 0, key_mod, RETRO_DEVICE_POINTER);
+               input_keyboard_event(new_bits & (1 << j), i * 32 + j, 0, key_mod, RETRO_DEVICE_POINTER);
       }
    }
 
@@ -706,9 +693,7 @@ void input_poll_overlay(input_overlay_t *ol, float opacity, unsigned analog_dpad
       input_overlay_poll_clear(ol, opacity);
 }
 
-void input_state_overlay(input_overlay_t *ol, int16_t *ret,
-      unsigned port, unsigned device, unsigned idx,
-      unsigned id)
+void input_state_overlay(input_overlay_t *ol, int16_t *ret, unsigned port, unsigned device, unsigned idx, unsigned id)
 {
    input_overlay_state_t *ol_state = ol ? &ol->overlay_state : NULL;
 

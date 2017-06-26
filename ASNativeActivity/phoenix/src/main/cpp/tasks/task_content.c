@@ -1463,7 +1463,7 @@ bool task_push_start_content_from_cli(const char *core_path, const char *fullpat
 //      return false;
 //
    if (!task_push_start_current_core(content_info))
-      return -1;
+      return false;
 
    return true;
 }

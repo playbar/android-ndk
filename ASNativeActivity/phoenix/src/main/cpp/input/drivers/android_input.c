@@ -24,6 +24,7 @@
 #include <dynamic/dylib.h>
 #include <retro_inline.h>
 #include <string/stdstring.h>
+#include <src/verbosity.h>
 
 #ifdef HAVE_CONFIG_H
 #include "../../config.h"
@@ -108,36 +109,37 @@ typedef struct state_device
 
 typedef struct android_input
 {
-   bool blocked;
-   const input_device_driver_t *joypad;
+    bool blocked;
+    const input_device_driver_t *joypad;
 
-   state_device_t pad_states[MAX_PADS];
-   int16_t analog_state[MAX_PADS][MAX_AXIS];
-   int8_t hat_state[MAX_PADS][2];
+    state_device_t pad_states[MAX_PADS];
+    int16_t analog_state[MAX_PADS][MAX_AXIS];
+    int8_t hat_state[MAX_PADS][2];
 
-   unsigned pads_connected;
-   sensor_t accelerometer_state;
-   struct input_pointer pointer[MAX_TOUCH];
-   unsigned pointer_count;
-   int mouse_x_delta, mouse_y_delta;
-   float mouse_x_prev, mouse_y_prev;
-   int mouse_l, mouse_r, mouse_m;
-   int64_t quick_tap_time;
+    unsigned pads_connected;
+    sensor_t accelerometer_state;
+    struct input_pointer pointer[MAX_TOUCH];
+    unsigned pointer_count;
+    int mouse_x_delta;
+    int mouse_y_delta;
+    float mouse_x_prev;
+    float mouse_y_prev;
+    int mouse_l;
+    int mouse_r;
+    int mouse_m;
+    int64_t quick_tap_time;
 } android_input_t;
 
 static void frontend_android_get_version_sdk(int32_t *sdk);
 static void frontend_android_get_name(char *s, size_t len);
 
-bool (*engine_lookup_name)(char *buf,
-      int *vendorId, int *productId, size_t size, int id);
+bool (*engine_lookup_name)(char *buf, int *vendorId, int *productId, size_t size, int id);
 
 void (*engine_handle_dpad)(android_input_t *, AInputEvent*, int, int);
 
-static bool android_input_set_sensor_state(void *data, unsigned port,
-      enum retro_sensor_action action, unsigned event_rate);
+static bool android_input_set_sensor_state(void *data, unsigned port, enum retro_sensor_action action, unsigned event_rate);
 
-extern float AMotionEvent_getAxisValue(const AInputEvent* motion_event,
-      int32_t axis, size_t pointer_idx);
+extern float AMotionEvent_getAxisValue(const AInputEvent* motion_event, int32_t axis, size_t pointer_idx);
 
 static typeof(AMotionEvent_getAxisValue) *p_AMotionEvent_getAxisValue;
 
@@ -151,8 +153,7 @@ static typeof(AMotionEvent_getButtonState) *p_AMotionEvent_getButtonState;
 
 static void *libandroid_handle;
 
-static bool android_input_lookup_name_prekitkat(char *buf,
-      int *vendorId, int *productId, size_t size, int id)
+static bool android_input_lookup_name_prekitkat(char *buf, int *vendorId, int *productId, size_t size, int id)
 {
    jobject name      = NULL;
    jmethodID getName = NULL;
@@ -171,8 +172,7 @@ static bool android_input_lookup_name_prekitkat(char *buf,
    if (!class)
       goto error;
 
-   GET_STATIC_METHOD_ID(env, method, class, "getDevice",
-         "(I)Landroid/view/InputDevice;");
+   GET_STATIC_METHOD_ID(env, method, class, "getDevice", "(I)Landroid/view/InputDevice;");
    if (!method)
       goto error;
 
@@ -208,8 +208,7 @@ error:
    return false;
 }
 
-static bool android_input_lookup_name(char *buf,
-      int *vendorId, int *productId, size_t size, int id)
+static bool android_input_lookup_name(char *buf, int *vendorId, int *productId, size_t size, int id)
 {
    jmethodID getVendorId  = NULL;
    jmethodID getProductId = NULL;
@@ -230,8 +229,7 @@ static bool android_input_lookup_name(char *buf,
    if (!class)
       goto error;
 
-   GET_STATIC_METHOD_ID(env, method, class, "getDevice",
-         "(I)Landroid/view/InputDevice;");
+   GET_STATIC_METHOD_ID(env, method, class, "getDevice", "(I)Landroid/view/InputDevice;");
    if (!method)
       goto error;
 
@@ -314,9 +312,7 @@ static void android_input_poll_main_cmd(void)
          if (android_app->inputQueue)
          {
             RARCH_LOG("Attaching input queue to looper");
-            AInputQueue_attachLooper(android_app->inputQueue,
-                  android_app->looper, LOOPER_ID_INPUT, NULL,
-                  NULL);
+            AInputQueue_attachLooper(android_app->inputQueue, android_app->looper, LOOPER_ID_INPUT, NULL, NULL);
          }
 
          scond_broadcast(android_app->cond);
@@ -373,12 +369,8 @@ static void android_input_poll_main_cmd(void)
             rarch_ctl(RARCH_CTL_SET_IDLE,   &boolean);
             video_driver_unset_stub_frame();
 
-            if ((android_app->sensor_state_mask
-                     & (UINT64_C(1) << RETRO_SENSOR_ACCELEROMETER_ENABLE))
-                  && android_app->accelerometerSensor == NULL)
-               input_sensor_set_state(0,
-                     RETRO_SENSOR_ACCELEROMETER_ENABLE,
-                     android_app->accelerometer_event_rate);
+            if ((android_app->sensor_state_mask & (UINT64_C(1) << RETRO_SENSOR_ACCELEROMETER_ENABLE)) && android_app->accelerometerSensor == NULL)
+               input_sensor_set_state(0, RETRO_SENSOR_ACCELEROMETER_ENABLE, android_app->accelerometer_event_rate);
          }
          slock_lock(android_app->mutex);
          android_app->unfocused = false;
@@ -394,13 +386,8 @@ static void android_input_poll_main_cmd(void)
             video_driver_set_stub_frame();
 
             /* Avoid draining battery while app is not being used. */
-            if ((android_app->sensor_state_mask
-                     & (UINT64_C(1) << RETRO_SENSOR_ACCELEROMETER_ENABLE))
-                  && android_app->accelerometerSensor != NULL
-                  )
-               input_sensor_set_state(0,
-                     RETRO_SENSOR_ACCELEROMETER_DISABLE,
-                     android_app->accelerometer_event_rate);
+            if ((android_app->sensor_state_mask & (UINT64_C(1) << RETRO_SENSOR_ACCELEROMETER_ENABLE)) && android_app->accelerometerSensor != NULL)
+               input_sensor_set_state(0, RETRO_SENSOR_ACCELEROMETER_DISABLE, android_app->accelerometer_event_rate);
          }
          slock_lock(android_app->mutex);
          android_app->unfocused = true;
@@ -415,20 +402,17 @@ static void android_input_poll_main_cmd(void)
    }
 }
 
-static void engine_handle_dpad_default(android_input_t *android,
-      AInputEvent *event, int port, int source)
+static void engine_handle_dpad_default(android_input_t *android, AInputEvent *event, int port, int source)
 {
-   size_t motion_ptr = AMotionEvent_getAction(event) >>
-      AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
-   float x           = AMotionEvent_getX(event, motion_ptr);
-   float y           = AMotionEvent_getY(event, motion_ptr);
+   size_t motion_ptr = AMotionEvent_getAction(event) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+   float x = AMotionEvent_getX(event, motion_ptr);
+   float y = AMotionEvent_getY(event, motion_ptr);
 
    android->analog_state[port][0] = (int16_t)(x * 32767.0f);
    android->analog_state[port][1] = (int16_t)(y * 32767.0f);
 }
 
-static void engine_handle_dpad_getaxisvalue(android_input_t *android,
-      AInputEvent *event, int port, int source)
+static void engine_handle_dpad_getaxisvalue(android_input_t *android, AInputEvent *event, int port, int source)
 {
    size_t motion_ptr = AMotionEvent_getAction(event) >>
       AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
@@ -472,13 +456,11 @@ static bool android_input_init_handle(void)
                RTLD_LOCAL | RTLD_LAZY)) == 0)
    return false;
 #else
-   if ((libandroid_handle = dlopen("/system/lib/libandroid.so",
-               RTLD_LOCAL | RTLD_LAZY)) == 0)
+   if ((libandroid_handle = dlopen("/system/lib/libandroid.so", RTLD_LOCAL | RTLD_LAZY)) == 0)
    return false;
 #endif
 
-   if ((p_AMotionEvent_getAxisValue = dlsym(RTLD_DEFAULT,
-               "AMotionEvent_getAxisValue")))
+   if ((p_AMotionEvent_getAxisValue = dlsym(RTLD_DEFAULT, "AMotionEvent_getAxisValue")))
    {
       RARCH_LOG("Set engine_handle_dpad to 'Get Axis Value' (for reading extra analog sticks)");
       engine_handle_dpad = engine_handle_dpad_getaxisvalue;
@@ -517,7 +499,7 @@ static void *android_input_init(const char *joypad_driver)
    else
       engine_lookup_name = android_input_lookup_name_prekitkat;
 
-   engine_handle_dpad         = engine_handle_dpad_default;
+   engine_handle_dpad = engine_handle_dpad_default;
 
    if (!android_input_init_handle())
    {
@@ -610,13 +592,13 @@ static INLINE void android_mouse_calculate_deltas(android_input_t *android,
    /* Adjust mouse speed based on ratio
     * between core resolution and system resolution */
    float x, y;
-   float                        x_scale = 1;
-   float                        y_scale = 1;
+   float x_scale = 1;
+   float y_scale = 1;
    struct retro_system_av_info *av_info = video_viewport_get_system_av_info();
 
    if(av_info)
    {
-      video_viewport_t          *custom_vp   = video_viewport_get_custom();
+      video_viewport_t *custom_vp = video_viewport_get_custom();
       const struct retro_game_geometry *geom = (const struct retro_game_geometry*)&av_info->geometry;
       x_scale = 2 * (float)geom->base_width / (float)custom_vp->width;
       y_scale = 2 * (float)geom->base_height / (float)custom_vp->height;
@@ -692,13 +674,14 @@ static INLINE int android_input_poll_event_type_motion(android_input_t *android,
       {
          /* If touchscreen was pressed for less than 200ms
           * then register time stamp of a quick tap */
-         if((AMotionEvent_getEventTime(event)-AMotionEvent_getDownTime(event))/1000000 < 200)
-            android->quick_tap_time = AMotionEvent_getEventTime(event);
+         if((AMotionEvent_getEventTime(event)-AMotionEvent_getDownTime(event))/1000000 < 200) {
+//             android->quick_tap_time = AMotionEvent_getEventTime(event);
+         }
+
          android->mouse_l = 0;
       }
 
-      memmove(android->pointer + motion_ptr, android->pointer + motion_ptr + 1,
-            (MAX_TOUCH - motion_ptr - 1) * sizeof(struct input_pointer));
+      memmove(android->pointer + motion_ptr, android->pointer + motion_ptr + 1, (MAX_TOUCH - motion_ptr - 1) * sizeof(struct input_pointer));
       if (android->pointer_count > 0)
          android->pointer_count--;
    }
@@ -772,11 +755,11 @@ bool is_keyboard_id(int id)
 static INLINE void android_input_poll_event_type_keyboard(
       AInputEvent *event, int keycode, int *handled)
 {
-   int keydown           = (AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_DOWN);
+   int keydown = (AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_DOWN);
    unsigned keyboardcode = input_keymaps_translate_keysym_to_rk(keycode);
    /* Set keyboard modifier based on shift,ctrl and alt state */
-   uint16_t mod          = 0;
-   int meta              = AKeyEvent_getMetaState(event);
+   uint16_t mod = 0;
+   int meta = AKeyEvent_getMetaState(event);
 
    if (meta & AMETA_ALT_ON)
       mod |= RETROKMOD_ALT;
@@ -902,20 +885,14 @@ static void handle_hotplug(android_input_t *android,
     * and be grouped with the NVIDIA button of the virtual device.
     *
     */
-   if(strstr(device_model, "SHIELD Android TV") && (
-      strstr(device_name, "Virtual") ||
+   if(strstr(device_model, "SHIELD Android TV") && (strstr(device_name, "Virtual") ||
       strstr(device_name, "NVIDIA Corporation NVIDIA Controller v01.03")))
    {
       /* only use the hack if the device is one of the built-in devices */
       RARCH_LOG("Special Device Detected: %s\n", device_model);
       {
-#if 0
-         RARCH_LOG("- Pads Mapped: %d\n- Device Name: %s\n- IDS: %d, %d, %d",
-               android->pads_connected, device_name, id, pad_id1, pad_id2);
-#endif
          /* remove the remote or virtual controller device if it is mapped */
-         if (strstr(android->pad_states[0].name,"SHIELD Remote") ||
-            strstr(android->pad_states[0].name,"SHIELD Virtual Controller"))
+         if (strstr(android->pad_states[0].name,"SHIELD Remote") || strstr(android->pad_states[0].name,"SHIELD Virtual Controller"))
          {
             pad_id1 = -1;
             pad_id2 = -1;
@@ -934,8 +911,7 @@ static void handle_hotplug(android_input_t *android,
          /* apply the hack only for the first controller
           * store the id for later use
          */
-         if (strstr(device_name, "NVIDIA Corporation NVIDIA Controller v01.03")
-               && android->pads_connected==0)
+         if (strstr(device_name, "NVIDIA Corporation NVIDIA Controller v01.03") && android->pads_connected==0)
             pad_id1 = id;
          else if (strstr(device_name, "Virtual") && pad_id1 != -1)
          {
@@ -964,15 +940,13 @@ static void handle_hotplug(android_input_t *android,
       }
    }
 
-   else if(strstr(device_model, "SHIELD") && (
-      strstr(device_name, "Virtual") || strstr(device_name, "gpio") ||
+   else if(strstr(device_model, "SHIELD") && (strstr(device_name, "Virtual") || strstr(device_name, "gpio") ||
       strstr(device_name, "NVIDIA Corporation NVIDIA Controller v01.03")))
    {
       /* only use the hack if the device is one of the built-in devices */
       RARCH_LOG("Special Device Detected: %s\n", device_model);
       {
-         if (strstr(device_name, "NVIDIA Corporation NVIDIA Controller v01.03")
-             && android->pads_connected==0)
+         if (strstr(device_name, "NVIDIA Corporation NVIDIA Controller v01.03") && android->pads_connected==0)
             pad_id1 = id;
          else if (strstr(device_name, "Virtual") || strstr(device_name, "gpio"))
          {
@@ -995,8 +969,7 @@ static void handle_hotplug(android_input_t *android,
     * This is a simple hack, basically groups the "back"
     * button with the rest of the gamepad
     */
-   else if(strstr(device_model, "XD") && (
-      strstr(device_name, "Virtual") || strstr(device_name, "rk29-keypad") ||
+   else if(strstr(device_model, "XD") && (strstr(device_name, "Virtual") || strstr(device_name, "rk29-keypad") ||
       strstr(device_name,"Playstation3") || strstr(device_name,"XBOX")))
    {
       /* only use the hack if the device is one of the built-in devices */
@@ -1019,12 +992,7 @@ static void handle_hotplug(android_input_t *android,
     * This device is composed of two hid devices
     * We make it look like one device
     */
-   else if(strstr(device_model, "R800") &&
-         (
-          strstr(device_name, "keypad-game-zeus") ||
-          strstr(device_name, "keypad-zeus")
-         )
-         )
+   else if(strstr(device_model, "R800") && (strstr(device_name, "keypad-game-zeus") || strstr(device_name, "keypad-zeus")))
    {
       /* only use the hack if the device is one of the built-in devices */
       RARCH_LOG("Special Device Detected: %s\n", device_model);
@@ -1046,8 +1014,7 @@ static void handle_hotplug(android_input_t *android,
     * This device is composed of two hid devices
     * We make it look like one device
     */
-   else if(strstr(device_model, "ARCHOS GAMEPAD") && (
-      strstr(device_name, "joy_key") || strstr(device_name, "joystick")))
+   else if(strstr(device_model, "ARCHOS GAMEPAD") && (strstr(device_name, "joy_key") || strstr(device_name, "joystick")))
    {
       /* only use the hack if the device is one of the built-in devices */
       RARCH_LOG("ARCHOS GAMEPAD Detected: %s\n", device_model);
@@ -1069,9 +1036,7 @@ static void handle_hotplug(android_input_t *android,
     * These are mostly remote control type devices, bind them always to port 0
     * And overwrite the binding whenever a controller button is pressed
     */
-   else if (strstr(device_name, "Amazon Fire TV Remote")
-         || strstr(device_name, "Nexus Remote")
-         || strstr(device_name, "SHIELD Remote"))
+   else if (strstr(device_name, "Amazon Fire TV Remote") || strstr(device_name, "Nexus Remote") || strstr(device_name, "SHIELD Remote"))
    {
       android->pads_connected = 0;
       *port = 0;
@@ -1130,8 +1095,7 @@ static void handle_hotplug(android_input_t *android,
    android->pad_states[android->pads_connected].id   = id;
    android->pad_states[android->pads_connected].port = *port;
 
-   strlcpy(android->pad_states[*port].name, name_buf,
-         sizeof(android->pad_states[*port].name));
+   strlcpy(android->pad_states[*port].name, name_buf, sizeof(android->pad_states[*port].name));
 
    android->pads_connected++;
 }
@@ -1165,8 +1129,7 @@ static void android_input_poll_input(void *data)
          int          port = android_input_get_id_port(android, id, source);
 
          if (port < 0 && !is_keyboard_id(id))
-            handle_hotplug(android, android_app,
-            &port, id, source);
+            handle_hotplug(android, android_app, &port, id, source);
 
          switch (type_event)
          {
@@ -1203,9 +1166,7 @@ static void android_input_poll_user(void *data)
    struct android_app *android_app = (struct android_app*)g_android;
    android_input_t    *android     = (android_input_t*)data;
 
-   if ((android_app->sensor_state_mask & (UINT64_C(1) <<
-               RETRO_SENSOR_ACCELEROMETER_ENABLE))
-         && android_app->accelerometerSensor)
+   if ((android_app->sensor_state_mask & (UINT64_C(1) << RETRO_SENSOR_ACCELEROMETER_ENABLE)) && android_app->accelerometerSensor)
    {
       ASensorEvent event;
       while (ASensorEventQueue_getEvents(android_app->sensorEventQueue, &event, 1) > 0)
@@ -1235,22 +1196,17 @@ static void android_input_poll_memcpy(void *data)
 static bool android_input_key_pressed(void *data, int key)
 {
    rarch_joypad_info_t joypad_info;
-   android_input_t *android           = (android_input_t*)data;
-   const struct retro_keybind *keyptr = (const struct retro_keybind*)
-      &input_config_binds[0][key];
+   android_input_t *android = (android_input_t*)data;
+   const struct retro_keybind *keyptr = (const struct retro_keybind*) &input_config_binds[0][key];
 
-   if(       keyptr->valid
-         && android_keyboard_port_input_pressed(input_config_binds[0],
-            key))
+   if(keyptr->valid && android_keyboard_port_input_pressed(input_config_binds[0], key))
       return true;
 
-   joypad_info.joy_idx        = 0;
-   joypad_info.auto_binds     = input_autoconf_binds[0];
+   joypad_info.joy_idx = 0;
+   joypad_info.auto_binds = input_autoconf_binds[0];
    joypad_info.axis_threshold = *(input_driver_get_float(INPUT_ACTION_AXIS_THRESHOLD));
 
-   if (keyptr->valid &&
-         input_joypad_pressed(android->joypad, joypad_info,
-            0, input_config_binds[0], key))
+   if (keyptr->valid && input_joypad_pressed(android->joypad, joypad_info, 0, input_config_binds[0], key))
       return true;
 
    return false;
@@ -1262,7 +1218,7 @@ static bool android_input_key_pressed(void *data, int key)
 static void android_input_poll(void *data)
 {
    int ident;
-   unsigned key                    = RARCH_PAUSE_TOGGLE;
+   unsigned key = RARCH_PAUSE_TOGGLE;
    struct android_app *android_app = (struct android_app*)g_android;
 
    while ((ident = ALooper_pollAll((android_input_key_pressed(data, key)) ? -1 : 1, NULL, NULL, NULL)) >= 0)
@@ -1323,23 +1279,18 @@ bool android_run_events(void *data)
    return true;
 }
 
-static int16_t android_input_state(void *data,
-      rarch_joypad_info_t joypad_info,
-      const struct retro_keybind **binds, unsigned port, unsigned device,
-      unsigned idx, unsigned id)
+static int16_t android_input_state(void *data, rarch_joypad_info_t joypad_info, const struct retro_keybind **binds,
+                                   unsigned port, unsigned device, unsigned idx, unsigned id)
 {
-   android_input_t *android           = (android_input_t*)data;
+   android_input_t *android = (android_input_t*)data;
 
    switch (device)
    {
       case RETRO_DEVICE_JOYPAD:
-         return input_joypad_pressed(android->joypad, joypad_info,
-               port, binds[port], id) ||
-            android_keyboard_port_input_pressed(binds[port],id);
+         return input_joypad_pressed(android->joypad, joypad_info, port, binds[port], id) || android_keyboard_port_input_pressed(binds[port],id);
       case RETRO_DEVICE_ANALOG:
          if (binds[port])
-            return input_joypad_analog(android->joypad, joypad_info,
-                  port, idx, id, binds[port]);
+            return input_joypad_analog(android->joypad, joypad_info, port, idx, id, binds[port]);
          break;
       case RETRO_DEVICE_MOUSE:
          return android_mouse_state(android, id);
@@ -1353,9 +1304,7 @@ static int16_t android_input_state(void *data,
             case RETRO_DEVICE_ID_POINTER_Y:
                return android->pointer[idx].y;
             case RETRO_DEVICE_ID_POINTER_PRESSED:
-               return (idx < android->pointer_count) &&
-                  (android->pointer[idx].x != -0x8000) &&
-                  (android->pointer[idx].y != -0x8000);
+               return (idx < android->pointer_count) && (android->pointer[idx].x != -0x8000) && (android->pointer[idx].y != -0x8000);
             case RARCH_DEVICE_ID_POINTER_BACK:
             {
                const struct retro_keybind *keyptr = &input_autoconf_binds[0][RARCH_MENU_TOGGLE];
@@ -1372,9 +1321,7 @@ static int16_t android_input_state(void *data,
             case RETRO_DEVICE_ID_POINTER_Y:
                return android->pointer[idx].full_y;
             case RETRO_DEVICE_ID_POINTER_PRESSED:
-               return (idx < android->pointer_count) &&
-                  (android->pointer[idx].full_x != -0x8000) &&
-                  (android->pointer[idx].full_y != -0x8000);
+               return (idx < android->pointer_count) && (android->pointer[idx].full_x != -0x8000) && (android->pointer[idx].full_y != -0x8000);
             case RARCH_DEVICE_ID_POINTER_BACK:
                {
                   const struct retro_keybind *keyptr = &input_autoconf_binds[0][RARCH_MENU_TOGGLE];
@@ -1401,8 +1348,7 @@ static void android_input_free_input(void *data)
       return;
 
    if (android_app->sensorManager)
-      ASensorManager_destroyEventQueue(android_app->sensorManager,
-            android_app->sensorEventQueue);
+      ASensorManager_destroyEventQueue(android_app->sensorManager, android_app->sensorEventQueue);
 
    if (android->joypad)
       android->joypad->destroy();
@@ -1432,16 +1378,11 @@ static uint64_t android_input_get_capabilities(void *data)
 static void android_input_enable_sensor_manager(struct android_app *android_app)
 {
    android_app->sensorManager = ASensorManager_getInstance();
-   android_app->accelerometerSensor =
-      ASensorManager_getDefaultSensor(android_app->sensorManager,
-         ASENSOR_TYPE_ACCELEROMETER);
-   android_app->sensorEventQueue =
-      ASensorManager_createEventQueue(android_app->sensorManager,
-         android_app->looper, LOOPER_ID_USER, NULL, NULL);
+   android_app->accelerometerSensor = ASensorManager_getDefaultSensor(android_app->sensorManager, ASENSOR_TYPE_ACCELEROMETER);
+   android_app->sensorEventQueue = ASensorManager_createEventQueue(android_app->sensorManager, android_app->looper, LOOPER_ID_USER, NULL, NULL);
 }
 
-static bool android_input_set_sensor_state(void *data, unsigned port,
-      enum retro_sensor_action action, unsigned event_rate)
+static bool android_input_set_sensor_state(void *data, unsigned port, enum retro_sensor_action action, unsigned event_rate)
 {
    struct android_app *android_app = (struct android_app*)g_android;
 
@@ -1455,14 +1396,11 @@ static bool android_input_set_sensor_state(void *data, unsigned port,
             android_input_enable_sensor_manager(android_app);
 
          if (android_app->accelerometerSensor)
-            ASensorEventQueue_enableSensor(android_app->sensorEventQueue,
-                  android_app->accelerometerSensor);
+            ASensorEventQueue_enableSensor(android_app->sensorEventQueue, android_app->accelerometerSensor);
 
          /* Events per second (in microseconds). */
          if (android_app->accelerometerSensor)
-            ASensorEventQueue_setEventRate(android_app->sensorEventQueue,
-                  android_app->accelerometerSensor, (1000L / event_rate)
-                  * 1000);
+            ASensorEventQueue_setEventRate(android_app->sensorEventQueue, android_app->accelerometerSensor, (1000L / event_rate) * 1000);
 
          BIT64_CLEAR(android_app->sensor_state_mask, RETRO_SENSOR_ACCELEROMETER_DISABLE);
          BIT64_SET(android_app->sensor_state_mask, RETRO_SENSOR_ACCELEROMETER_ENABLE);
@@ -1470,8 +1408,7 @@ static bool android_input_set_sensor_state(void *data, unsigned port,
 
       case RETRO_SENSOR_ACCELEROMETER_DISABLE:
          if (android_app->accelerometerSensor)
-            ASensorEventQueue_disableSensor(android_app->sensorEventQueue,
-                  android_app->accelerometerSensor);
+            ASensorEventQueue_disableSensor(android_app->sensorEventQueue, android_app->accelerometerSensor);
 
          BIT64_CLEAR(android_app->sensor_state_mask, RETRO_SENSOR_ACCELEROMETER_ENABLE);
          BIT64_SET(android_app->sensor_state_mask, RETRO_SENSOR_ACCELEROMETER_DISABLE);
@@ -1483,10 +1420,9 @@ static bool android_input_set_sensor_state(void *data, unsigned port,
    return false;
 }
 
-static float android_input_get_sensor_input(void *data,
-      unsigned port,unsigned id)
+static float android_input_get_sensor_input(void *data, unsigned port,unsigned id)
 {
-   android_input_t      *android      = (android_input_t*)data;
+   android_input_t *android = (android_input_t*)data;
 
    switch (id)
    {

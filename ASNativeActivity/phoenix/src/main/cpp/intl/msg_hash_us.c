@@ -3593,8 +3593,8 @@ const char *msg_hash_to_str_us(enum msg_hash_enums msg) {
                 "L3 button (thumb)")
        MSG_HASH(MENU_ENUM_LABEL_VALUE_INPUT_JOYPAD_L,
                 "L button (shoulder)")
-       MSG_HASH(MENU_ENUM_LABEL_VALUE_INPUT_JOYPAD_LEFT,
-                "Left D-pad")
+        case MENU_ENUM_LABEL_VALUE_INPUT_JOYPAD_LEFT:
+            return "Left D-pad";
        MSG_HASH(MENU_ENUM_LABEL_VALUE_INPUT_JOYPAD_R2,
                 "R2 button (trigger)")
        MSG_HASH(MENU_ENUM_LABEL_VALUE_INPUT_JOYPAD_R3,

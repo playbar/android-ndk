@@ -1054,7 +1054,7 @@ static void frontend_linux_init(void *data)
       return;
 
    android_app->config = AConfiguration_new();
-   AConfiguration_fromAssetManager(android_app->config, android_app->activity->assetManager);
+//   AConfiguration_fromAssetManager(android_app->config, android_app->activity->assetManager);
 
    looper = (ALooper*)ALooper_prepare(ALOOPER_PREPARE_ALLOW_NON_CALLBACKS);
    ALooper_addFd(looper, android_app->msgread, LOOPER_ID_MAIN, ALOOPER_EVENT_INPUT, NULL, NULL);
