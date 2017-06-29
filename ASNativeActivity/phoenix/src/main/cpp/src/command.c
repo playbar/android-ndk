@@ -1867,8 +1867,10 @@ bool command_event(enum event_command cmd, void *data)
          {
             settings_t *settings = config_get_ptr();
             command_event(CMD_EVENT_OVERLAY_DEINIT, NULL);
+#ifdef HAVE_OVERLAY
             if (settings->bools.input_overlay_enable)
                task_push_overlay_load_default(input_overlay_loaded, NULL);
+#endif
          }
          break;
       case CMD_EVENT_OVERLAY_NEXT:

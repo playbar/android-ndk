@@ -49,119 +49,11 @@
 #include "../src/command.h"
 
 static const input_driver_t *input_drivers[] = {
-#ifdef __CELLOS_LV2__
-   &input_ps3,
-#endif
-#if defined(SN_TARGET_PSP2) || defined(PSP) || defined(VITA)
-   &input_psp,
-#endif
-#if defined(_3DS)
-   &input_ctr,
-#endif
-#if defined(HAVE_SDL) || defined(HAVE_SDL2)
-   &input_sdl,
-#endif
-#ifdef HAVE_DINPUT
-   &input_dinput,
-#endif
-#ifdef HAVE_X11
-   &input_x,
-#endif
-#ifdef XENON
-   &input_xenon360,
-#endif
-#if defined(HAVE_XINPUT2) || defined(HAVE_XINPUT_XBOX1)
-   &input_xinput,
-#endif
-#ifdef GEKKO
-   &input_gx,
-#endif
-#ifdef WIIU
-   &input_wiiu,
-#endif
-#ifdef ANDROID
    &input_android,
-#endif
-#ifdef HAVE_UDEV
-   &input_udev,
-#endif
-#if defined(__linux__) && !defined(ANDROID)
-   &input_linuxraw,
-#endif
-#if defined(HAVE_COCOA) || defined(HAVE_COCOATOUCH)
-   &input_cocoa,
-#endif
-#ifdef __QNX__
-   &input_qnx,
-#endif
-#ifdef EMSCRIPTEN
-   &input_rwebinput,
-#endif
-#ifdef DJGPP
-   &input_dos,
-#endif
-#if defined(_WIN32) && !defined(_XBOX) && _WIN32_WINNT >= 0x0501
-   /* winraw only available since XP */
-   &input_winraw,
-#endif
-   &input_null,
-   NULL,
 };
 
 static input_device_driver_t *joypad_drivers[] = {
-#ifdef __CELLOS_LV2__
-   &ps3_joypad,
-#endif
-#ifdef HAVE_XINPUT
-   &xinput_joypad,
-#endif
-#ifdef GEKKO
-   &gx_joypad,
-#endif
-#ifdef WIIU
-   &wiiu_joypad,
-#endif
-#ifdef _XBOX
-   &xdk_joypad,
-#endif
-#if defined(PSP) || defined(VITA)
-   &psp_joypad,
-#endif
-#ifdef _3DS
-   &ctr_joypad,
-#endif
-#ifdef HAVE_DINPUT
-   &dinput_joypad,
-#endif
-#ifdef HAVE_UDEV
-   &udev_joypad,
-#endif
-#if defined(__linux) && !defined(ANDROID)
-   &linuxraw_joypad,
-#endif
-#ifdef HAVE_PARPORT
-   &parport_joypad,
-#endif
-#ifdef ANDROID
    &android_joypad,
-#endif
-#if defined(HAVE_SDL) || defined(HAVE_SDL2)
-   &sdl_joypad,
-#endif
-#ifdef __QNX__
-   &qnx_joypad,
-#endif
-#ifdef HAVE_MFI
-   &mfi_joypad,
-#endif
-#ifdef DJGPP
-   &dos_joypad,
-#endif
-#ifdef HAVE_HID
-   &hid_joypad,
-#endif
-   &null_joypad,
-   NULL,
 };
 
 typedef struct turbo_buttons turbo_buttons_t;
@@ -336,47 +228,48 @@ void input_poll(void)
 
    current_input->poll(current_input_data);
 
-   input_driver_turbo_btns.count++;
-
-   for (i = 0; i < max_users; i++)
-   {
-      input_driver_turbo_btns.frame_enable[i] = 0;
-
-      if (!input_driver_block_libretro_input &&
-            libretro_input_binds[i][RARCH_TURBO_ENABLE].valid)
-      {
-         rarch_joypad_info_t joypad_info;
-         joypad_info.axis_threshold = input_driver_axis_threshold;
-         joypad_info.joy_idx        = settings->uints.input_joypad_map[i];
-         joypad_info.auto_binds     = input_autoconf_binds[joypad_info.joy_idx];
-
-         input_driver_turbo_btns.frame_enable[i] = current_input->input_state(
-               current_input_data, joypad_info, libretro_input_binds,
-               (unsigned)i, RETRO_DEVICE_JOYPAD, 0, RARCH_TURBO_ENABLE);
-      }
-   }
-
-   if (input_driver_block_libretro_input)
-      return;
-
-#ifdef HAVE_OVERLAY
-   if (overlay_ptr && input_overlay_is_alive(overlay_ptr))
-      input_poll_overlay(
-            overlay_ptr,
-            settings->floats.input_overlay_opacity,
-            settings->uints.input_analog_dpad_mode[0],
-            input_driver_axis_threshold);
-#endif
-
-#ifdef HAVE_COMMAND
-   if (input_driver_command)
-      command_poll(input_driver_command);
-#endif
-
-#ifdef HAVE_NETWORKGAMEPAD
-   if (input_driver_remote)
-      input_remote_poll(input_driver_remote, max_users);
-#endif
+//   input_driver_turbo_btns.count++;
+//
+//   for (i = 0; i < max_users; i++)
+//   {
+//      input_driver_turbo_btns.frame_enable[i] = 0;
+//
+//      if (!input_driver_block_libretro_input &&
+//            libretro_input_binds[i][RARCH_TURBO_ENABLE].valid)
+//      {
+//         rarch_joypad_info_t joypad_info;
+//         joypad_info.axis_threshold = input_driver_axis_threshold;
+//         joypad_info.joy_idx        = settings->uints.input_joypad_map[i];
+//         joypad_info.auto_binds     = input_autoconf_binds[joypad_info.joy_idx];
+//
+//         input_driver_turbo_btns.frame_enable[i] = current_input->input_state(
+//               current_input_data, joypad_info, libretro_input_binds,
+//               (unsigned)i, RETRO_DEVICE_JOYPAD, 0, RARCH_TURBO_ENABLE);
+//      }
+//   }
+//
+//   if (input_driver_block_libretro_input)
+//      return;
+//
+//#ifdef HAVE_OVERLAY
+//   if (overlay_ptr && input_overlay_is_alive(overlay_ptr))
+//      input_poll_overlay(
+//            overlay_ptr,
+//            settings->floats.input_overlay_opacity,
+//            settings->uints.input_analog_dpad_mode[0],
+//            input_driver_axis_threshold);
+//#endif
+//
+//#ifdef HAVE_COMMAND
+//   if (input_driver_command)
+//      command_poll(input_driver_command);
+//#endif
+//
+//#ifdef HAVE_NETWORKGAMEPAD
+//   if (input_driver_remote)
+//      input_remote_poll(input_driver_remote, max_users);
+//#endif
+//
 }
 
 /**
@@ -840,44 +733,32 @@ uint64_t input_keys_pressed(void *data, uint64_t last_input)
 
    if (check_input_driver_block_hotkey(binds_norm, binds_auto))
    {
-      if (     enable_hotkey->valid
-            && current_input->input_state(
-               current_input_data, joypad_info, &binds, 0,
-               RETRO_DEVICE_JOYPAD, 0, RARCH_ENABLE_HOTKEY))
+      if (enable_hotkey->valid && current_input->input_state(current_input_data, joypad_info, &binds, 0, RETRO_DEVICE_JOYPAD, 0, RARCH_ENABLE_HOTKEY))
             input_driver_block_libretro_input = true;
          else
-            input_driver_block_hotkey         = true;
+            input_driver_block_hotkey = true;
    }
 
-   game_focus_toggle_valid                      = binds[RARCH_GAME_FOCUS_TOGGLE].valid;
+   game_focus_toggle_valid = binds[RARCH_GAME_FOCUS_TOGGLE].valid;
 
    /* Allows rarch_focus_toggle hotkey to still work
     * even though every hotkey is blocked */
-   if (check_input_driver_block_hotkey(
-            focus_normal, focus_binds_auto) && game_focus_toggle_valid)
+   if (check_input_driver_block_hotkey(focus_normal, focus_binds_auto) && game_focus_toggle_valid)
    {
-      if (current_input->input_state(current_input_data, joypad_info, &binds, 0,
-               RETRO_DEVICE_JOYPAD, 0, RARCH_GAME_FOCUS_TOGGLE))
+      if (current_input->input_state(current_input_data, joypad_info, &binds, 0, RETRO_DEVICE_JOYPAD, 0, RARCH_GAME_FOCUS_TOGGLE))
          input_driver_block_hotkey = false;
    }
 
    for (i = 0; i < RARCH_BIND_LIST_END; i++)
    {
-      if (
-            ((!input_driver_block_libretro_input && ((i < RARCH_FIRST_META_KEY)))
-               || !input_driver_block_hotkey) &&
-            binds[i].valid && current_input->input_state(current_input_data,
-               joypad_info, &binds,
-               0, RETRO_DEVICE_JOYPAD, 0, i)
-         )
+      if (((!input_driver_block_libretro_input && ((i < RARCH_FIRST_META_KEY))) || !input_driver_block_hotkey) &&
+            binds[i].valid && current_input->input_state(current_input_data, joypad_info, &binds, 0, RETRO_DEVICE_JOYPAD, 0, i))
       {
          ret |= (UINT64_C(1) << i);
          continue;
       }
 
-      if ((i >= RARCH_FIRST_META_KEY) &&
-            current_input->meta_key_pressed(current_input_data, i)
-            )
+      if ((i >= RARCH_FIRST_META_KEY) && current_input->meta_key_pressed(current_input_data, i))
       {
          ret |= (UINT64_C(1) << i);
          continue;
@@ -909,8 +790,7 @@ uint64_t input_keys_pressed(void *data, uint64_t last_input)
 #endif
 
 #ifdef HAVE_NETWORKGAMEPAD
-      if (input_driver_remote &&
-            input_remote_key_pressed(i, 0))
+      if (input_driver_remote && input_remote_key_pressed(i, 0))
       {
          ret |= (UINT64_C(1) << i);
          continue;
@@ -948,8 +828,8 @@ bool input_driver_init(void)
 {
    if (current_input)
    {
-      settings_t *settings    = config_get_ptr();
-      current_input_data      = current_input->init(settings->arrays.input_joypad_driver);
+      settings_t *settings = config_get_ptr();
+      current_input_data = current_input->init(settings->arrays.input_joypad_driver);
    }
 
    if (!current_input_data)
@@ -1004,23 +884,20 @@ bool input_driver_find_driver(void)
 
    driver_ctl(RARCH_DRIVER_CTL_FIND_INDEX, &drv);
 
-   i                    = (int)drv.len;
+   i = (int)drv.len;
 
    if (i >= 0)
-      current_input = (const input_driver_t*)
-         input_driver_find_handle(i);
+      current_input = (const input_driver_t*) input_driver_find_handle(i);
    else
    {
       unsigned d;
-      RARCH_ERR("Couldn't find any input driver named \"%s\"\n",
-            settings->arrays.input_driver);
+      RARCH_ERR("Couldn't find any input driver named \"%s\"\n", settings->arrays.input_driver);
       RARCH_LOG_OUTPUT("Available input drivers are:\n");
       for (d = 0; input_driver_find_handle(d); d++)
-         RARCH_LOG_OUTPUT("\t%s\n", input_driver_find_ident(d));
+          RARCH_LOG_OUTPUT("\t%s\n", input_driver_find_ident(d));
       RARCH_WARN("Going to default to first input driver...\n");
 
-      current_input = (const input_driver_t*)
-         input_driver_find_handle(0);
+      current_input = (const input_driver_t*) input_driver_find_handle(0);
 
       if (!current_input)
       {
@@ -1150,9 +1027,7 @@ bool input_driver_init_remote(void)
    if (!settings->bools.network_remote_enable)
       return false;
 
-   input_driver_remote = input_remote_new(
-         settings->uints.network_remote_base_port,
-         input_driver_max_users);
+   input_driver_remote = input_remote_new(settings->uints.network_remote_base_port, input_driver_max_users);
 
    if (input_driver_remote)
       return true;
@@ -1266,8 +1141,7 @@ const char* config_get_joypad_driver_options(void)
  *
  * Returns: joypad driver if found, otherwise NULL.
  **/
-const input_device_driver_t *input_joypad_init_driver(
-      const char *ident, void *data)
+const input_device_driver_t *input_joypad_init_driver(const char *ident, void *data)
 {
    unsigned i;
    if (!ident || !*ident)
@@ -1275,11 +1149,9 @@ const input_device_driver_t *input_joypad_init_driver(
 
    for (i = 0; joypad_drivers[i]; i++)
    {
-      if (string_is_equal(ident, joypad_drivers[i]->ident)
-            && joypad_drivers[i]->init(data))
+      if (string_is_equal(ident, joypad_drivers[i]->ident) && joypad_drivers[i]->init(data))
       {
-         RARCH_LOG("[Joypad]: Found joypad driver: \"%s\".\n",
-               joypad_drivers[i]->ident);
+         RARCH_LOG("[Joypad]: Found joypad driver: \"%s\".\n", joypad_drivers[i]->ident);
          return joypad_drivers[i];
       }
    }
@@ -1302,8 +1174,7 @@ const input_device_driver_t *input_joypad_init_first(void *data)
    {
       if (joypad_drivers[i]->init(data))
       {
-         RARCH_LOG("[Joypad]: Found joypad driver: \"%s\".\n",
-               joypad_drivers[i]->ident);
+         RARCH_LOG("[Joypad]: Found joypad driver: \"%s\".\n", joypad_drivers[i]->ident);
          return joypad_drivers[i];
       }
    }
@@ -1320,8 +1191,7 @@ const input_device_driver_t *input_joypad_init_first(void *data)
  *
  * Returns: name of joystick #port.
  **/
-const char *input_joypad_name(const input_device_driver_t *drv,
-      unsigned port)
+const char *input_joypad_name(const input_device_driver_t *drv, unsigned port)
 {
    if (!drv)
       return NULL;
@@ -1339,8 +1209,7 @@ const char *input_joypad_name(const input_device_driver_t *drv,
  *
  * Returns: true (1) if successful, otherwise false (0).
  **/
-bool input_joypad_set_rumble(const input_device_driver_t *drv,
-      unsigned port, enum retro_rumble_effect effect, uint16_t strength)
+bool input_joypad_set_rumble(const input_device_driver_t *drv, unsigned port, enum retro_rumble_effect effect, uint16_t strength)
 {
    unsigned joy_idx     = 0;
 
@@ -1372,22 +1241,20 @@ bool input_joypad_set_rumble(const input_device_driver_t *drv,
  *
  * Returns: analog value on success, otherwise 0.
  **/
-int16_t input_joypad_analog(const input_device_driver_t *drv,
-      rarch_joypad_info_t joypad_info,
-      unsigned port, unsigned idx, unsigned ident,
-      const struct retro_keybind *binds)
+int16_t input_joypad_analog(const input_device_driver_t *drv, rarch_joypad_info_t joypad_info, unsigned port,
+                            unsigned idx, unsigned ident, const struct retro_keybind *binds)
 {
    uint32_t axis_minus, axis_plus;
    int16_t  pressed_minus, pressed_plus, res;
-   unsigned ident_minus                   = 0;
-   unsigned ident_plus                    = 0;
+   unsigned ident_minus = 0;
+   unsigned ident_plus = 0;
    const struct retro_keybind *bind_minus = NULL;
    const struct retro_keybind *bind_plus  = NULL;
 
    input_conv_analog_id_to_bind_id(idx, ident, &ident_minus, &ident_plus);
 
-   bind_minus                             = &binds[ident_minus];
-   bind_plus                              = &binds[ident_plus];
+   bind_minus = &binds[ident_minus];
+   bind_plus = &binds[ident_plus];
 
    if (!bind_minus->valid || !bind_plus->valid)
       return 0;
@@ -1402,7 +1269,7 @@ int16_t input_joypad_analog(const input_device_driver_t *drv,
 
    pressed_minus = abs(drv->axis(joypad_info.joy_idx, axis_minus));
    pressed_plus  = abs(drv->axis(joypad_info.joy_idx, axis_plus));
-   res           = pressed_plus - pressed_minus;
+   res = pressed_plus - pressed_minus;
 
    if (res == 0)
    {
@@ -1438,13 +1305,11 @@ int16_t input_joypad_analog(const input_device_driver_t *drv,
  * Returns: true (1) if axis was pressed, otherwise
  * false (0).
  **/
-int16_t input_joypad_axis_raw(const input_device_driver_t *drv,
-      unsigned port, unsigned axis)
+int16_t input_joypad_axis_raw(const input_device_driver_t *drv, unsigned port, unsigned axis)
 {
    if (!drv)
       return 0;
-   return drv->axis(port, AXIS_POS(axis)) +
-      drv->axis(port, AXIS_NEG(axis));
+   return drv->axis(port, AXIS_POS(axis)) + drv->axis(port, AXIS_NEG(axis));
 }
 
 /**
@@ -1459,16 +1324,14 @@ int16_t input_joypad_axis_raw(const input_device_driver_t *drv,
  * Returns: true (1) if key was pressed, otherwise
  * false (0).
  **/
-bool input_joypad_button_raw(const input_device_driver_t *drv,
-      unsigned port, unsigned button)
+bool input_joypad_button_raw(const input_device_driver_t *drv, unsigned port, unsigned button)
 {
    if (!drv)
       return false;
    return drv->button(port, button);
 }
 
-bool input_joypad_hat_raw(const input_device_driver_t *drv,
-      unsigned port, unsigned hat_dir, unsigned hat)
+bool input_joypad_hat_raw(const input_device_driver_t *drv, unsigned port, unsigned hat_dir, unsigned hat)
 {
    if (!drv)
       return false;
@@ -1491,8 +1354,7 @@ bool input_joypad_hat_raw(const input_device_driver_t *drv,
  * Takes as input analog key identifiers and converts
  * them to corresponding bind IDs @ident_minus and @ident_plus.
  **/
-void input_conv_analog_id_to_bind_id(unsigned idx, unsigned ident,
-      unsigned *ident_minus, unsigned *ident_plus)
+void input_conv_analog_id_to_bind_id(unsigned idx, unsigned ident, unsigned *ident_minus, unsigned *ident_plus)
 {
    switch ((idx << 1) | ident)
    {

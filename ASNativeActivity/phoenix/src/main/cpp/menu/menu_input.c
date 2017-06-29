@@ -424,8 +424,7 @@ static int menu_input_pointer_post_iterate(
       return -1;
 
 #ifdef HAVE_OVERLAY
-   if ((       settings->bools.input_overlay_enable
-            && input_overlay_is_alive(overlay_ptr)))
+   if (( settings->bools.input_overlay_enable && input_overlay_is_alive(overlay_ptr)))
       return 0;
 #endif
 

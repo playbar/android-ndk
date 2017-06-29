@@ -1,3 +1,4 @@
-//include ':nativeactivity'
+include ':nativeactivity'
 include ':googleplay'
-include ':phoenix'
+//include ':phoenix'
+include ':phoenixas'

@@ -540,45 +540,8 @@ const char *input_joypad_name(const input_device_driver_t *driver, unsigned port
 
 bool input_config_get_bind_idx(unsigned port, unsigned *joy_idx_real);
 
-extern input_device_driver_t dinput_joypad;
-extern input_device_driver_t linuxraw_joypad;
-extern input_device_driver_t parport_joypad;
-extern input_device_driver_t udev_joypad;
-extern input_device_driver_t xinput_joypad;
-extern input_device_driver_t sdl_joypad;
-extern input_device_driver_t ps3_joypad;
-extern input_device_driver_t psp_joypad;
-extern input_device_driver_t ctr_joypad;
-extern input_device_driver_t xdk_joypad;
-extern input_device_driver_t gx_joypad;
-extern input_device_driver_t wiiu_joypad;
-extern input_device_driver_t hid_joypad;
 extern input_device_driver_t android_joypad;
-extern input_device_driver_t qnx_joypad;
-extern input_device_driver_t null_joypad;
-extern input_device_driver_t mfi_joypad;
-extern input_device_driver_t dos_joypad;
-
 extern input_driver_t input_android;
-extern input_driver_t input_sdl;
-extern input_driver_t input_dinput;
-extern input_driver_t input_x;
-extern input_driver_t input_ps3;
-extern input_driver_t input_psp;
-extern input_driver_t input_ctr;
-extern input_driver_t input_xenon360;
-extern input_driver_t input_gx;
-extern input_driver_t input_wiiu;
-extern input_driver_t input_xinput;
-extern input_driver_t input_linuxraw;
-extern input_driver_t input_udev;
-extern input_driver_t input_cocoa;
-extern input_driver_t input_qnx;
-extern input_driver_t input_rwebinput;
-extern input_driver_t input_dos;
-extern input_driver_t input_winraw;
-extern input_driver_t input_wayland;
-extern input_driver_t input_null;
 
 RETRO_END_DECLS
 

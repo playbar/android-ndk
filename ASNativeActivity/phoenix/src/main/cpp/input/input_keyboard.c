@@ -146,8 +146,7 @@ static input_keyboard_line_t *input_keyboard_line_new(void *userdata,
  *
  * Returns: true (1) on success, otherwise false (0).
  **/
-static bool input_keyboard_line_event(
-      input_keyboard_line_t *state, uint32_t character)
+static bool input_keyboard_line_event(input_keyboard_line_t *state, uint32_t character)
 {
    char c = character >= 128 ? '?' : character;
 
@@ -169,9 +168,7 @@ static bool input_keyboard_line_event(
 
          for (i = 0; i < osk_last_codepoint_len; i++)
          {
-            memmove(state->buffer + state->ptr - 1,
-                  state->buffer + state->ptr,
-                  state->size - state->ptr + 1);
+            memmove(state->buffer + state->ptr - 1, state->buffer + state->ptr, state->size - state->ptr + 1);
             state->ptr--;
             state->size--;
          }
@@ -189,9 +186,7 @@ static bool input_keyboard_line_event(
       if (!newbuf)
          return false;
 
-      memmove(newbuf + state->ptr + 1,
-            newbuf + state->ptr,
-            state->size - state->ptr + 1);
+      memmove(newbuf + state->ptr + 1, newbuf + state->ptr, state->size - state->ptr + 1);
       newbuf[state->ptr] = c;
       state->ptr++;
       state->size++;
@@ -209,16 +204,12 @@ bool input_keyboard_line_append(const char *word)
 {
    unsigned i   = 0;
    unsigned len = (unsigned)strlen(word);
-   char *newbuf = (char*)
-         realloc(g_keyboard_line->buffer,
-               g_keyboard_line->size + len*2);
+   char *newbuf = (char*) realloc(g_keyboard_line->buffer, g_keyboard_line->size + len*2);
 
    if (!newbuf)
       return false;
 
-   memmove(newbuf + g_keyboard_line->ptr + len,
-         newbuf + g_keyboard_line->ptr,
-         g_keyboard_line->size - g_keyboard_line->ptr + len);
+   memmove(newbuf + g_keyboard_line->ptr + len, newbuf + g_keyboard_line->ptr, g_keyboard_line->size - g_keyboard_line->ptr + len);
 
    for (i = 0; i < len; i++)
    {
@@ -249,8 +240,7 @@ bool input_keyboard_line_append(const char *word)
  *
  * Returns: underlying buffer of the keyboard line.
  **/
-const char **input_keyboard_start_line(void *userdata,
-      input_keyboard_line_complete_t cb)
+const char **input_keyboard_start_line(void *userdata, input_keyboard_line_complete_t cb)
 {
    input_keyboard_ctl(RARCH_INPUT_KEYBOARD_CTL_LINE_FREE, NULL);
 
@@ -272,8 +262,7 @@ const char **input_keyboard_start_line(void *userdata,
  * Keyboard event utils. Called by drivers when keyboard events are fired.
  * This interfaces with the global system driver struct and libretro callbacks.
  **/
-void input_keyboard_event(bool down, unsigned code,
-      uint32_t character, uint16_t mod, unsigned device)
+void input_keyboard_event(bool down, unsigned code, uint32_t character, uint16_t mod, unsigned device)
 {
    static bool deferred_wait_keys;
 

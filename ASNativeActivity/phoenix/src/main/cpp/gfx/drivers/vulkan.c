@@ -917,7 +917,9 @@ static void vulkan_free(void *data)
       font_driver_free_osd();
 
       vulkan_deinit_static_resources(vk);
+#ifdef HAVE_OVERLAY
       vulkan_overlay_free(vk);
+#endif
 
       if (vk->filter_chain)
          vulkan_filter_chain_free((vulkan_filter_chain_t*)vk->filter_chain);

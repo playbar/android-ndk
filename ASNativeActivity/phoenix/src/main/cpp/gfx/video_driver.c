@@ -2706,9 +2706,7 @@ bool video_context_driver_input_driver(gfx_ctx_input_t *inp)
 
    if (!current_video_context.input_driver)
       return false;
-   current_video_context.input_driver(
-         video_context_data, joypad_name,
-         inp->input, inp->input_data);
+   current_video_context.input_driver(video_context_data, joypad_name, inp->input, inp->input_data);
    return true;
 }
 

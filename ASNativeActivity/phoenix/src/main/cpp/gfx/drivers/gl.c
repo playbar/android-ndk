@@ -246,12 +246,12 @@ static void gl_render_overlay(gl_t *gl, video_frame_info_t *video_info)
 
    video_info->cb_shader_set_mvp(gl, video_info->shader_data, &gl->mvp_no_rot);
 
-   for (i = 0; i < gl->overlays; i++)
-   {
-      glBindTexture(GL_TEXTURE_2D, gl->overlay_tex[i]);
-      glDrawArrays(GL_TRIANGLE_STRIP, 4 * i, 4);
-   }
 
+    for (i = 0; i < gl->overlays; i++)
+    {
+        glBindTexture(GL_TEXTURE_2D, gl->overlay_tex[i]);
+        glDrawArrays(GL_TRIANGLE_STRIP, 4 * i, 4);
+    }
    glDisable(GL_BLEND);
    gl->coords.vertex    = gl->vertex_ptr;
    gl->coords.tex_coord = gl->tex_info.coord;
@@ -2330,8 +2330,7 @@ bool gl_load_luts(const struct video_shader *shader,
 }
 
 #ifdef HAVE_OVERLAY
-static bool gl_overlay_load(void *data,
-      const void *image_data, unsigned num_images)
+static bool gl_overlay_load(void *data, const void *image_data, unsigned num_images)
 {
    unsigned i, j;
    gl_t *gl = (gl_t*)data;

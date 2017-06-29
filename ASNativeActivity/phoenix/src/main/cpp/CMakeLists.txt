@@ -114,8 +114,6 @@ add_library(retroarch-activity SHARED
                 ${RARCH_DIR}/input/drivers/android_input.c
                 ${RARCH_DIR}/input/drivers_keyboard/keyboard_event_android.c
                 ${RARCH_DIR}/input/drivers_joypad/android_joypad.c
-                ${RARCH_DIR}/input/drivers/nullinput.c
-                ${RARCH_DIR}/input/drivers_joypad/null_joypad.c
                 ${RARCH_DIR}/gfx/video_state_tracker.c
                 ${RARCH_DIR}/libretro-common/queues/fifo_queue.c
                 ${RARCH_DIR}/libretro-common/audio/resampler/audio_resampler.c

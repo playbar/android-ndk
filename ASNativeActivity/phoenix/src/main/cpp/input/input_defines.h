@@ -26,6 +26,7 @@ RETRO_BEGIN_DECLS
 #define MAX_USERS                      8
 
 #define RARCH_FIRST_CUSTOM_BIND        16
+#define LAST_KEYCODE 0x1ff
 #define RARCH_FIRST_META_KEY           RARCH_CUSTOM_BIND_LIST_END
 
 /* RetroArch specific bind IDs. */

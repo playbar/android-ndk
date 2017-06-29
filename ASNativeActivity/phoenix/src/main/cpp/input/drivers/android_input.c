@@ -127,7 +127,7 @@ typedef struct android_input
     int mouse_l;
     int mouse_r;
     int mouse_m;
-    int64_t quick_tap_time;
+//    int64_t quick_tap_time;
 } android_input_t;
 
 static void frontend_android_get_version_sdk(int32_t *sdk);
@@ -414,8 +414,7 @@ static void engine_handle_dpad_default(android_input_t *android, AInputEvent *ev
 
 static void engine_handle_dpad_getaxisvalue(android_input_t *android, AInputEvent *event, int port, int source)
 {
-   size_t motion_ptr = AMotionEvent_getAction(event) >>
-      AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+   size_t motion_ptr = AMotionEvent_getAction(event) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
    float x           = AMotionEvent_getAxisValue(event, AXIS_X, motion_ptr);
    float y           = AMotionEvent_getAxisValue(event, AXIS_Y, motion_ptr);
    float z           = AMotionEvent_getAxisValue(event, AXIS_Z, motion_ptr);
@@ -478,20 +477,17 @@ static void *android_input_init(const char *joypad_driver)
 {
    int32_t sdk;
    struct android_app *android_app = (struct android_app*)g_android;
-   android_input_t *android = (android_input_t*)
-      calloc(1, sizeof(*android));
+   android_input_t *android = (android_input_t*) calloc(1, sizeof(*android));
 
    if (!android)
       return NULL;
 
    android->pads_connected = 0;
-   android->quick_tap_time = 0;
-   android->joypad         = input_joypad_init_driver(joypad_driver, android);
+//   android->quick_tap_time = 0;
+   android->joypad = input_joypad_init_driver(joypad_driver, android);
 
    input_keymaps_init_keyboard_lut(rarch_key_map_android);
-
    frontend_android_get_version_sdk(&sdk);
-
    RARCH_LOG("sdk version: %d\n", sdk);
 
    if (sdk >= 19)
@@ -516,12 +512,12 @@ static int android_check_quick_tap(android_input_t *android)
    /* Check if the touch screen has been been quick tapped
     * and then not touched again for 200ms
     * If so then return true and deactivate quick tap timer */
-   retro_time_t now = cpu_features_get_time_usec();
-   if(android->quick_tap_time && (now/1000 - android->quick_tap_time/1000000) >= 200)
-   {
-      android->quick_tap_time = 0;
-      return 1;
-   }
+//   retro_time_t now = cpu_features_get_time_usec();
+//   if(android->quick_tap_time && (now/1000 - android->quick_tap_time/1000000) >= 200)
+//   {
+//      android->quick_tap_time = 0;
+//      return 1;
+//   }
 
    return 0;
 }
@@ -639,8 +635,10 @@ static INLINE int android_input_poll_event_type_motion(android_input_t *android,
    getaction  = AMotionEvent_getAction(event);
    action     = getaction & AMOTION_EVENT_ACTION_MASK;
    motion_ptr = getaction >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
-   keyup = (action == AMOTION_EVENT_ACTION_UP || action == AMOTION_EVENT_ACTION_CANCEL || action == AMOTION_EVENT_ACTION_POINTER_UP)
-           || (source == AINPUT_SOURCE_MOUSE && action != AMOTION_EVENT_ACTION_DOWN);
+   keyup = (   action == AMOTION_EVENT_ACTION_UP
+            || action == AMOTION_EVENT_ACTION_CANCEL
+            || action == AMOTION_EVENT_ACTION_POINTER_UP)
+            || (source == AINPUT_SOURCE_MOUSE && action != AMOTION_EVENT_ACTION_DOWN);
 
    /* If source is mouse then calculate button state
     * and mouse deltas and don't process as touchscreen event */
@@ -674,9 +672,9 @@ static INLINE int android_input_poll_event_type_motion(android_input_t *android,
       {
          /* If touchscreen was pressed for less than 200ms
           * then register time stamp of a quick tap */
-         if((AMotionEvent_getEventTime(event)-AMotionEvent_getDownTime(event))/1000000 < 200) {
-//             android->quick_tap_time = AMotionEvent_getEventTime(event);
-         }
+//         if((AMotionEvent_getEventTime(event)-AMotionEvent_getDownTime(event))/1000000 < 200) {
+////             android->quick_tap_time = AMotionEvent_getEventTime(event);
+//         }
 
          android->mouse_l = 0;
       }
@@ -700,11 +698,11 @@ static INLINE int android_input_poll_event_type_motion(android_input_t *android,
          /* If another touch happened within 200ms after a quick tap
           * then cancel the quick tap and register left mouse button
           * as being held down */
-         if((AMotionEvent_getEventTime(event) - android->quick_tap_time)/1000000 < 200)
-         {
-            android->quick_tap_time = 0;
-            android->mouse_l = 1;
-         }
+//         if((AMotionEvent_getEventTime(event) - android->quick_tap_time)/1000000 < 200)
+//         {
+//            android->quick_tap_time = 0;
+//            android->mouse_l = 1;
+//         }
       }
 
       if(action == AMOTION_EVENT_ACTION_MOVE && ENABLE_TOUCH_SCREEN_MOUSE)
@@ -801,13 +799,11 @@ static INLINE void android_input_poll_event_type_key(
       *handled = 0;
 }
 
-static int android_input_get_id_port(android_input_t *android, int id,
-      int source)
+static int android_input_get_id_port(android_input_t *android, int id, int source)
 {
    unsigned i;
    int ret = -1;
-   if (source & (AINPUT_SOURCE_TOUCHSCREEN | AINPUT_SOURCE_MOUSE |
-            AINPUT_SOURCE_TOUCHPAD))
+   if (source & (AINPUT_SOURCE_TOUCHSCREEN | AINPUT_SOURCE_MOUSE | AINPUT_SOURCE_TOUCHPAD))
          ret = 0; /* touch overlay is always user 1 */
 
    for (i = 0; i < android->pads_connected; i++)
@@ -1110,6 +1106,21 @@ static int android_input_get_id(AInputEvent *event)
    return id;
 }
 
+static void android_input_poll_memcpy(void *data)
+{
+    unsigned i, j;
+    android_input_t    *android     = (android_input_t*)data;
+    struct android_app *android_app = (struct android_app*)g_android;
+
+    for (i = 0; i < MAX_PADS; i++)
+    {
+        for (j = 0; j < 2; j++)
+            android_app->hat_state[i][j]    = android->hat_state[i][j];
+        for (j = 0; j < MAX_AXIS; j++)
+            android_app->analog_state[i][j] = android->analog_state[i][j];
+    }
+}
+
 static void android_input_poll_input(void *data)
 {
    AInputEvent *event = NULL;
@@ -1122,7 +1133,7 @@ static void android_input_poll_input(void *data)
       while (AInputQueue_getEvent(android_app->inputQueue, &event) >= 0)
       {
          int32_t   handled = 1;
-         int predispatched = AInputQueue_preDispatchEvent(android_app->inputQueue, event);
+//         int predispatched = AInputQueue_preDispatchEvent(android_app->inputQueue, event);
          int        source = AInputEvent_getSource(event);
          int    type_event = AInputEvent_getType(event);
          int            id = android_input_get_id(event);
@@ -1134,7 +1145,7 @@ static void android_input_poll_input(void *data)
          switch (type_event)
          {
             case AINPUT_EVENT_TYPE_MOTION:
-               if (android_input_poll_event_type_motion(android, event, port, source))
+//               if (android_input_poll_event_type_motion(android, event, port, source))
                   engine_handle_dpad(android, event, port, source);
                break;
             case AINPUT_EVENT_TYPE_KEY:
@@ -1143,11 +1154,11 @@ static void android_input_poll_input(void *data)
 
                   if (is_keyboard_id(id))
                   {
-                     if (!predispatched)
-                     {
+//                     if (!predispatched)
+//                     {
                         android_input_poll_event_type_keyboard(event, keycode, &handled);
                         android_input_poll_event_type_key(android_app, event, ANDROID_KEYBOARD_PORT, keycode, source, type_event, &handled);
-                     }
+//                     }
                   }
                   else
                      android_input_poll_event_type_key(android_app, event, port, keycode, source, type_event, &handled);
@@ -1155,8 +1166,10 @@ static void android_input_poll_input(void *data)
                break;
          }
 
-         if (!predispatched)
+//         if (!predispatched)
             AInputQueue_finishEvent(android_app->inputQueue, event, handled);
+          if (android_app->input_alive)
+              android_input_poll_memcpy(data);
       }
    }
 }
@@ -1178,20 +1191,6 @@ static void android_input_poll_user(void *data)
    }
 }
 
-static void android_input_poll_memcpy(void *data)
-{
-   unsigned i, j;
-   android_input_t    *android     = (android_input_t*)data;
-   struct android_app *android_app = (struct android_app*)g_android;
-
-   for (i = 0; i < MAX_PADS; i++)
-   {
-      for (j = 0; j < 2; j++)
-         android_app->hat_state[i][j]    = android->hat_state[i][j];
-      for (j = 0; j < MAX_AXIS; j++)
-         android_app->analog_state[i][j] = android->analog_state[i][j];
-   }
-}
 
 static bool android_input_key_pressed(void *data, int key)
 {
@@ -1221,7 +1220,8 @@ static void android_input_poll(void *data)
    unsigned key = RARCH_PAUSE_TOGGLE;
    struct android_app *android_app = (struct android_app*)g_android;
 
-   while ((ident = ALooper_pollAll((android_input_key_pressed(data, key)) ? -1 : 1, NULL, NULL, NULL)) >= 0)
+    bool bpress = false; //android_input_key_pressed(data, key);
+    while ((ident = ALooper_pollAll((bpress) ? -1 : 1, NULL, NULL, NULL)) >= 0)
    {
       switch (ident)
       {
@@ -1251,8 +1251,8 @@ static void android_input_poll(void *data)
       }
    }
 
-   if (android_app->input_alive)
-      android_input_poll_memcpy(data);
+//   if (android_app->input_alive)
+//      android_input_poll_memcpy(data);
 }
 
 bool android_run_events(void *data)

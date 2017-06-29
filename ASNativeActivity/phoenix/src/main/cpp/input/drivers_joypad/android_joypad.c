@@ -18,7 +18,7 @@
 #include "../input_config.h"
 #include "../drivers_keyboard/keyboard_event_android.h"
 #include "drivers/platform_linux.h"
-#include "drivers_keyboard/keyboard_event_dos.h"
+//#include "drivers_keyboard/keyboard_event_dos.h"
 
 static const char *android_joypad_name(unsigned pad)
 {
