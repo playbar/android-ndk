@@ -35,7 +35,7 @@
 
 #include "shader_glsl.h"
 #include "../../managers/state_manager.h"
-#include "../../src/core.h"
+#include "../../core.h"
 
 #define PREV_TEXTURES (GFX_MAX_TEXTURES - 1)
 
@@ -118,6 +118,7 @@ static const char *glsl_prefixes[] = {
 #include "../drivers/gl_shaders/core_alpha_blend.glsl.frag.h"
 
 #ifdef HAVE_SHADERPIPELINE
+#include "../drivers/gl_shaders/core_pipeline_xmb_ribbon.glsl.frag.h"
 #include "../drivers/gl_shaders/legacy_pipeline_xmb_ribbon_simple.glsl.vert.h"
 #include "../drivers/gl_shaders/modern_pipeline_xmb_ribbon_simple.glsl.vert.h"
 #include "../drivers/gl_shaders/modern_pipeline_snow.glsl.vert.h"
@@ -264,7 +265,7 @@ static bool gl_glsl_compile_shader(glsl_shader_data_t *glsl,
    if (existing_version)
    {
       const char* version_extra = "";
-      unsigned version_no = strtoul(existing_version + 8, (char**)&program, 10);
+      unsigned version_no = (unsigned)strtoul(existing_version + 8, (char**)&program, 10);
 #ifdef HAVE_OPENGLES
       if (version_no < 130)
          version_no = 100;
@@ -462,7 +463,7 @@ static bool gl_glsl_compile_programs(
        * load the file here, and pretend
        * we were really using XML all along.
        */
-      if (     !string_is_empty(pass->source.path)
+      if (     !string_is_empty(pass->source.path) 
             && !gl_glsl_load_source_path(pass, pass->source.path))
       {
          RARCH_ERR("Failed to load GLSL shader: %s.\n",
@@ -955,7 +956,7 @@ static void *gl_glsl_init(void *data, const char *path)
    if (gl_query_extension("GL_OES_standard_derivatives"))
    {
       shader_prog_info.vertex   = glsl_core ? stock_vertex_xmb_ribbon_modern : stock_vertex_xmb_ribbon_legacy;
-      shader_prog_info.fragment = stock_fragment_xmb;
+      shader_prog_info.fragment = glsl_core ? core_stock_fragment_xmb : stock_fragment_xmb;
    }
    else
    {
@@ -964,7 +965,7 @@ static void *gl_glsl_init(void *data, const char *path)
    }
 #else
       shader_prog_info.vertex   = glsl_core ? stock_vertex_xmb_ribbon_modern : stock_vertex_xmb_ribbon_legacy;
-      shader_prog_info.fragment = stock_fragment_xmb;
+      shader_prog_info.fragment = glsl_core ? core_stock_fragment_xmb : stock_fragment_xmb;
 #endif
    shader_prog_info.is_file  = false;
 
@@ -1386,8 +1387,8 @@ static bool gl_glsl_set_mvp(void *data, void *shader_data, const math_matrix_4x4
    loc = glsl->uniforms[glsl->active_idx].mvp;
    if (loc >= 0)
    {
-      if (  (current_idx != glsl->active_idx) ||
-            (mat->data != current_mat_data_pointer[glsl->active_idx]) ||
+      if (  (current_idx != glsl->active_idx) || 
+            (mat->data != current_mat_data_pointer[glsl->active_idx]) || 
             (*mat->data != current_mat_data[glsl->active_idx]))
       {
          glUniformMatrix4fv(loc, 1, GL_FALSE, mat->data);
@@ -1418,7 +1419,7 @@ static bool gl_glsl_set_coords(void *handle_data, void *shader_data,
    size_t                       size = 0;
    GLfloat *buffer                   = short_buffer;
    glsl_shader_data_t          *glsl = (glsl_shader_data_t*)shader_data;
-   const struct shader_uniforms *uni = glsl
+   const struct shader_uniforms *uni = glsl 
       ? &glsl->uniforms[glsl->active_idx] : NULL;
 
    if (!glsl || !glsl->shader->modern || !coords)

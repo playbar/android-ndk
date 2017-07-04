@@ -17,7 +17,6 @@
 #include <retro_assert.h>
 #include <streams/file_stream.h>
 #include <file/file_path.h>
-#include <retro_stat.h>
 #include <string/stdstring.h>
 
 #ifdef HAVE_CONFIG_H
@@ -28,20 +27,20 @@
 #include "menu_driver.h"
 #include "menu_shader.h"
 
-#include "../src/core_info.h"
-#include "../src/configuration.h"
-#include "../src/defaults.h"
-#include "../src/playlist.h"
-#include "../src/verbosity.h"
+#include "../core_info.h"
+#include "../configuration.h"
+#include "../defaults.h"
+#include "../playlist.h"
+#include "../verbosity.h"
 
 bool menu_content_playlist_find_associated_core(const char *path, char *s, size_t len)
 {
    unsigned j;
    bool                                ret = false;
    settings_t *settings                    = config_get_ptr();
-   struct string_list *existing_core_names =
+   struct string_list *existing_core_names = 
       string_split(settings->arrays.playlist_names, ";");
-   struct string_list *existing_core_paths =
+   struct string_list *existing_core_paths = 
       string_split(settings->arrays.playlist_cores, ";");
 
    for (j = 0; j < existing_core_names->size; j++)

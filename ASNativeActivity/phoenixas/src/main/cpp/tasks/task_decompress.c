@@ -20,13 +20,12 @@
 #include <file/file_path.h>
 #include <file/archive_file.h>
 #include <retro_miscellaneous.h>
-#include <retro_stat.h>
 #include <compat/strl.h>
 
 #include "tasks_internal.h"
-#include "../src/file_path_special.h"
-#include "../src/verbosity.h"
-#include "../src/msg_hash.h"
+#include "../file_path_special.h"
+#include "../verbosity.h"
+#include "../msg_hash.h"
 
 static int file_decompressed_target_file(const char *name,
       const char *valid_exts,

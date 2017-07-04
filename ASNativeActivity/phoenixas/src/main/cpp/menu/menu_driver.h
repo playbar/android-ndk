@@ -33,7 +33,7 @@
 #include "menu_entries.h"
 
 #include "../gfx/video_driver.h"
-#include "../src/file_path_special.h"
+#include "../file_path_special.h"
 #include "../gfx/font_driver.h"
 #include "../gfx/video_coord_array.h"
 

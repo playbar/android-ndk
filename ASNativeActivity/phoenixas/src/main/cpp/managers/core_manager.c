@@ -22,8 +22,8 @@
 #include <lists/string_list.h>
 #include <lists/dir_list.h>
 
-#include "../src/configuration.h"
-#include "../src/verbosity.h"
+#include "../configuration.h"
+#include "../verbosity.h"
 
 /*We need to set libretro to the first entry in the cores
  * directory so that it will be saved to the config file
@@ -45,7 +45,7 @@ bool find_libretro_core(char *fullpath,
 
    RARCH_LOG("Searching for valid libretro implementation in: \"%s\".\n",
          dir);
-
+   
    for (i = 0; i < list->size; i++)
    {
       char fname[PATH_MAX_LENGTH]           = {0};

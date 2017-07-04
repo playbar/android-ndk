@@ -1,6 +1,6 @@
 /*  RetroArch - A frontend for libretro.
  *  Copyright (C) 2016-2017 - Gregor Richards
- *
+ * 
  *  RetroArch is free software: you can redistribute it and/or modify it under the terms
  *  of the GNU General Public License as published by the Free Software Found-
  *  ation, either version 3 of the License, or (at your option) any later version.
@@ -36,15 +36,15 @@
 #include <string.h>
 #include <string/stdstring.h>
 #include <file/file_path.h>
-#include "../../src/file_path_special.h"
-#include "../../src/paths.h"
-#include "../../src/content.h"
+#include "../../file_path_special.h"
+#include "../../paths.h"
+#include "../../content.h"
 
 #include <compat/strl.h>
 #include <net/net_compat.h>
 
-#include "../../src/retroarch.h"
-#include "../../src/version.h"
+#include "../../retroarch.h"
+#include "../../version.h"
 #include "netplay.h"
 #include "netplay_discovery.h"
 #include "netplay_private.h"
@@ -262,7 +262,7 @@ bool netplay_lan_ad_server(netplay_t *netplay)
          strlcpy(ad_packet_buffer.retroarch_version, PACKAGE_VERSION,
             NETPLAY_HOST_STR_LEN);
          strlcpy(ad_packet_buffer.content, !string_is_empty(
-                  path_basename(path_get(RARCH_PATH_BASENAME)))
+                  path_basename(path_get(RARCH_PATH_BASENAME))) 
                ? path_basename(path_get(RARCH_PATH_BASENAME)) : "N/A",
                NETPLAY_HOST_LONGSTR_LEN);
          strlcpy(ad_packet_buffer.nick, netplay->nick, NETPLAY_HOST_STR_LEN);
@@ -402,7 +402,7 @@ static bool netplay_lan_ad_client(void)
          strlcpy(host->content, ad_packet_buffer.content,
             NETPLAY_HOST_LONGSTR_LEN);
 
-         host->content_crc                  =
+         host->content_crc                  = 
             atoi(ad_packet_buffer.content_crc);
          host->nick[NETPLAY_HOST_STR_LEN-1] =
             host->core[NETPLAY_HOST_STR_LEN-1] =

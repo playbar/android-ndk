@@ -22,21 +22,23 @@
 #include "../config.h"
 #endif
 
+#include <retro_timers.h>
+
 #ifdef HAVE_MENU
 #include "../menu/menu_driver.h"
 #endif
 
 #include "frontend.h"
-#include "../src/configuration.h"
+#include "../configuration.h"
 #include "../ui/ui_companion_driver.h"
 #include "../tasks/tasks_internal.h"
 
-#include "../src/driver.h"
-#include "../src/paths.h"
-#include "../src/retroarch.h"
+#include "../driver.h"
+#include "../paths.h"
+#include "../retroarch.h"
 
 #ifndef HAVE_MAIN
-#include "../src/retroarch.h"
+#include "../retroarch.h"
 #endif
 
 /**
@@ -100,9 +102,7 @@ int rarch_main(int argc, char *argv[], void *data)
    rarch_ctl(RARCH_CTL_PREINIT, NULL);
    frontend_driver_init_first(args);
    rarch_ctl(RARCH_CTL_INIT, NULL);
-
-   path_set(RARCH_PATH_CORE, "lib2048.so");
-
+   
    if (frontend_driver_is_inited())
    {
       content_ctx_info_t info;

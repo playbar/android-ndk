@@ -25,12 +25,13 @@
 #include <compat/posix_string.h>
 #include <file/file_path.h>
 #include <string/stdstring.h>
+#include <retro_math.h>
 
 #include "d3d.h"
 #include "../video_coord_array.h"
 #include "../../configuration.h"
 #include "../../dynamic.h"
-#include "../video_renderchain_driver.h"
+#include "../video_driver.h"
 
 #ifdef HAVE_THREADS
 #include "../video_thread_wrapper.h"

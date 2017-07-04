@@ -1,7 +1,7 @@
 /*  RetroArch - A frontend for libretro.
  *  Copyright (C) 2010-2014 - Hans-Kristian Arntzen
  *  Copyright (C) 2011-2017 - Daniel De Matteis
- *
+ * 
  *  RetroArch is free software: you can redistribute it and/or modify it under the terms
  *  of the GNU General Public License as published by the Free Software Found-
  *  ation, either version 3 of the License, or (at your option) any later version.
@@ -22,6 +22,10 @@
 #include <stddef.h>
 #include <sys/types.h>
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <boolean.h>
 #include <retro_common_api.h>
 #include <retro_inline.h>
@@ -29,12 +33,16 @@
 
 #include "input_defines.h"
 
-#include "../src/msg_hash.h"
+#include "../msg_hash.h"
 
 RETRO_BEGIN_DECLS
 
 typedef struct rarch_joypad_driver input_device_driver_t;
 
+typedef struct hid_driver hid_driver_t;
+
+/* Keyboard line reader. Handles textual input in a direct fashion. */
+typedef struct input_keyboard_line input_keyboard_line_t;
 
 enum input_device_type
 {
@@ -60,6 +68,26 @@ enum input_action
    INPUT_ACTION_MAX_USERS
 };
 
+enum rarch_input_keyboard_ctl_state
+{
+   RARCH_INPUT_KEYBOARD_CTL_NONE = 0,
+   RARCH_INPUT_KEYBOARD_CTL_SET_LINEFEED_ENABLED,
+   RARCH_INPUT_KEYBOARD_CTL_UNSET_LINEFEED_ENABLED,
+   RARCH_INPUT_KEYBOARD_CTL_IS_LINEFEED_ENABLED,
+
+   RARCH_INPUT_KEYBOARD_CTL_LINE_FREE,
+
+   /*
+    * Waits for keys to be pressed (used for binding 
+    * keys in the menu).
+    * Callback returns false when all polling is done.
+    **/
+   RARCH_INPUT_KEYBOARD_CTL_START_WAIT_KEYS,
+
+   /* Cancels keyboard wait for keys function callback. */
+   RARCH_INPUT_KEYBOARD_CTL_CANCEL_WAIT_KEYS
+};
+
 struct retro_keybind
 {
    bool valid;
@@ -67,19 +95,19 @@ struct retro_keybind
    enum msg_hash_enums enum_idx;
    enum retro_key key;
 
-   /* Joypad key. Joypad POV (hats)
+   /* Joypad key. Joypad POV (hats) 
     * are embedded into this key as well. */
    uint64_t joykey;
 
-   /* Default key binding value -
+   /* Default key binding value - 
     * for resetting bind to default */
    uint64_t def_joykey;
 
-   /* Joypad axis. Negative and positive axes
+   /* Joypad axis. Negative and positive axes 
     * are embedded into this variable. */
    uint32_t joyaxis;
 
-   /* Default joy axis binding value -
+   /* Default joy axis binding value - 
     * for resetting bind to default */
    uint32_t def_joyaxis;
 
@@ -99,7 +127,7 @@ typedef struct rarch_joypad_info
 
 typedef struct input_driver
 {
-   /* Inits input driver.
+   /* Inits input driver. 
     */
    void *(*init)(const char *joypad_driver);
 
@@ -148,6 +176,21 @@ struct rarch_joypad_driver
    void (*poll)(void);
    bool (*set_rumble)(unsigned, enum retro_rumble_effect, uint16_t);
    const char *(*name)(unsigned);
+
+   const char *ident;
+};
+
+struct hid_driver
+{
+   void *(*init)(void);
+   bool (*query_pad)(void *, unsigned);
+   void (*free)(void *);
+   bool (*button)(void *, unsigned, uint16_t);
+   uint64_t (*get_buttons)(void *, unsigned);
+   int16_t (*axis)(void *, unsigned, uint32_t);
+   void (*poll)(void *);
+   bool (*set_rumble)(void *, unsigned, enum retro_rumble_effect, uint16_t);
+   const char *(*name)(void *, unsigned);
 
    const char *ident;
 };
@@ -550,6 +593,95 @@ const char *input_joypad_name(const input_device_driver_t *driver,
 
 bool input_config_get_bind_idx(unsigned port, unsigned *joy_idx_real);
 
+#ifdef HAVE_HID
+/**
+ * hid_driver_find_handle:
+ * @index              : index of driver to get handle to.
+ *
+ * Returns: handle to HID driver at index. Can be NULL
+ * if nothing found.
+ **/
+const void *hid_driver_find_handle(int index);
+
+/**
+ * hid_driver_find_ident:
+ * @index              : index of driver to get handle to.
+ *
+ * Returns: Human-readable identifier of HID driver at index. Can be NULL
+ * if nothing found.
+ **/
+const char *hid_driver_find_ident(int index);
+
+/**
+ * config_get_hid_driver_options:
+ *
+ * Get an enumerated list of all HID driver names, separated by '|'.
+ *
+ * Returns: string listing of all HID driver names, separated by '|'.
+ **/
+const char* config_get_hid_driver_options(void);
+
+/**
+ * input_hid_init_first:
+ *
+ * Finds first suitable HID driver and initializes.
+ *
+ * Returns: HID driver if found, otherwise NULL.
+ **/
+const hid_driver_t *input_hid_init_first(void);
+
+const void *hid_driver_get_data(void);
+#endif
+
+/** Line complete callback. 
+ * Calls back after return is pressed with the completed line.
+ * Line can be NULL.
+ **/
+typedef void (*input_keyboard_line_complete_t)(void *userdata,
+      const char *line);
+
+typedef bool (*input_keyboard_press_t)(void *userdata, unsigned code);
+
+typedef struct input_keyboard_ctx_wait
+{
+   void *userdata;
+   input_keyboard_press_t cb;
+} input_keyboard_ctx_wait_t;
+
+/**
+ * input_keyboard_event:
+ * @down                     : Keycode was pressed down?
+ * @code                     : Keycode.
+ * @character                : Character inputted.
+ * @mod                      : TODO/FIXME: ???
+ *
+ * Keyboard event utils. Called by drivers when keyboard events are fired.
+ * This interfaces with the global driver struct and libretro callbacks.
+ **/
+void input_keyboard_event(bool down, unsigned code, uint32_t character,
+      uint16_t mod, unsigned device);
+
+bool input_keyboard_line_append(const char *word);
+
+/**
+ * input_keyboard_start_line:
+ * @userdata                 : Userdata.
+ * @cb                       : Line complete callback function.
+ *
+ * Sets function pointer for keyboard line handle.
+ *
+ * The underlying buffer can be reallocated at any time 
+ * (or be NULL), but the pointer to it remains constant 
+ * throughout the objects lifetime.
+ *
+ * Returns: underlying buffer of the keyboard line.
+ **/
+const char **input_keyboard_start_line(void *userdata,
+      input_keyboard_line_complete_t cb);
+
+
+bool input_keyboard_ctl(enum rarch_input_keyboard_ctl_state state, void *data);
+
 extern input_device_driver_t dinput_joypad;
 extern input_device_driver_t linuxraw_joypad;
 extern input_device_driver_t parport_joypad;
@@ -589,6 +721,14 @@ extern input_driver_t input_dos;
 extern input_driver_t input_winraw;
 extern input_driver_t input_wayland;
 extern input_driver_t input_null;
+
+#ifdef HAVE_HID
+extern hid_driver_t iohidmanager_hid;
+extern hid_driver_t btstack_hid;
+extern hid_driver_t libusb_hid;
+extern hid_driver_t wiiusb_hid;
+extern hid_driver_t null_hid;
+#endif
 
 RETRO_END_DECLS
 

@@ -19,6 +19,7 @@
 #include <file/file_path.h>
 #include <compat/strl.h>
 #include <string/stdstring.h>
+#include <retro_math.h>
 
 #ifdef HAVE_CONFIG_H
 #include "../config.h"
@@ -26,14 +27,14 @@
 
 #include "record_driver.h"
 
-#include "../src/command.h"
-#include "../src/configuration.h"
-#include "../src/driver.h"
+#include "../command.h"
+#include "../configuration.h"
+#include "../driver.h"
 #include "../gfx/video_driver.h"
-#include "../src/retroarch.h"
-#include "../src/verbosity.h"
-#include "../src/msg_hash.h"
-#include "../src/list_special.h"
+#include "../retroarch.h"
+#include "../verbosity.h"
+#include "../msg_hash.h"
+#include "../list_special.h"
 
 
 static const record_driver_t *record_drivers[] = {
@@ -187,7 +188,7 @@ void recording_dump_frame(const void *data, unsigned width,
 {
    bool has_gpu_record = false;
    uint8_t *gpu_buf    = NULL;
-   struct ffemu_video_data
+   struct ffemu_video_data 
       ffemu_data       = {0};
 
    video_driver_get_record_status(&has_gpu_record,
@@ -326,7 +327,7 @@ bool recording_init(void)
       return false;
    }
 
-   if (!settings->bools.video_gpu_record
+   if (!settings->bools.video_gpu_record 
          && video_driver_is_hw_context())
    {
       RARCH_WARN("%s.\n",
@@ -357,7 +358,7 @@ bool recording_init(void)
    params.pix_fmt    = (video_driver_get_pixel_format() == RETRO_PIXEL_FORMAT_XRGB8888) ?
       FFEMU_PIX_ARGB8888 : FFEMU_PIX_RGB565;
    params.config     = NULL;
-
+   
    if (!string_is_empty(global->record.config))
       params.config = global->record.config;
 
@@ -418,12 +419,12 @@ bool recording_init(void)
       else
          params.aspect_ratio = (float)params.out_width / params.out_height;
 
-      if (settings->bools.video_post_filter_record
+      if (settings->bools.video_post_filter_record 
             && video_driver_frame_filter_alive())
       {
          unsigned max_width  = 0;
          unsigned max_height = 0;
-
+         
          params.pix_fmt    = FFEMU_PIX_RGB565;
 
          if (video_driver_frame_filter_is_32bit())

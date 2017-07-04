@@ -18,7 +18,7 @@
 
 #include "../menu_driver.h"
 #include "../menu_cbs.h"
-#include "../../src/msg_hash.h"
+#include "../../msg_hash.h"
 
 #include "../widgets/menu_filebrowser.h"
 

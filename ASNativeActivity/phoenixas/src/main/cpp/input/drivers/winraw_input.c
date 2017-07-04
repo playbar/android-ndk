@@ -13,11 +13,13 @@
  *  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Windows.h>
+#include <windows.h>
 
 #include "../input_driver.h"
 #include "../input_keymaps.h"
-#include "../video_driver.h"
+
+#include "../../configuration.h"
+#include "../../gfx/video_driver.h"
 #include "../../verbosity.h"
 
 #define WINRAW_LOG(msg) RARCH_LOG("[WINRAW]: "msg"\n")
@@ -230,8 +232,28 @@ static bool winraw_set_mouse_input(HWND window, bool grab)
    return true;
 }
 
-static int16_t winraw_mouse_state(winraw_mouse_t *mouse, bool abs, unsigned id)
+static int16_t winraw_mouse_state(winraw_input_t *wr,
+      unsigned port, bool abs, unsigned id)
 {
+   unsigned i;
+   settings_t *settings  = config_get_ptr();
+   winraw_mouse_t *mouse = NULL;
+
+   if (port >= MAX_USERS)
+      return 0;
+
+   for (i = 0; i < g_mouse_cnt; ++i)
+   {
+      if (i == settings->uints.input_mouse_index[port])
+      {
+         mouse = &wr->mice[i];
+         break;
+      }
+   }
+
+   if (!mouse)
+      return 0;
+
    switch (id)
    {
       case RETRO_DEVICE_ID_MOUSE_X:
@@ -364,8 +386,6 @@ end:
 static void *winraw_init(const char *joypad_driver)
 {
    bool r;
-   video_viewport_t dst_vid_info;
-   struct retro_system_av_info *src_vid_info;
    winraw_input_t *wr = (winraw_input_t *)calloc(1, sizeof(winraw_input_t));
    g_keyboard         = (winraw_keyboard_t*)calloc(1, sizeof(winraw_keyboard_t));
 
@@ -491,13 +511,9 @@ static int16_t winraw_input_state(void *d,
          }
          break;
       case RETRO_DEVICE_MOUSE:
-         if (port < g_mouse_cnt)
-            return winraw_mouse_state(&wr->mice[port], false, id);
-         break;
+         return winraw_mouse_state(wr, port, false, id);
       case RARCH_DEVICE_MOUSE_SCREEN:
-         if (port < g_mouse_cnt)
-            return winraw_mouse_state(&wr->mice[port], true, id);
-         break;
+         return winraw_mouse_state(wr, port, true, id);
       case RETRO_DEVICE_JOYPAD:
          return winraw_joypad_state(wr, joypad_info, binds[port], port, id);
       case RETRO_DEVICE_ANALOG:

@@ -1,6 +1,6 @@
 /*  RetroArch - A frontend for libretro.
  *  Copyright (C) 2016-2017 - Jean-André Santoni
- *  Copyright (C) 2017      - Andrés Suárez
+ *  Copyright (C) 2017      - Andrés Suárez 
  *
  *  RetroArch is free software: you can redistribute it and/or modify it under the terms
  *  of the GNU General Public License as published by the Free Software Found-
@@ -16,7 +16,7 @@
 
 #include <lists/file_list.h>
 #include <string/stdstring.h>
-#include "../src/paths.h"
+#include "../paths.h"
 
 #include "tasks_internal.h"
 
@@ -24,7 +24,7 @@
 #include "../config.h"
 #endif
 
-#include "../src/verbosity.h"
+#include "../verbosity.h"
 #include "../network/netplay/netplay_discovery.h"
 
 static void task_netplay_lan_scan_handler(retro_task_t *task)

@@ -178,13 +178,13 @@ VIDEO DRIVER
 #endif
 #endif
 
-//#ifdef HAVE_VULKAN
-//#include "../gfx/drivers_shader/shader_vulkan.cpp"
-//#include "../gfx/drivers_shader/glslang_util.cpp"
-//#include "../gfx/drivers_shader/slang_reflection.cpp"
-//#include "../deps/SPIRV-Cross/spirv_cross.cpp"
-//#include "../deps/SPIRV-Cross/spirv_cfg.cpp"
-//#endif
+#ifdef HAVE_VULKAN
+#include "../gfx/drivers_shader/shader_vulkan.cpp"
+#include "../gfx/drivers_shader/glslang_util.cpp"
+#include "../gfx/drivers_shader/slang_reflection.cpp"
+#include "../deps/SPIRV-Cross/spirv_cross.cpp"
+#include "../deps/SPIRV-Cross/spirv_cfg.cpp"
+#endif
 
 /*============================================================
 FONTS

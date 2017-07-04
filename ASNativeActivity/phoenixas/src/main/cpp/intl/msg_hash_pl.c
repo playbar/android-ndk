@@ -15,7 +15,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "../src/msg_hash.h"
+#include "../msg_hash.h"
 
 #if defined(_MSC_VER) && !defined(_XBOX)
 /* https://support.microsoft.com/en-us/kb/980263 */

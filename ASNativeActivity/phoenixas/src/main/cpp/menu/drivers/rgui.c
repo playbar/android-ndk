@@ -43,7 +43,7 @@
 
 #include "../widgets/menu_input_dialog.h"
 
-#include "../../src/configuration.h"
+#include "../../configuration.h"
 #include "../../gfx/drivers_font_renderer/bitmap.h"
 
 #define RGUI_TERM_START_X(width)        (width / 21)
@@ -185,7 +185,7 @@ static void blit_line(int x, int y,
    {
       const uint8_t *font_fb = menu_display_get_font_framebuffer();
       uint32_t symbol        = utf8_walk(&message);
-
+      
       for (j = 0; j < FONT_HEIGHT; j++)
       {
          for (i = 0; i < FONT_WIDTH; i++)
@@ -438,7 +438,7 @@ static void rgui_render(void *data, bool is_idle)
       unsigned new_val;
 
       menu_entries_ctl(MENU_ENTRIES_CTL_START_GET, &old_start);
-
+      
       new_val = (unsigned)(menu_input_pointer_state(MENU_POINTER_Y_AXIS)
          / (11 - 2 + old_start));
 
@@ -532,7 +532,7 @@ static void rgui_render(void *data, bool is_idle)
          RGUI_TERM_START_X(fb_width),
          title_buf, TITLE_COLOR(settings));
 
-   if (settings->bools.menu_core_enable &&
+   if (settings->bools.menu_core_enable && 
          menu_entries_get_core_title(title_msg, sizeof(title_msg)) == 0)
       blit_line(
             RGUI_TERM_START_X(fb_width),

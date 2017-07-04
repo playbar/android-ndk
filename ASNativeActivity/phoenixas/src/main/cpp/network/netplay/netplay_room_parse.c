@@ -23,7 +23,7 @@
 #include <compat/strl.h>
 #include <formats/jsonsax_full.h>
 #include "netplay_discovery.h"
-#include "../../src/verbosity.h"
+#include "../../verbosity.h"
 
 enum parse_state
 {
@@ -112,7 +112,7 @@ static JSON_Parser_HandlerResult JSON_CALL StringHandler(
          {
             if (string_is_equal(pCtx->cur_field, "game_crc"))
             {
-               /* CRC comes in as a string but it is stored
+               /* CRC comes in as a string but it is stored 
                 * as an unsigned casted to int. */
                *((int*)pCtx->cur_member) = (int)strtoul(pValue, NULL, 16);
             }

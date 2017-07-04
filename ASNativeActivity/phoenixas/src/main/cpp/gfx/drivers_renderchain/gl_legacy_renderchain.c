@@ -2,7 +2,7 @@
  *  Copyright (C) 2010-2014 - Hans-Kristian Arntzen
  *  Copyright (C) 2011-2017 - Daniel De Matteis
  *  Copyright (C) 2012-2015 - Michael Lelli
- *
+ * 
  *  RetroArch is free software: you can redistribute it and/or modify it under the terms
  *  of the GNU General Public License as published by the Free Software Found-
  *  ation, either version 3 of the License, or (at your option) any later version.
@@ -33,18 +33,19 @@
 #include <formats/image.h>
 #include <retro_inline.h>
 #include <retro_miscellaneous.h>
+#include <retro_math.h>
 #include <string/stdstring.h>
 
 #include <gfx/gl_capabilities.h>
 #include <gfx/video_frame.h>
 
 #include "gl_legacy_renderchain.h"
-#include "../video_renderchain_driver.h"
+#include "../video_driver.h"
 #include "../common/gl_common.h"
 
-#include "../../src/driver.h"
-#include "../../src/configuration.h"
-#include "../../src/verbosity.h"
+#include "../../driver.h"
+#include "../../configuration.h"
+#include "../../verbosity.h"
 
 #if defined(_WIN32) && !defined(_XBOX)
 #include "../common/win32_common.h"
@@ -59,7 +60,7 @@
    coords[7] = yamt
 
 /* Used when rendering to an FBO.
- * Texture coords have to be aligned
+ * Texture coords have to be aligned 
  * with vertex coordinates. */
 static const GLfloat fbo_vertexes[] = {
    0, 0,
@@ -92,12 +93,12 @@ void gl_renderchain_convert_geometry(gl_t *gl,
          break;
 
       case RARCH_SCALE_ABSOLUTE:
-         fbo_rect->img_width      = fbo_rect->max_img_width =
+         fbo_rect->img_width      = fbo_rect->max_img_width = 
             fbo_scale->abs_x;
          break;
 
       case RARCH_SCALE_VIEWPORT:
-         fbo_rect->img_width      = fbo_rect->max_img_width =
+         fbo_rect->img_width      = fbo_rect->max_img_width = 
             fbo_scale->scale_x * vp_width;
          break;
    }
@@ -115,7 +116,7 @@ void gl_renderchain_convert_geometry(gl_t *gl,
          break;
 
       case RARCH_SCALE_VIEWPORT:
-         fbo_rect->img_height     = fbo_rect->max_img_height =
+         fbo_rect->img_height     = fbo_rect->max_img_height = 
             fbo_scale->scale_y * vp_height;
          break;
    }
@@ -142,7 +143,7 @@ static bool gl_recreate_fbo(
          RARCH_GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
          *texture, 0);
 
-   if (glCheckFramebufferStatus(RARCH_GL_FRAMEBUFFER)
+   if (glCheckFramebufferStatus(RARCH_GL_FRAMEBUFFER) 
          == RARCH_GL_FRAMEBUFFER_COMPLETE)
       return true;
 
@@ -154,7 +155,7 @@ static void gl_check_fbo_dimension(gl_t *gl, unsigned i,
       bool update_feedback)
 {
    struct video_fbo_rect *fbo_rect = &gl->fbo_rect[i];
-   /* Check proactively since we might suddently
+   /* Check proactively since we might suddently 
     * get sizes of tex_w width or tex_h height. */
    unsigned img_width              = fbo_rect->max_img_width;
    unsigned img_height             = fbo_rect->max_img_height;
@@ -166,14 +167,14 @@ static void gl_check_fbo_dimension(gl_t *gl, unsigned i,
 
    gl_recreate_fbo(fbo_rect, gl->fbo[i], &gl->fbo_texture[i]);
 
-   /* Update feedback texture in-place so we avoid having to
+   /* Update feedback texture in-place so we avoid having to 
     * juggle two different fbo_rect structs since they get updated here. */
    if (update_feedback)
    {
       if (gl_recreate_fbo(fbo_rect, gl->fbo_feedback,
                &gl->fbo_feedback_texture))
       {
-         /* Make sure the feedback textures are cleared
+         /* Make sure the feedback textures are cleared 
           * so we don't feedback noise. */
          glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
          glClear(GL_COLOR_BUFFER_BIT);
@@ -184,7 +185,7 @@ static void gl_check_fbo_dimension(gl_t *gl, unsigned i,
          i, fbo_rect->width, fbo_rect->height);
 }
 
-/* On resize, we might have to recreate our FBOs
+/* On resize, we might have to recreate our FBOs 
  * due to "Viewport" scale, and set a new viewport. */
 
 void gl_check_fbo_dimensions(gl_t *gl)
@@ -197,7 +198,7 @@ void gl_check_fbo_dimensions(gl_t *gl)
       struct video_fbo_rect *fbo_rect = &gl->fbo_rect[i];
       if (fbo_rect)
       {
-         bool update_feedback = gl->fbo_feedback_enable
+         bool update_feedback = gl->fbo_feedback_enable 
             && (unsigned)i == gl->fbo_feedback_pass;
 
          if ((fbo_rect->max_img_width  > fbo_rect->width) ||
@@ -428,7 +429,7 @@ static bool gl_create_fbo_targets(gl_t *gl)
       if (status != RARCH_GL_FRAMEBUFFER_COMPLETE)
          goto error;
 
-      /* Make sure the feedback textures are cleared
+      /* Make sure the feedback textures are cleared 
        * so we don't feedback noise. */
       glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
       glClear(GL_COLOR_BUFFER_BIT);
@@ -455,7 +456,7 @@ static void gl_create_fbo_texture(gl_t *gl, unsigned i, GLuint texture)
    bool smooth                  = false;
    settings_t *settings         = config_get_ptr();
    GLuint base_filt             = settings->bools.video_smooth ? GL_LINEAR : GL_NEAREST;
-   GLuint base_mip_filt         = settings->bools.video_smooth ?
+   GLuint base_mip_filt         = settings->bools.video_smooth ? 
       GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST;
 
    glBindTexture(GL_TEXTURE_2D, texture);
@@ -468,7 +469,7 @@ static void gl_create_fbo_texture(gl_t *gl, unsigned i, GLuint texture)
 
    if (video_shader_driver_filter_type(&filter_type))
    {
-      min_filter = mipmapped ? (smooth ?
+      min_filter = mipmapped ? (smooth ? 
             GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST)
          : (smooth ? GL_LINEAR : GL_NEAREST);
    }
@@ -506,21 +507,21 @@ static void gl_create_fbo_texture(gl_t *gl, unsigned i, GLuint texture)
    {
 #ifndef HAVE_OPENGLES
       bool srgb_fbo = gl->fbo_scale[i].srgb_fbo;
-
+       
       if (!fp_fbo && srgb_fbo)
       {
          if (!gl->has_srgb_fbo)
                RARCH_ERR("[GL]: sRGB FBO was requested, but it is not supported. Falling back to UNORM. Result may have banding!\n");
       }
-
+       
       if (settings->bools.video_force_srgb_disable)
          srgb_fbo = false;
-
+       
       if (srgb_fbo && gl->has_srgb_fbo)
       {
          RARCH_LOG("[GL]: FBO pass #%d is sRGB.\n", i);
 #ifdef HAVE_OPENGLES2
-         /* EXT defines are same as core GLES3 defines,
+         /* EXT defines are same as core GLES3 defines, 
           * but GLES3 variant requires different arguments. */
          glTexImage2D(GL_TEXTURE_2D,
                0, GL_SRGB_ALPHA_EXT,
@@ -543,7 +544,7 @@ static void gl_create_fbo_texture(gl_t *gl, unsigned i, GLuint texture)
                gl->fbo_rect[i].width, gl->fbo_rect[i].height, 0,
                GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 #else
-         /* Avoid potential performance
+         /* Avoid potential performance 
           * reductions on particular platforms. */
          gl_load_texture_image(GL_TEXTURE_2D,
             0, RARCH_GL_INTERNAL_FORMAT32,
@@ -573,7 +574,7 @@ static void gl_create_fbo_textures(gl_t *gl)
 }
 
 /* Compute FBO geometry.
- * When width/height changes or window sizes change,
+ * When width/height changes or window sizes change, 
  * we have to recalculate geometry of our FBO. */
 
 void gl_renderchain_recompute_pass_sizes(gl_t *gl,
@@ -644,7 +645,7 @@ void gl_renderchain_start_render(gl_t *gl, video_frame_info_t *video_info)
    gl_set_viewport(gl, video_info, gl->fbo_rect[0].img_width,
          gl->fbo_rect[0].img_height, true, false);
 
-   /* Need to preserve the "flipped" state when in FBO
+   /* Need to preserve the "flipped" state when in FBO 
     * as well to have consistent texture coordinates.
     *
     * We will "flip" it in place on last pass. */
@@ -723,7 +724,7 @@ void gl_renderchain_init(gl_t *gl, unsigned fbo_width, unsigned fbo_height)
    if (!scale.valid)
    {
       scale.scale_x = 1.0f;
-      scale.scale_y = 1.0f;
+      scale.scale_y = 1.0f; 
       scale.type_x  = scale.type_y = RARCH_SCALE_INPUT;
       scale.valid   = true;
    }
@@ -740,7 +741,7 @@ void gl_renderchain_init(gl_t *gl, unsigned fbo_width, unsigned fbo_height)
       if (!gl->fbo_scale[i].valid)
       {
          gl->fbo_scale[i].scale_x = gl->fbo_scale[i].scale_y = 1.0f;
-         gl->fbo_scale[i].type_x  = gl->fbo_scale[i].type_y  =
+         gl->fbo_scale[i].type_x  = gl->fbo_scale[i].type_y  = 
             RARCH_SCALE_INPUT;
          gl->fbo_scale[i].valid   = true;
       }
@@ -760,7 +761,7 @@ void gl_renderchain_init(gl_t *gl, unsigned fbo_width, unsigned fbo_height)
    gl->fbo_feedback_enable = video_shader_driver_get_feedback_pass(
          &gl->fbo_feedback_pass);
 
-   if (gl->fbo_feedback_enable && gl->fbo_feedback_pass
+   if (gl->fbo_feedback_enable && gl->fbo_feedback_pass 
          < (unsigned)gl->fbo_pass)
    {
       RARCH_LOG("[GL]: Creating feedback FBO %d @ %ux%u\n", i,
@@ -909,7 +910,7 @@ void gl_renderchain_bind_prev_texture(
          sizeof(*tex_info));
 
 #ifdef HAVE_FBO
-   /* Implement feedback by swapping out FBO/textures
+   /* Implement feedback by swapping out FBO/textures 
     * for FBO pass #N and feedbacks. */
    if (gl->fbo_feedback_enable)
    {

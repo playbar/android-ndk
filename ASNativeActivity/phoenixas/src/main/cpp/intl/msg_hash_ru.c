@@ -13,7 +13,7 @@
  *  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../src/msg_hash.h"
+#include "../msg_hash.h"
 
 const char *msg_hash_to_str_ru(enum msg_hash_enums msg)
 {

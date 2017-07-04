@@ -23,8 +23,8 @@
 
 #include "netplay_private.h"
 
-#include "../../src/autosave.h"
-#include "../../src/driver.h"
+#include "../../autosave.h"
+#include "../../driver.h"
 #include "../../input/input_driver.h"
 
 #if 0

@@ -32,8 +32,8 @@
 #include "menu_driver.h"
 #include "menu_animation.h"
 
-#include "../src/configuration.h"
-#include "../src/retroarch.h"
+#include "../configuration.h"
+#include "../retroarch.h"
 #include "../tasks/tasks_internal.h"
 
 static unsigned char menu_keyboard_key_state[RETROK_LAST] = {0};
@@ -64,7 +64,7 @@ static int menu_event_pointer(unsigned *action)
       current_input->input_state(current_input_data, joypad_info, binds,
             0, pointer_device, 0, RETRO_DEVICE_ID_POINTER_Y);
 
-   menu_input->pointer.pressed[0]  = current_input->input_state(current_input_data,
+   menu_input->pointer.pressed[0]  = current_input->input_state(current_input_data, 
          joypad_info,
          binds,
          0, pointer_device, 0, RETRO_DEVICE_ID_POINTER_PRESSED);
@@ -123,10 +123,10 @@ unsigned menu_event(uint64_t input, uint64_t trigger_input)
    settings_t *settings                    = config_get_ptr();
    static unsigned ok_old                  = 0;
    bool input_swap_override                = input_autoconfigure_get_swap_override();
-   unsigned menu_ok_btn                    = (!input_swap_override &&
+   unsigned menu_ok_btn                    = (!input_swap_override && 
       settings->bools.input_menu_swap_ok_cancel_buttons) ?
       RETRO_DEVICE_ID_JOYPAD_B : RETRO_DEVICE_ID_JOYPAD_A;
-   unsigned menu_cancel_btn                = (!input_swap_override &&
+   unsigned menu_cancel_btn                = (!input_swap_override && 
       settings->bools.input_menu_swap_ok_cancel_buttons) ?
       RETRO_DEVICE_ID_JOYPAD_A : RETRO_DEVICE_ID_JOYPAD_B;
    unsigned ok_current                     = (unsigned)(input & UINT64_C(1) << menu_ok_btn);

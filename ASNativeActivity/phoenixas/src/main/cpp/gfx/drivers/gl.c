@@ -42,11 +42,11 @@
 
 #include "../drivers_renderchain/gl_legacy_renderchain.h"
 
-#include "../../src/configuration.h"
+#include "../../configuration.h"
 #include "../../record/record_driver.h"
 
-#include "../../src/retroarch.h"
-#include "../../src/verbosity.h"
+#include "../../retroarch.h"
+#include "../../verbosity.h"
 #include "../common/gl_common.h"
 
 #ifdef HAVE_THREADS
@@ -669,7 +669,7 @@ static void gl_init_textures(gl_t *gl, const video_info_t *video)
    glBindTexture(GL_TEXTURE_2D, gl->texture[gl->tex_index]);
 }
 
-static INLINE void gl_copy_frame(gl_t *gl,
+static INLINE void gl_copy_frame(gl_t *gl, 
       video_frame_info_t *video_info,
       const void *frame,
       unsigned width, unsigned height, unsigned pitch)
@@ -1129,7 +1129,7 @@ static bool gl_frame(void *data, const void *frame,
    glBindTexture(GL_TEXTURE_2D, gl->texture[gl->tex_index]);
 
    /* Can be NULL for frame dupe / NULL render. */
-   if (frame)
+   if (frame) 
    {
 #ifdef HAVE_FBO
       if (!gl->hw_render_fbo_init)
@@ -2049,7 +2049,7 @@ static void *gl_init(const video_info_t *video, const input_driver_t **input, vo
    video_context_driver_input_driver(&inp);
 
    if (video->font_enable)
-      font_driver_init_osd(gl, false,
+      font_driver_init_osd(gl, false, 
             video->is_threaded,
             FONT_DRIVER_RENDER_OPENGL_API);
 

@@ -25,9 +25,9 @@
 #include "../widgets/menu_dialog.h"
 #include "../widgets/menu_input_bind_dialog.h"
 
-#include "../../src/verbosity.h"
-#include "../../src/content.h"
-#include "../../src/retroarch.h"
+#include "../../verbosity.h"
+#include "../../content.h"
+#include "../../retroarch.h"
 
 static enum action_iterate_type action_iterate_type(uint32_t hash)
 {

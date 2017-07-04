@@ -16,8 +16,8 @@
 
 #include "../video_driver.h"
 
-#include "../../src/driver.h"
-#include "../../src/verbosity.h"
+#include "../../driver.h"
+#include "../../verbosity.h"
 
 static void *null_gfx_init(const video_info_t *video,
       const input_driver_t **input, void **input_data)
@@ -88,7 +88,7 @@ static bool null_gfx_set_shader(void *data,
    (void)type;
    (void)path;
 
-   return false;
+   return false; 
 }
 
 static void null_gfx_set_rotation(void *data,

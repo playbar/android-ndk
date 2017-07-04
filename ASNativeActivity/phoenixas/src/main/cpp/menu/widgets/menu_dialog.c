@@ -29,12 +29,12 @@
 
 #include "../menu_driver.h"
 
-#include "../../src/retroarch.h"
-#include "../../src/configuration.h"
+#include "../../retroarch.h"
+#include "../../configuration.h"
 
 #include "../../tasks/tasks_internal.h"
 #include "../../input/input_config.h"
-#include "../../src/performance_counters.h"
+#include "../../performance_counters.h"
 
 static bool                  menu_dialog_pending_push   = false;
 static bool                  menu_dialog_active         = false;

@@ -32,8 +32,8 @@
 #include "menu_animation.h"
 #include "menu_event.h"
 
-#include "../src/configuration.h"
-#include "../src/performance_counters.h"
+#include "../configuration.h"
+#include "../performance_counters.h"
 
 enum menu_mouse_action
 {
@@ -131,13 +131,13 @@ static int menu_input_mouse_post_iterate(uint64_t *input_mouse,
 #endif
          )
    {
-      /* HACK: Need to lie to avoid false hits if mouse is held
+      /* HACK: Need to lie to avoid false hits if mouse is held 
        * when entering the RetroArch window. */
 
-      /* This happens if, for example, someone double clicks the
+      /* This happens if, for example, someone double clicks the 
        * window border to maximize it.
        *
-       * The proper fix is, of course, triggering on WM_LBUTTONDOWN
+       * The proper fix is, of course, triggering on WM_LBUTTONDOWN 
        * rather than this state change. */
       mouse_oldleft   = true;
       mouse_oldright  = true;
@@ -419,12 +419,12 @@ static int menu_input_pointer_post_iterate(
    int ret                      = 0;
    menu_input_t *menu_input     = menu_input_get_ptr();
    settings_t *settings         = config_get_ptr();
-
+   
    if (!menu_input || !settings)
       return -1;
 
 #ifdef HAVE_OVERLAY
-   if ((       settings->bools.input_overlay_enable
+   if ((       settings->bools.input_overlay_enable 
             && input_overlay_is_alive(overlay_ptr)))
       return 0;
 #endif

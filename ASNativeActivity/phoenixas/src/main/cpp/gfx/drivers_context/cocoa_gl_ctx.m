@@ -85,6 +85,11 @@
 #define RAScreen NSScreen
 #endif
 
+typedef struct cocoa_ctx_data
+{
+   bool core_hw_context_enable; 
+} cocoa_ctx_data_t;
+
 #if defined(HAVE_COCOATOUCH)
 
 static GLKView *g_view;
@@ -96,7 +101,7 @@ static GLContextClass* g_context;
 
 static int g_fast_forward_skips;
 static bool g_is_syncing = true;
-static bool g_use_hw_ctx;
+static bool g_use_hw_ctx = false;
 
 #if defined(HAVE_COCOA)
 #include "../../ui/drivers/ui_cocoa.h"
@@ -220,8 +225,10 @@ void cocoagl_gfx_ctx_update(void)
 {
 #if defined(HAVE_COCOA)
 #if MAC_OS_X_VERSION_10_7
+   CGLUpdateContext(g_hw_ctx.CGLContextObj);
    CGLUpdateContext(g_context.CGLContextObj);
 #else
+    [g_hw_ctx update];
 	[g_context update];
 #endif
 #endif
@@ -229,53 +236,13 @@ void cocoagl_gfx_ctx_update(void)
 
 static void *cocoagl_gfx_ctx_init(video_frame_info_t *video_info, void *video_driver)
 {
-   (void)video_driver;
-    
-#if defined(HAVE_COCOA)
-    CocoaView *g_view = (CocoaView*)nsview_get_ptr();
-    if ([g_view respondsToSelector: @selector(setWantsBestResolutionOpenGLSurface:)])
-        [g_view setWantsBestResolutionOpenGLSurface:YES];
-    
-    NSOpenGLPixelFormatAttribute attributes [] = {
-        NSOpenGLPFAColorSize, 24,
-        NSOpenGLPFADoubleBuffer,
-        NSOpenGLPFAAllowOfflineRenderers,
-        NSOpenGLPFADepthSize,
-        (NSOpenGLPixelFormatAttribute)16, // 16 bit depth buffer
-#ifdef MAC_OS_X_VERSION_10_7
-        (g_major || g_minor) ? NSOpenGLPFAOpenGLProfile : 0,
-        (g_major << 12) | (g_minor << 8),
-#endif
-        (NSOpenGLPixelFormatAttribute)0
-    };
-    
-    g_format = [[NSOpenGLPixelFormat alloc] initWithAttributes:attributes];
-    
-#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
-    if (g_format == nil)
-    {
-        /* NSOpenGLFPAAllowOfflineRenderers is 
-         not supported on this OS version. */
-        attributes[3] = (NSOpenGLPixelFormatAttribute)0;
-        g_format = [[NSOpenGLPixelFormat alloc] initWithAttributes:attributes];
-    }
-#endif
-    
-    if (g_use_hw_ctx)
-    {
-        //g_hw_ctx  = [[NSOpenGLContext alloc] initWithFormat:g_format shareContext:nil];
-    }
-    g_context = [[NSOpenGLContext alloc] initWithFormat:g_format shareContext:(g_use_hw_ctx) ? g_hw_ctx : nil];
-    [g_context setView:g_view];
-#else
-    g_context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-    g_view.context = g_context;
-#endif
-    
-    [g_context makeCurrentContext];
-   // Make sure the view was created
-   [CocoaView get];
-   return (void*)"cocoa";
+   cocoa_ctx_data_t *cocoa_ctx = (cocoa_ctx_data_t*)
+      calloc(1, sizeof(cocoa_ctx_data_t));
+
+   if (!cocoa_ctx)
+      return NULL;
+
+   return cocoa_ctx;
 }
 
 static void cocoagl_gfx_ctx_destroy(void *data)
@@ -293,7 +260,10 @@ static void cocoagl_gfx_ctx_destroy(void *data)
         [g_format release];
     g_format = nil;
     if (g_hw_ctx)
+    {
+        [g_hw_ctx clearDrawable];
         [g_hw_ctx release];
+    }
     g_hw_ctx = nil;
 #endif
    [GLContextClass clearCurrentContext];
@@ -348,8 +318,65 @@ static bool cocoagl_gfx_ctx_set_video_mode(void *data,
       unsigned width, unsigned height, bool fullscreen)
 {
 #if defined(HAVE_COCOA)
+    CocoaView *g_view = (CocoaView*)nsview_get_ptr();
+    if ([g_view respondsToSelector: @selector(setWantsBestResolutionOpenGLSurface:)])
+        [g_view setWantsBestResolutionOpenGLSurface:YES];
+    
+    NSOpenGLPixelFormatAttribute attributes [] = {
+        NSOpenGLPFAColorSize,
+        24,
+        NSOpenGLPFADoubleBuffer,
+        NSOpenGLPFAAllowOfflineRenderers,
+        NSOpenGLPFADepthSize,
+        (NSOpenGLPixelFormatAttribute)16, // 16 bit depth buffer
+        0,                                /* profile */
+        0,                                /* profile enum */
+        (NSOpenGLPixelFormatAttribute)0
+    };
+
+#if MAC_OS_X_VERSION_10_7
+    if (g_major == 3 && (g_minor >= 1 && g_minor <= 3))
+    {
+       attributes[6] = NSOpenGLPFAOpenGLProfile;
+       attributes[7] = NSOpenGLProfileVersion3_2Core;
+    }
+#endif
+
+#if MAC_OS_X_VERSION_10_10
+    if (g_major == 4 && g_minor == 1)
+    {
+       attributes[6] = NSOpenGLPFAOpenGLProfile;
+       attributes[7] = NSOpenGLProfileVersion4_1Core;
+    }
+#endif
+    
+    g_format = [[NSOpenGLPixelFormat alloc] initWithAttributes:attributes];
+    
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
+    if (g_format == nil)
+    {
+        /* NSOpenGLFPAAllowOfflineRenderers is
+         not supported on this OS version. */
+        attributes[3] = (NSOpenGLPixelFormatAttribute)0;
+        g_format = [[NSOpenGLPixelFormat alloc] initWithAttributes:attributes];
+    }
+#endif
+    
+    if (g_use_hw_ctx)
+        g_hw_ctx  = [[NSOpenGLContext alloc] initWithFormat:g_format shareContext:nil];
+    g_context = [[NSOpenGLContext alloc] initWithFormat:g_format shareContext:(g_use_hw_ctx) ? g_hw_ctx : nil];
+    [g_context setView:g_view];
+#else
+    if (g_use_hw_ctx)
+        g_hw_ctx = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+    g_context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+    g_view.context = g_context;
+#endif
+    
+    [g_context makeCurrentContext];
+    
+#if defined(HAVE_COCOA)
    static bool has_went_fullscreen = false;
-   CocoaView *g_view = (CocoaView*)nsview_get_ptr();
    /* TODO: Screen mode support. */
 
    if (fullscreen)
@@ -545,6 +572,7 @@ static void cocoagl_gfx_ctx_swap_buffers(void *data, void *data2)
     
 #if defined(HAVE_COCOA)
     [g_context flushBuffer];
+    [g_hw_ctx flushBuffer];
 #elif defined(HAVE_COCOATOUCH)
     if (g_view)
         [g_view display];
@@ -597,14 +625,24 @@ static void cocoagl_gfx_ctx_bind_hw_render(void *data, bool enable)
 
 static uint32_t cocoagl_gfx_ctx_get_flags(void *data)
 {
-   uint32_t flags = 0;
+   uint32_t flags                 = 0;
+   cocoa_ctx_data_t    *cocoa_ctx = (cocoa_ctx_data_t*)data;
+
    BIT32_SET(flags, GFX_CTX_FLAGS_NONE);
+
+   if (cocoa_ctx->core_hw_context_enable)
+      BIT32_SET(flags, GFX_CTX_FLAGS_GL_CORE_CONTEXT);
+
    return flags;
 }
 
 static void cocoagl_gfx_ctx_set_flags(void *data, uint32_t flags)
 {
    (void)flags;
+   cocoa_ctx_data_t *cocoa_ctx = (cocoa_ctx_data_t*)data;
+
+   if (BIT32_GET(flags, GFX_CTX_FLAGS_GL_CORE_CONTEXT))
+      cocoa_ctx->core_hw_context_enable = true;
 }
 
 const gfx_ctx_driver_t gfx_ctx_cocoagl = {

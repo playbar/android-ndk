@@ -419,7 +419,7 @@ MSG_HASH(
 MSG_HASH(MENU_ENUM_LABEL_VALUE_CONTENT_SETTINGS,
       "Выйти из меню")
 MSG_HASH(MENU_ENUM_LABEL_VALUE_CORE_ASSETS_DIR,
-      "Основные средства")
+      "Загрузки")
 MSG_HASH(MENU_ENUM_LABEL_VALUE_CORE_ASSETS_DIRECTORY,
       "Загрузки")
 MSG_HASH(MENU_ENUM_LABEL_VALUE_CORE_CHEAT_OPTIONS,
@@ -1149,7 +1149,7 @@ MSG_HASH(MENU_ENUM_LABEL_VALUE_SAVESTATE_AUTO_LOAD,
 MSG_HASH(MENU_ENUM_LABEL_VALUE_SAVESTATE_AUTO_SAVE,
       "Автосохранение")
 MSG_HASH(MENU_ENUM_LABEL_VALUE_SAVESTATE_DIRECTORY,
-      "Сохранить статистику")
+      "Сохранить состояние")
 MSG_HASH(MENU_ENUM_LABEL_VALUE_SAVE_CURRENT_CONFIG,
       "Сохранить текущую конфигурацию")
 MSG_HASH(MENU_ENUM_LABEL_VALUE_SAVE_CURRENT_CONFIG_OVERRIDE_CORE,
@@ -1159,7 +1159,7 @@ MSG_HASH(MENU_ENUM_LABEL_VALUE_SAVE_CURRENT_CONFIG_OVERRIDE_GAME,
 MSG_HASH(MENU_ENUM_LABEL_VALUE_SAVE_NEW_CONFIG,
       "Сохранить новую конфигурацию")
 MSG_HASH(MENU_ENUM_LABEL_VALUE_SAVE_STATE,
-      "Сохранить статистику")
+      "Сохранить состояние")
 MSG_HASH(MENU_ENUM_LABEL_VALUE_SAVING_SETTINGS,
       "Сохранить")
 MSG_HASH(MENU_ENUM_LABEL_VALUE_SCAN_DIRECTORY,
@@ -1215,7 +1215,7 @@ MSG_HASH(MENU_ENUM_LABEL_VALUE_START_NET_RETROPAD,
 MSG_HASH(MENU_ENUM_LABEL_VALUE_START_VIDEO_PROCESSOR,
       "Запустить видеопроцессор")
 MSG_HASH(MENU_ENUM_LABEL_VALUE_STATE_SLOT,
-      "Статистика слота")
+      "Слот состояния")
 MSG_HASH(MENU_ENUM_LABEL_VALUE_STATUS,
       "Статус")
 MSG_HASH(MENU_ENUM_LABEL_VALUE_STDIN_CMD_ENABLE,
@@ -1869,7 +1869,7 @@ MSG_HASH(MSG_FAILED_TO_SEND_NICKNAME_SIZE,
 MSG_HASH(MSG_FAILED_TO_SEND_NICKNAME_TO_CLIENT,
       "Не удалось отправить никнейм клиенту.")
 MSG_HASH(MSG_FAILED_TO_SEND_NICKNAME_TO_HOST,
-      "FНе удалось отправить никнейм на хост.")
+      "Не удалось отправить никнейм на хост.")
 MSG_HASH(MSG_FAILED_TO_SEND_SRAM_DATA_TO_CLIENT,
       "Не удалось отправить данные SRAM клиенту.")
 MSG_HASH(MSG_FAILED_TO_START_AUDIO_DRIVER,
@@ -1991,7 +1991,7 @@ MSG_HASH(MSG_REDIRECTING_SAVEFILE_TO,
 MSG_HASH(MSG_REDIRECTING_SAVESTATE_TO,
       "Файл сохранения перенаправлен в")
 MSG_HASH(MSG_REMAP_FILE_SAVED_SUCCESSFULLY,
-      "Remap file saved successfully.")
+      "Файл перекодировки успешно сохранен.")
 MSG_HASH(MSG_REMOVED_DISK_FROM_TRAY,
       "Диск извлечён.")
 MSG_HASH(MSG_REMOVING_TEMPORARY_CONTENT_FILE,
@@ -2112,7 +2112,7 @@ MSG_HASH(
       )
 MSG_HASH(
       MENU_ENUM_SUBLABEL_INPUT_POLL_TYPE_BEHAVIOR,
-      "Влияйте на то, как входной опрос выполняется внутри RetroArch. Установка его на« Early »или« Late »может привести к меньшему времени ожидания в зависимости от вашей конфигурации."
+      "Влияйте на то, как входной опрос выполняется внутри RetroArch. Установка его на «Раньше» или «Позже» может привести к меньшему времени ожидания в зависимости от вашей конфигурации."
       )
 MSG_HASH(
       MENU_ENUM_SUBLABEL_INPUT_ALL_USERS_CONTROL_MENU,
@@ -2148,7 +2148,7 @@ MSG_HASH(
    )
 MSG_HASH(
    MENU_ENUM_SUBLABEL_VIDEO_ALLOW_ROTATE,
-   "AРазрешить ядрам задавать поворот, при отключении, запросы на поворот игнорируются, что полезно при настройках, когда один из них поворачивает экран вручную."
+   "Разрешить ядрам задавать поворот, при отключении, запросы на поворот игнорируются, что полезно при настройках, когда один из них поворачивает экран вручную."
    )
 MSG_HASH(
    MENU_ENUM_SUBLABEL_DUMMY_ON_CORE_SHUTDOWN,
@@ -2238,30 +2238,635 @@ MSG_HASH(MENU_ENUM_LABEL_DATABASE_CURSOR_LIST_ENTRY_EDGE_MAGAZINE_RATING,
 MSG_HASH(MENU_ENUM_LABEL_VALUE_DATABASE_CURSOR_LIST_ENTRY_DATABASE_INFO,
       "Database Info")
 MSG_HASH(MENU_ENUM_SUBLABEL_PAUSE_NONACTIVE,
-      "Pause gameplay when window focus is lost.")
+      "Ставить на паузу когда окно теряет фокус.")
 MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_DISABLE_COMPOSITION,
-      "Enable or disable composition (Windows only).")
+      "Включить или отключить композицию (только для Windows).")
 MSG_HASH(MENU_ENUM_SUBLABEL_HISTORY_LIST_ENABLE,
-      "Enable or disable recent playlist for games, images, music, and videos.")
+      "Включить или отключить показ недавних игр, изображений, музыки и видео.")
 MSG_HASH(MENU_ENUM_SUBLABEL_CONTENT_HISTORY_SIZE,
-      "Limit the number of entries in recent playlist for games, images, music, and videos.")
+      "Ограничить количество записей в последнем плейлисте для игр, изображений, музыки и видео.")
 MSG_HASH(MENU_ENUM_LABEL_VALUE_INPUT_UNIFIED_MENU_CONTROLS,
-      "Unified Menu Controls")
+      "Унифицировать управление в меню")
 MSG_HASH(MENU_ENUM_SUBLABEL_INPUT_UNIFIED_MENU_CONTROLS,
-      "Use the same controls for both the menu and the game. Applies to the keyboard.")
+      "Использовать управление в меню, такое же как в игре (для клавиатуры).")
 MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_FONT_ENABLE,
-      "Show onscreen messages.")
+      "Показывать сообщения на экране.")
 MSG_HASH(
       MENU_ENUM_LABEL_VALUE_BROWSE_URL_LIST,
-      "Browse URL"
+      "Просмотр URL"
       )
 MSG_HASH(
       MENU_ENUM_LABEL_VALUE_BROWSE_URL,
-      "URL Path"
+      "Путь URL"
       )
 MSG_HASH(
       MENU_ENUM_LABEL_VALUE_BROWSE_START,
-      "Start"
+      "Старт"
       )
 MSG_HASH(MENU_ENUM_LABEL_VALUE_SHADER_PIPELINE_BOKEH,
       "Bokeh")
+MSG_HASH(MENU_ENUM_LABEL_VALUE_NETPLAY_REFRESH_ROOMS,
+      "Refresh Room List")
+MSG_HASH(MENU_ENUM_LABEL_VALUE_NETPLAY_ROOM_NICKNAME,
+      "Nickname: %s")
+MSG_HASH(MENU_ENUM_LABEL_VALUE_NETPLAY_ROOM_NICKNAME_LAN,
+      "Nickname (lan): %s")
+MSG_HASH(MENU_ENUM_LABEL_VALUE_NETPLAY_COMPAT_CONTENT_FOUND,
+      "Compatible content found")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_CROP_OVERSCAN,
+      "Cuts off a few pixels around the edges of the image customarily left blank by developers which sometimes also contain garbage pixels.")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_SMOOTH,
+      "Adds a slight blur to the image to take the edge off of the hard pixel edges. This option has very little impact on performance.")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_FILTER,
+      "Apply a CPU-powered video filter. NOTE: Might come at a high performance cost. Some video filters might only work for cores that use 32bit or 16bit color.")
+MSG_HASH(MENU_ENUM_SUBLABEL_CHEEVOS_USERNAME,
+      "Input the username of your Retro Achievements account.")
+MSG_HASH(MENU_ENUM_SUBLABEL_CHEEVOS_PASSWORD,
+      "Input the password of your Retro Achievements account.")
+MSG_HASH(MENU_ENUM_SUBLABEL_NETPLAY_NICKNAME,
+      "Input your user name here. This will be used for netplay sessions, among other things.")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_POST_FILTER_RECORD,
+      "Capture the image after filters (but not shaders) are applied. Your video will look as fancy as what you see on your screen.")
+MSG_HASH(MENU_ENUM_SUBLABEL_CORE_LIST,
+      "Select which core to use.")
+MSG_HASH(MENU_ENUM_SUBLABEL_LOAD_CONTENT_LIST,
+      "Select which content to start.")
+MSG_HASH(MENU_ENUM_SUBLABEL_NETWORK_INFORMATION,
+      "Show network interface(s) and associated IP addresses.")
+MSG_HASH(MENU_ENUM_SUBLABEL_SYSTEM_INFORMATION,
+      "Show information specific to the device.")
+MSG_HASH(MENU_ENUM_SUBLABEL_QUIT_RETROARCH,
+      "Quit the program.")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_WINDOW_WIDTH,
+      "Set the custom width size for the display window. Leaving it at 0 will attempt to scale the window as large as possible.")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_WINDOW_HEIGHT,
+      "Set the custom height size for the display window. Leaving it at 0 will attempt to scale the window as large as possible.")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_FULLSCREEN_X,
+      "Set the custom width size for the non-windowed fullscreen mode. Leaving it at 0 will use the desktop resolution.")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_FULLSCREEN_Y,
+      "Set the custom height size for the non-windowed fullscreen mode. Leaving it at 0 will use the desktop resolution")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_MESSAGE_POS_X,
+      "Specify custom X axis position for onscreen text.")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_MESSAGE_POS_Y,
+      "Specify custom Y axis position for onscreen text.")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_FONT_SIZE,
+      "Specify the font size in points.")
+MSG_HASH(MENU_ENUM_SUBLABEL_INPUT_OVERLAY_HIDE_IN_MENU,
+      "Hide the overlay while inside the menu, and show it again when exiting the menu.")
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_CONTENT_COLLECTION_LIST,
+      "Scanned content will appear here."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_VIDEO_SCALE_INTEGER,
+      "Only scales video in integer steps. The base size depends on system-reported geometry and aspect ratio. If 'Force Aspect' is not set, X/Y will be integer scaled independently."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_VIDEO_GPU_SCREENSHOT,
+      "Screenshots output of GPU shaded material if available."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_VIDEO_ROTATION,
+      "Forces a certain rotation of the screen. The rotation is added to rotations which the core sets."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_VIDEO_FORCE_SRGB_DISABLE,
+      "Forcibly disable sRGB FBO support. Some Intel OpenGL drivers on Windows have video problems with sRGB FBO support if this is enabled. Enabling this can work around it."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_VIDEO_FULLSCREEN,
+      "Start in fullscreen. Can be changed at runtime."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_VIDEO_WINDOWED_FULLSCREEN,
+      "If fullscreen, prefer using a windowed fullscreen mode."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_VIDEO_GPU_RECORD,
+      "Records output of GPU shaded material if available."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_SAVESTATE_AUTO_INDEX,
+      "When making a savestate, save state index is automatically increased before it is saved. When loading content, the index will be set to the highest existing index."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_BLOCK_SRAM_OVERWRITE,
+      "Block Save RAM from being overwritten when loading save states. Might potentially lead to buggy games."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_FASTFORWARD_RATIO,
+      "The maximum rate at which content will be run when using fast forward (e.g., 5.0x for 60 fps content = 300 fps cap). If set to 0.0x, fastforward ratio is unlimited (no FPS cap)."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_SLOWMOTION_RATIO,
+      "When in slow motion, content will slow down by the factor specified/set."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_REWIND_ENABLE,
+      "Enable rewinding. This will take a performance hit when playing."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_REWIND_GRANULARITY,
+      "When rewinding a defined number of frames, you can rewind several frames at a time, increasing the rewind speed."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_LIBRETRO_LOG_LEVEL,
+      "Sets log level for cores. If a log level issued by a core is below this value, it is ignored."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_PERFCNT_ENABLE,
+      "Enable performance counters for RetroArch (and cores)."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_SAVESTATE_AUTO_SAVE,
+      "Automatically makes a savestate at the end of RetroArch's runtime. RetroArch will automatically load this savestate if 'Auto Load State' is enabled."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_SAVESTATE_AUTO_LOAD,
+      "Automatically load the auto save state on startup."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_SAVESTATE_THUMBNAIL_ENABLE,
+      "Show thumbnails of save states inside the menu."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_AUTOSAVE_INTERVAL,
+      "Autosaves the non-volatile Save RAM at a regular interval. This is disabled by default unless set otherwise. The interval is measured in seconds. A value of 0 disables autosave."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_INPUT_REMAP_BINDS_ENABLE,
+      "If enabled, overrides the input binds with the remapped binds set for the current core."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_INPUT_AUTODETECT_ENABLE,
+      "Enable input auto-detection. Will attempt to autoconfigure joypads, Plug-and-Play style."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_MENU_INPUT_SWAP_OK_CANCEL,
+      "Swap buttons for OK/Cancel. Disabled is the Japanese button orientation, enabled is the western orientation."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_PAUSE_LIBRETRO,
+      "If disabled, the content will keep running in the background when RetroArch's menu is toggled."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_VIDEO_DRIVER,
+      "Video driver to use."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_AUDIO_DRIVER,
+      "Audio driver to use."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_INPUT_DRIVER,
+      "Input driver to use. Depending on the video driver, it might force a different input driver."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_JOYPAD_DRIVER,
+      "Joypad driver to use."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_AUDIO_RESAMPLER_DRIVER,
+      "Audio resampler driver to use."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_CAMERA_DRIVER,
+      "Camera driver to use."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_LOCATION_DRIVER,
+      "Location driver to use."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_MENU_DRIVER,
+      "Menu driver to use."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_RECORD_DRIVER,
+      "Record driver to use."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_WIFI_DRIVER,
+      "WiFi driver to use."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_NAVIGATION_BROWSER_FILTER_SUPPORTED_EXTENSIONS_ENABLE,
+      "Filter files being shown in filebrowser by supported extensions."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_MENU_WALLPAPER,
+      "Select an image to set as menu wallpaper."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_DYNAMIC_WALLPAPER,
+      "Dynamically load a new wallpaper depending on context."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_AUDIO_DEVICE,
+      "Override the default audio device the audio driver uses. This is driver dependent."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_AUDIO_DSP_PLUGIN,
+      "Audio DSP plugin that processes audio before it's sent to the driver."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_AUDIO_OUTPUT_RATE,
+      "Audio output sample rate."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_OVERLAY_OPACITY,
+      "Opacity of all UI elements of the overlay."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_OVERLAY_SCALE,
+      "Scale of all UI elements of the overlay."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_INPUT_OVERLAY_ENABLE,
+      "Enable the overlay."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_OVERLAY_PRESET,
+      "Select an overlay from the file browser."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_NETPLAY_IP_ADDRESS,
+      "The address of the host to connect to."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_NETPLAY_TCP_UDP_PORT,
+      "The port of the host IP address. Can be either a TCP or UDP port."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_NETPLAY_PASSWORD,
+      "The password for connecting to the netplay host. Used only in host mode."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_NETPLAY_PUBLIC_ANNOUNCE,
+      "Whether to announce netplay games publicly. If unset, clients must manually connect rather than using the public lobby."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_NETPLAY_SPECTATE_PASSWORD,
+      "The password for connecting to the netplay host with only spectator privileges. Used only in host mode."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_NETPLAY_START_AS_SPECTATOR,
+      "Whether to start netplay in spectator mode."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_NETPLAY_ALLOW_SLAVES,
+      "Whether to allow connections in slave mode. Slave-mode clients require very little processing power on either side, but will suffer significantly from network latency."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_NETPLAY_REQUIRE_SLAVES,
+      "Whether to disallow connections not in slave mode. Not recommended except for very fast networks with very weak machines."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_NETPLAY_STATELESS_MODE,
+      "Whether to run netplay in a mode not requiring save states. If set to true, a very fast network is required, but no rewinding is performed, so there will be no netplay jitter."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_NETPLAY_CHECK_FRAMES,
+      "The frequency in frames with which netplay will verify that the host and client are in sync."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_NETPLAY_NAT_TRAVERSAL,
+      "When hosting, attempt to listen for connections from the public Internet, using UPnP or similar technologies to escape LANs."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_STDIN_CMD_ENABLE,
+      "Enable stdin command interface."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_MOUSE_ENABLE,
+      "Enable mouse controls inside the menu."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_POINTER_ENABLE,
+      "Enable touch controls inside the menu."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_THUMBNAILS,
+      "Type of thumbnail to display."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_TIMEDATE_ENABLE,
+      "Shows current date and/or time inside the menu."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_BATTERY_LEVEL_ENABLE,
+      "Shows current battery level inside the menu."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_NAVIGATION_WRAPAROUND,
+      "Wrap-around to beginning and/or end if boundary of list is reached horizontally or vertically."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_NETPLAY_ENABLE_HOST,
+      "Enables netplay in host (server) mode."
+      )
+MSG_HASH(MENU_ENUM_SUBLABEL_NETPLAY_ENABLE_CLIENT,
+      "Enables netplay in client mode.")
+MSG_HASH(MENU_ENUM_SUBLABEL_NETPLAY_DISCONNECT,
+      "Disconnects an active Netplay connection.")
+MSG_HASH(MENU_ENUM_SUBLABEL_SCAN_DIRECTORY,
+      "Scans a directory for compatible files and add them to the collection.")
+MSG_HASH(MENU_ENUM_SUBLABEL_SCAN_FILE,
+      "Scans a compatible file and add it to the collection.")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_SWAP_INTERVAL,
+      "Uses a custom swap interval for Vsync. Set this to effectively halve monitor refresh rate."
+      )
+MSG_HASH(MENU_ENUM_SUBLABEL_SORT_SAVEFILES_ENABLE,
+      "Sort save files in folders named after the core used."
+      )
+MSG_HASH(MENU_ENUM_SUBLABEL_SORT_SAVESTATES_ENABLE,
+      "Sort save states in folders named after the core used."
+      )
+MSG_HASH(MENU_ENUM_SUBLABEL_NETPLAY_CLIENT_SWAP_INPUT,
+      "When being client over netplay, use keybinds for Player 1.")
+MSG_HASH(MENU_ENUM_SUBLABEL_CORE_UPDATER_BUILDBOT_URL,
+      "URL to core updater directory on the Libretro buildbot.")
+MSG_HASH(MENU_ENUM_SUBLABEL_BUILDBOT_ASSETS_URL,
+      "URL to assets updater directory on the Libretro buildbot.")
+MSG_HASH(MENU_ENUM_SUBLABEL_CORE_UPDATER_AUTO_EXTRACT_ARCHIVE,
+      "After downloading, automatically extract files contained in the downloaded archives."
+      )
+MSG_HASH(MENU_ENUM_SUBLABEL_NETPLAY_REFRESH_ROOMS,
+      "Scan for new rooms.")
+MSG_HASH(MENU_ENUM_SUBLABEL_DELETE_ENTRY,
+      "Remove this entry from the collection.")
+MSG_HASH(MENU_ENUM_SUBLABEL_INFORMATION,
+      "View more information about the content.")
+MSG_HASH(MENU_ENUM_SUBLABEL_RUN,
+      "Start the content.")
+MSG_HASH(MENU_ENUM_SUBLABEL_MENU_FILE_BROWSER_SETTINGS,
+      "Adjusts filebrowser settings.")
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_AUTO_REMAPS_ENABLE,
+      "Enable customized controls by default at startup."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_AUTO_OVERRIDES_ENABLE,
+      "Enable customized configuration by default at startup."
+      )
+MSG_HASH(MENU_ENUM_SUBLABEL_GAME_SPECIFIC_OPTIONS,
+      "Enable customized core options by default at startup.")
+MSG_HASH(MENU_ENUM_SUBLABEL_CORE_ENABLE,
+      "Shows current core name inside menu.")
+MSG_HASH(MENU_ENUM_SUBLABEL_DATABASE_MANAGER,
+      "View databases.")
+MSG_HASH(MENU_ENUM_SUBLABEL_CURSOR_MANAGER,
+      "View previous searches.")
+MSG_HASH(MENU_ENUM_SUBLABEL_TAKE_SCREENSHOT,
+      "Captures an image of the screen.")
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_CLOSE_CONTENT,
+      "Closes the current content. Any unsaved changes might be lost."
+      )
+MSG_HASH(MENU_ENUM_SUBLABEL_LOAD_STATE,
+      "Load a saved state from the currently selected slot.")
+MSG_HASH(MENU_ENUM_SUBLABEL_SAVE_STATE,
+      "Save a state to the currently selected slot.")
+MSG_HASH(MENU_ENUM_SUBLABEL_RESUME,
+      "Resume the currently running content and leave the Quick Menu.")
+MSG_HASH(MENU_ENUM_SUBLABEL_RESUME_CONTENT,
+      "Resume the currently running content and leave the Quick Menu.")
+MSG_HASH(MENU_ENUM_SUBLABEL_STATE_SLOT,
+      "Changes the currently selected state slot.")
+MSG_HASH(MENU_ENUM_SUBLABEL_UNDO_LOAD_STATE,
+      "If a state was loaded, content will go back to the state prior to loading.")
+MSG_HASH(MENU_ENUM_SUBLABEL_UNDO_SAVE_STATE,
+      "If a state was overwritten, it will roll back to the previous save state.")
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_ACCOUNTS_RETRO_ACHIEVEMENTS,
+      "Retro Achievements service. For more information, visit http://retroachievements.org"
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_ACCOUNTS_LIST,
+      "Manages currently configured accounts."
+      )
+MSG_HASH(MENU_ENUM_SUBLABEL_INPUT_META_REWIND,
+      "Manages rewind settings.")
+MSG_HASH(MENU_ENUM_SUBLABEL_RESTART_CONTENT,
+      "Restarts the content from the beginning.")
+MSG_HASH(MENU_ENUM_SUBLABEL_SAVE_CURRENT_CONFIG_OVERRIDE_CORE,
+      "Saves an override configuration file which will apply for all content loaded with this core. Will take precedence over the main configuration.")
+MSG_HASH(MENU_ENUM_SUBLABEL_SAVE_CURRENT_CONFIG_OVERRIDE_GAME,
+      "Saves an override configuration file which will apply for the current content only. Will take precedence over the main configuration.")
+MSG_HASH(MENU_ENUM_SUBLABEL_CORE_CHEAT_OPTIONS,
+      "Set up cheat codes.")
+MSG_HASH(MENU_ENUM_SUBLABEL_SHADER_OPTIONS,
+      "Set up shaders to visually augment the image.")
+MSG_HASH(MENU_ENUM_SUBLABEL_CORE_INPUT_REMAPPING_OPTIONS,
+      "Change the controls for the currently running content.")
+MSG_HASH(MENU_ENUM_SUBLABEL_CORE_OPTIONS,
+      "Change the options for the currently running content.")
+MSG_HASH(MENU_ENUM_SUBLABEL_SHOW_ADVANCED_SETTINGS,
+      "Show advanced settings for power users (hidden by default).")
+MSG_HASH(MENU_ENUM_SUBLABEL_THREADED_DATA_RUNLOOP_ENABLE,
+      "Perform tasks on a separate thread.")
+MSG_HASH(MENU_ENUM_SUBLABEL_PLAYLIST_ENTRY_REMOVE,
+      "Allow the user to remove entries from collections.")
+MSG_HASH(MENU_ENUM_SUBLABEL_SYSTEM_DIRECTORY,
+      "Sets the System directory. Cores can query for this directory to load BIOSes, system-specific configs, etc.")
+MSG_HASH(MENU_ENUM_SUBLABEL_RGUI_BROWSER_DIRECTORY,
+      "Sets start directory for the filebrowser.")
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_CONTENT_DIR,
+      "Usually set by developers who bundle libretro/RetroArch apps to point to assets."
+      )
+MSG_HASH(MENU_ENUM_SUBLABEL_DYNAMIC_WALLPAPERS_DIRECTORY,
+      "Directory to store wallpapers dynamically loaded by the menu depending on context.")
+MSG_HASH(MENU_ENUM_SUBLABEL_THUMBNAILS_DIRECTORY,
+      "Supplementary thumbnails (boxarts/misc. images, etc.) are stored here."
+      )
+MSG_HASH(MENU_ENUM_SUBLABEL_RGUI_CONFIG_DIRECTORY,
+      "Sets start directory for menu configuration browser.")
+MSG_HASH(MENU_ENUM_SUBLABEL_NETPLAY_INPUT_LATENCY_FRAMES_MIN,
+      "The number of frames of input latency for netplay to use to hide network latency. Reduces jitter and makes netplay less CPU-intensive, at the expense of noticeable input lag.")
+MSG_HASH(MENU_ENUM_SUBLABEL_NETPLAY_INPUT_LATENCY_FRAMES_RANGE,
+      "The range of frames of input latency that may be used to hide network latency. Reduces jitter and makes netplay less CPU-intensive, at the expense of unpredictable input lag.")
+MSG_HASH(MENU_ENUM_SUBLABEL_DISK_CYCLE_TRAY_STATUS,
+      "Cycle the current disk. If the disk is inserted, it will eject the disk. If the disk has not been inserted, it will be inserted. ")
+MSG_HASH(MENU_ENUM_SUBLABEL_DISK_INDEX,
+      "Change the disk index.")
+MSG_HASH(MENU_ENUM_SUBLABEL_DISK_OPTIONS,
+      "Disk image management.")
+MSG_HASH(MENU_ENUM_SUBLABEL_DISK_IMAGE_APPEND,
+      "Select a disk image to insert.")
+MSG_HASH(MENU_ENUM_SUBLABEL_MENU_ENUM_THROTTLE_FRAMERATE,
+      "Makes sure the framerate is capped while inside the menu.")
+MSG_HASH(MENU_ENUM_SUBLABEL_XMB_THEME,
+      "Select a different theme for the icon. Changes will take effect after you restart the program.")
+MSG_HASH(MENU_ENUM_SUBLABEL_XMB_SHADOWS_ENABLE,
+      "Enable drop shadows for all icons. This will have a minor performance hit.")
+MSG_HASH(MENU_ENUM_SUBLABEL_MATERIALUI_MENU_COLOR_THEME,
+      "Select a different background color gradient theme.")
+MSG_HASH(MENU_ENUM_SUBLABEL_MENU_WALLPAPER_OPACITY,
+      "Modify the opacity of the background wallpaper.")
+MSG_HASH(MENU_ENUM_SUBLABEL_XMB_MENU_COLOR_THEME,
+      "Select a different background color gradient theme.")
+MSG_HASH(MENU_ENUM_SUBLABEL_XMB_RIBBON_ENABLE,
+      "Select an animated background effect. Can be GPU-intensive depending on the effect. If performance is unsatisfactory, either turn this off or revert to a simpler effect.")
+MSG_HASH(MENU_ENUM_SUBLABEL_XMB_FONT,
+      "Select a different main font to be used by the menu.")
+MSG_HASH(MENU_ENUM_SUBLABEL_XMB_SHOW_IMAGES,
+      "Show the image tab inside the main menu.")
+MSG_HASH(MENU_ENUM_SUBLABEL_XMB_SHOW_MUSIC,
+      "Show the music tab inside the main menu.")
+MSG_HASH(MENU_ENUM_SUBLABEL_XMB_SHOW_VIDEO,
+      "Show the video tab inside the main menu.")
+MSG_HASH(MENU_ENUM_SUBLABEL_XMB_SHOW_NETPLAY,
+      "Show the netplay tab inside the main menu.")
+MSG_HASH(MENU_ENUM_SUBLABEL_XMB_SHOW_SETTINGS,
+      "Show the settings tab inside the main menu.")
+MSG_HASH(MENU_ENUM_SUBLABEL_XMB_SHOW_HISTORY,
+      "Show the recent history tab inside the main menu.")
+MSG_HASH(MENU_ENUM_SUBLABEL_XMB_SHOW_ADD,
+      "Show the import content tab inside the main menu.")
+MSG_HASH(MENU_ENUM_SUBLABEL_RGUI_SHOW_START_SCREEN,
+      "Show startup screen in menu. This is automatically set to false after the program starts for the first time.")
+MSG_HASH(MENU_ENUM_SUBLABEL_MATERIALUI_MENU_HEADER_OPACITY,
+      "Modify the opacity of the header graphic.")
+MSG_HASH(MENU_ENUM_SUBLABEL_MATERIALUI_MENU_FOOTER_OPACITY,
+      "Modify the opacity of the footer graphic.")
+MSG_HASH(MENU_ENUM_SUBLABEL_DPI_OVERRIDE_ENABLE,
+      "The menu normally scales itself dynamically. If you want to set a specific scaling size instead, enable this.")
+MSG_HASH(MENU_ENUM_SUBLABEL_DPI_OVERRIDE_VALUE,
+      "Set the custom scaling size here. NOTE: You have to enable 'DPI Override' for this scaling size to take effect.")
+MSG_HASH(MENU_ENUM_SUBLABEL_CORE_ASSETS_DIRECTORY,
+      "Save all downloaded files to this directory.")
+MSG_HASH(MENU_ENUM_SUBLABEL_INPUT_REMAPPING_DIRECTORY,
+      "Save all remapped controls to this directory.")
+MSG_HASH(MENU_ENUM_SUBLABEL_LIBRETRO_DIR_PATH,
+      "Directory where the program searches for content/cores.")
+MSG_HASH(MENU_ENUM_SUBLABEL_LIBRETRO_INFO_PATH,
+      "Application/core information files are stored here.")
+MSG_HASH(MENU_ENUM_SUBLABEL_JOYPAD_AUTOCONFIG_DIR,
+      "If a joypad is plugged in, that joypad will be autoconfigured if a config file corresponding to it is present inside this directory.")
+MSG_HASH(MENU_ENUM_SUBLABEL_PLAYLIST_DIRECTORY,
+      "Save all collections to this directory.")
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_CACHE_DIRECTORY,
+      "If set to a directory, content which is temporarily extracted (e.g. from archives) will be extracted to this directory."
+      )
+MSG_HASH(MENU_ENUM_SUBLABEL_CURSOR_DIRECTORY,
+      "Saved queries are stored to this directory.")
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_CONTENT_DATABASE_DIRECTORY,
+      "Databases are stored to this directory."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_ASSETS_DIRECTORY,
+      "This location is queried by default when menu interfaces try to look for loadable assets, etc."
+      )
+MSG_HASH(MENU_ENUM_SUBLABEL_SAVEFILE_DIRECTORY,
+      "Save all save files to this directory. If not set, will try to save inside the content file's working directory.")
+MSG_HASH(MENU_ENUM_SUBLABEL_SAVESTATE_DIRECTORY,
+      "Save all save states to this directory. If not set, will try to save inside the content file's working directory.")
+MSG_HASH(MENU_ENUM_SUBLABEL_SCREENSHOT_DIRECTORY,
+      "Directory to dump screenshots to.")
+MSG_HASH(MENU_ENUM_SUBLABEL_OVERLAY_DIRECTORY,
+      "Defines a directory where overlays are kept for easy access.")
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_CHEAT_DATABASE_PATH,
+      "Cheat files are kept here."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_AUDIO_FILTER_DIR,
+      "Directory where audio DSP filter files are kept."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_VIDEO_FILTER_DIR,
+      "Directory where CPU-based video filter files are kept."
+      )
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_SHADER_DIR,
+      "Defines a directory where GPU-based video shader files are kept for easy access.")
+MSG_HASH(MENU_ENUM_SUBLABEL_RECORDING_OUTPUT_DIRECTORY,
+      "Recordings will be dumped to this directory.")
+MSG_HASH(MENU_ENUM_SUBLABEL_RECORDING_CONFIG_DIRECTORY,
+      "Recording configurations will be kept here.")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_FONT_PATH,
+      "Select a different font for onscreen notifications.")
+MSG_HASH(MENU_ENUM_SUBLABEL_SHADER_APPLY_CHANGES,
+      "Changes to the shader configuration will take effect immediately. Use this if you changed the amount of shader passes, filtering, FBO scale, etc.")
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_VIDEO_SHADER_NUM_PASSES,
+      "Increase or decrease the amount of shader pipeline passes. You can bind a separate shader to each pipeline pass and configure its scale and filtering."
+      )
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_SHADER_PRESET,
+      "Load a shader preset. The shader pipeline will be automatically set-up.")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_SHADER_PRESET_SAVE_AS,
+      "Save the current shader settings as a new shader preset.")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_SHADER_PRESET_SAVE_CORE,
+      "Save the current shader settings as the default settings for this application/core.")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_SHADER_PRESET_SAVE_GAME,
+      "Save the current shader settings as the default settings for the content.")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_SHADER_PARAMETERS,
+      "Modifies the current shader directly. Changes will not be saved to the preset file.")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_SHADER_PRESET_PARAMETERS,
+      "Modifies the shader preset itself currently used in the menu.")
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_CHEAT_NUM_PASSES,
+      "Increase or decrease the amount of cheats."
+      )
+MSG_HASH(MENU_ENUM_SUBLABEL_CHEAT_APPLY_CHANGES,
+      "Cheat changes will take effect immediately.")
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_CHEAT_FILE_LOAD,
+      "Load a cheat file."
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_CHEAT_FILE_SAVE_AS,
+      "Save current cheats as a save file."
+      )
+MSG_HASH(MENU_ENUM_SUBLABEL_CONTENT_SETTINGS,
+      "Quickly access all relevant in-game settings.")
+MSG_HASH(MENU_ENUM_SUBLABEL_CORE_INFORMATION,
+      "View information pertaining to the application/core.")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_ASPECT_RATIO,
+      "Floating point value for video aspect ratio (width / height), used if the Aspect Ratio is set to 'Config'.")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_VIEWPORT_CUSTOM_HEIGHT,
+      "Custom viewport height that is used if the Aspect Ratio is set to 'Custom'.")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_VIEWPORT_CUSTOM_WIDTH,
+      "Custom viewport width that is used if the Aspect Ratio is set to 'Custom'.")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_VIEWPORT_CUSTOM_X,
+      "Custom viewport offset used for defining the X-axis position of the viewport. These are ignored if 'Integer Scale' is enabled. It will be automatically centered then.")
+MSG_HASH(MENU_ENUM_SUBLABEL_VIDEO_VIEWPORT_CUSTOM_Y,
+      "Custom viewport offset used for defining the Y-axis position of the viewport. These are ignored if 'Integer Scale' is enabled. It will be automatically centered then.")
+MSG_HASH(MENU_ENUM_LABEL_VALUE_NETPLAY_USE_MITM_SERVER,
+      "Use MITM Server")
+MSG_HASH(MENU_ENUM_SUBLABEL_NETPLAY_USE_MITM_SERVER,
+      "Forward netplay connections through a man-in-the-middle server. Useful if the host is behind a firewall or has NAT/UPnP problems.")
+MSG_HASH(MENU_ENUM_LABEL_VALUE_ADD_TO_MIXER,
+      "Add to mixer")
+MSG_HASH(MENU_ENUM_LABEL_VALUE_ADD_TO_MIXER_AND_COLLECTION,
+      "Add to mixer")
+MSG_HASH(MENU_ENUM_LABEL_VALUE_FILTER_BY_CURRENT_CORE,
+      "Filter by current core")
+MSG_HASH(
+      MSG_AUDIO_MIXER_VOLUME,
+      "Global audio mixer volume"
+      )
+MSG_HASH(
+      MENU_ENUM_SUBLABEL_AUDIO_MIXER_VOLUME,
+      "Global audio mixer volume (in dB). 0 dB is normal volume, and no gain is applied."
+      )
+MSG_HASH(
+      MENU_ENUM_LABEL_VALUE_AUDIO_MIXER_VOLUME,
+      "Audio Mixer Volume Level (dB)"
+      )
+MSG_HASH(
+      MENU_ENUM_LABEL_VALUE_AUDIO_MIXER_MUTE,
+      "Audio Mixer Mute"
+      )
+MSG_HASH(MENU_ENUM_SUBLABEL_AUDIO_MIXER_MUTE,
+      "Mute/unmute mixer audio.")
+MSG_HASH(MENU_ENUM_LABEL_MENU_SHOW_ONLINE_UPDATER,
+      "Show Online Updater")
+MSG_HASH(MENU_ENUM_SUBLABEL_MENU_SHOW_ONLINE_UPDATER,
+      "Show/hide the 'Online Updater' option.")
+MSG_HASH(MENU_ENUM_LABEL_VALUE_MENU_SHOW_CORE_UPDATER,
+      "Show Core Updater")
+MSG_HASH(MENU_ENUM_SUBLABEL_MENU_SHOW_CORE_UPDATER,
+      "Show/hide the ability to update cores (and core info files).")

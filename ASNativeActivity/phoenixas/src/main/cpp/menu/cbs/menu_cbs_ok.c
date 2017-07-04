@@ -17,7 +17,6 @@
 #include <compat/strl.h>
 #include <file/file_path.h>
 #include <retro_assert.h>
-#include <retro_stat.h>
 #include <string/stdstring.h>
 #include <streams/file_stream.h>
 #include <lists/string_list.h>
@@ -36,18 +35,18 @@
 #include "../menu_content.h"
 #include "../menu_shader.h"
 
-#include "../../src/core.h"
-#include "../../src/configuration.h"
-#include "../../src/core_info.h"
+#include "../../core.h"
+#include "../../configuration.h"
+#include "../../core_info.h"
 #include "../../frontend/frontend_driver.h"
-#include "../../src/defaults.h"
+#include "../../defaults.h"
 #include "../../managers/cheat_manager.h"
 #include "../../tasks/tasks_internal.h"
 #include "../../input/input_remapping.h"
-#include "../../src/paths.h"
-#include "../../src/retroarch.h"
-#include "../../src/verbosity.h"
-#include "../../src/lakka.h"
+#include "../../paths.h"
+#include "../../retroarch.h"
+#include "../../verbosity.h"
+#include "../../lakka.h"
 #include "../../wifi/wifi_driver.h"
 
 #ifdef HAVE_NETWORKING
@@ -654,6 +653,14 @@ int generic_action_ok_displaylist_push(const char *path,
          info.enum_idx      = MENU_ENUM_LABEL_DEFERRED_MENU_SETTINGS_LIST;
          dl_type            = DISPLAYLIST_GENERIC;
          break;
+      case ACTION_OK_DL_MENU_VIEWS_SETTINGS_LIST:
+         info.directory_ptr = idx;
+         info.type          = type;
+         info_path          = path;
+         info_label         = msg_hash_to_str(MENU_ENUM_LABEL_DEFERRED_MENU_VIEWS_SETTINGS_LIST);
+         info.enum_idx      = MENU_ENUM_LABEL_DEFERRED_MENU_VIEWS_SETTINGS_LIST;
+         dl_type            = DISPLAYLIST_GENERIC;
+         break;
       case ACTION_OK_DL_USER_INTERFACE_SETTINGS_LIST:
          info.directory_ptr = idx;
          info.type          = type;
@@ -700,6 +707,14 @@ int generic_action_ok_displaylist_push(const char *path,
          info_path          = path;
          info_label         = msg_hash_to_str(MENU_ENUM_LABEL_DEFERRED_WIFI_SETTINGS_LIST);
          info.enum_idx      = MENU_ENUM_LABEL_DEFERRED_WIFI_SETTINGS_LIST;
+         dl_type            = DISPLAYLIST_GENERIC;
+         break;
+      case ACTION_OK_DL_NETPLAY:
+         info.directory_ptr = idx;
+         info.type          = type;
+         info_path          = path;
+         info_label         = msg_hash_to_str(MENU_ENUM_LABEL_DEFERRED_NETPLAY);
+         info.enum_idx      = MENU_ENUM_LABEL_DEFERRED_NETPLAY;
          dl_type            = DISPLAYLIST_GENERIC;
          break;
       case ACTION_OK_DL_NETPLAY_LAN_SCAN_SETTINGS_LIST:
@@ -889,7 +904,7 @@ static bool menu_content_find_first_core(menu_content_ctx_defer_info_t *def_info
       size_t default_info_length    = def_info->len;
 
       if (!string_is_empty(default_info_path))
-         fill_pathname_join(def_info->s,
+         fill_pathname_join(def_info->s, 
                default_info_dir, default_info_path,
                default_info_length);
 
@@ -910,7 +925,7 @@ static bool menu_content_find_first_core(menu_content_ctx_defer_info_t *def_info
             def_info->s, &info,
             &supported);
 
-   /* We started the menu with 'Load Content', we are
+   /* We started the menu with 'Load Content', we are 
     * going to use the current core to load this. */
    if (load_content_with_current_core)
    {
@@ -1409,11 +1424,11 @@ static int action_ok_playlist_entry_collection(const char *path,
    playlist_get_index(playlist, selection_ptr,
          &entry_path, &entry_label, &core_path, &core_name, NULL, NULL);
 
-   /* If the currently loaded core's name is equal
+   /* If the currently loaded core's name is equal 
     * to the core name from the playlist entry,
     * then we directly load this game with the current core.
     */
-   if (system &&
+   if (system && 
          string_is_equal(system->library_name, core_name))
    {
       if (playlist_initialized)
@@ -1638,7 +1653,7 @@ static int action_ok_playlist_entry_start_content(const char *path,
 
       new_core_path[0] = new_display_name[0] = '\0';
 
-      found_associated_core                  =
+      found_associated_core                  = 
          menu_content_playlist_find_associated_core(
             path_base, new_core_path, sizeof(new_core_path));
 
@@ -1743,7 +1758,7 @@ static int action_ok_audio_add_to_mixer_and_collection(const char *path,
    fill_pathname_join(combined_path, menu->scratch2_buf,
          menu->scratch_buf, sizeof(combined_path));
 
-   playlist_push(g_defaults.music_history,
+   playlist_push(g_defaults.music_history, 
          combined_path,
          NULL,
          "builtin",
@@ -2566,7 +2581,7 @@ static int generic_action_ok_network(const char *path,
       default:
          break;
    }
-
+   
    menu_entries_ctl(MENU_ENTRIES_CTL_SET_REFRESH, &refresh);
 
    command_event(CMD_EVENT_NETWORK_INIT, NULL);
@@ -3078,20 +3093,29 @@ static int action_ok_delete_entry(const char *path,
       const char *label, unsigned type, size_t idx, size_t entry_idx)
 {
    size_t new_selection_ptr;
-   playlist_t *playlist = NULL;
+   playlist_t *playlist     = NULL;
+   char *conf_path          = playlist_get_conf_path(playlist);
+   char *def_conf_path      = playlist_get_conf_path(g_defaults.content_history);
+   char *def_conf_music_path= playlist_get_conf_path(g_defaults.music_history);
+#ifdef HAVE_FFMPEG
+   char *def_conf_video_path= playlist_get_conf_path(g_defaults.video_history);
+#endif
+#ifdef HAVE_IMAGEVIEWER
+   char *def_conf_img_path  = playlist_get_conf_path(g_defaults.image_history);
+#endif
 
    menu_driver_ctl(RARCH_MENU_CTL_PLAYLIST_GET, &playlist);
 
-   if (string_is_equal(playlist->conf_path, g_defaults.content_history->conf_path))
+   if (string_is_equal(conf_path, def_conf_path))
       playlist = g_defaults.content_history;
-   else if (string_is_equal(playlist->conf_path, g_defaults.music_history->conf_path))
+   else if (string_is_equal(conf_path, def_conf_music_path))
       playlist = g_defaults.music_history;
 #ifdef HAVE_FFMPEG
-   else if (string_is_equal(playlist->conf_path, g_defaults.video_history->conf_path))
+   else if (string_is_equal(conf_path, def_conf_video_path))
       playlist = g_defaults.video_history;
 #endif
 #ifdef HAVE_IMAGEVIEWER
-   else if (string_is_equal(playlist->conf_path, g_defaults.image_history->conf_path))
+   else if (string_is_equal(conf_path, def_conf_img_path))
       playlist = g_defaults.image_history;
 #endif
 
@@ -3313,6 +3337,13 @@ static int action_ok_menu_list(const char *path,
          entry_idx, ACTION_OK_DL_MENU_SETTINGS_LIST);
 }
 
+static int action_ok_menu_views_list(const char *path,
+      const char *label, unsigned type, size_t idx, size_t entry_idx)
+{
+   return generic_action_ok_displaylist_push(path, NULL, label, type, idx,
+         entry_idx, ACTION_OK_DL_MENU_VIEWS_SETTINGS_LIST);
+}
+
 static int action_ok_user_interface_list(const char *path,
       const char *label, unsigned type, size_t idx, size_t entry_idx)
 {
@@ -3384,7 +3415,7 @@ static int action_ok_netplay_connect_room(const char *path,
          netplay_room_list[idx - 3].port);
    }
 
-   RARCH_LOG("Connecting to: %s with game: %s/%08x\n",
+   RARCH_LOG("Connecting to: %s with game: %s/%08x\n", 
          tmp_hostname,
          netplay_room_list[idx - 3].gamename,
          netplay_room_list[idx - 3].gamecrc);
@@ -3412,6 +3443,13 @@ static int action_ok_user_list(const char *path,
 {
    return generic_action_ok_displaylist_push(path, NULL, label, type, idx,
          entry_idx, ACTION_OK_DL_USER_SETTINGS_LIST);
+}
+
+static int action_ok_netplay_sublist(const char *path,
+      const char *label, unsigned type, size_t idx, size_t entry_idx)
+{
+   return generic_action_ok_displaylist_push(path, NULL, label, type, idx,
+         entry_idx, ACTION_OK_DL_NETPLAY);
 }
 
 static int action_ok_directory_list(const char *path,
@@ -3738,14 +3776,14 @@ static void netplay_refresh_rooms_cb(void *task_data, void *user_data, const cha
                if (address->sa_family == AF_INET)
                {
                    struct sockaddr_in *sin = (struct sockaddr_in *) address;
-                   inet_ntop_compat(AF_INET, &sin->sin_addr,
+                   inet_ntop_compat(AF_INET, &sin->sin_addr, 
                       netplay_room_list[i].address, INET6_ADDRSTRLEN);
                }
 #if defined(AF_INET6) && !defined(HAVE_SOCKET_LEGACY)
                else if (address->sa_family == AF_INET6)
                {
                   struct sockaddr_in6 *sin = (struct sockaddr_in6 *) address;
-                  inet_ntop_compat(AF_INET6, &sin->sin6_addr,
+                  inet_ntop_compat(AF_INET6, &sin->sin6_addr, 
                      netplay_room_list[i].address, INET6_ADDRSTRLEN);
                }
 #endif
@@ -4315,13 +4353,14 @@ static int action_ok_netplay_enable_client(const char *path,
       const char *label, unsigned type, size_t idx, size_t entry_idx)
 {
 #ifdef HAVE_NETWORKING
+   menu_input_ctx_line_t line;
    if (netplay_driver_ctl(RARCH_NETPLAY_CTL_IS_DATA_INITED, NULL))
       command_event(CMD_EVENT_NETPLAY_DEINIT, NULL);
    netplay_driver_ctl(RARCH_NETPLAY_CTL_ENABLE_CLIENT, NULL);
 
    /* If no host was specified in the config, ask for one */
-   menu_input_ctx_line_t line;
    memset(&line, 0, sizeof(line));
+
    line.label = msg_hash_to_str(MENU_ENUM_LABEL_VALUE_NETPLAY_IP_ADDRESS);
    line.label_setting = "no_setting";
    line.cb = action_ok_netplay_enable_client_hostname_cb;
@@ -4714,6 +4753,9 @@ static int menu_cbs_init_bind_ok_compare_label(menu_file_list_cbs_t *cbs,
          case MENU_ENUM_LABEL_MENU_SETTINGS:
             BIND_ACTION_OK(cbs, action_ok_menu_list);
             break;
+         case MENU_ENUM_LABEL_MENU_VIEWS_SETTINGS:
+            BIND_ACTION_OK(cbs, action_ok_menu_views_list);
+            break;
          case MENU_ENUM_LABEL_USER_INTERFACE_SETTINGS:
             BIND_ACTION_OK(cbs, action_ok_user_interface_list);
             break;
@@ -4737,6 +4779,9 @@ static int menu_cbs_init_bind_ok_compare_label(menu_file_list_cbs_t *cbs,
             break;
          case MENU_ENUM_LABEL_LAKKA_SERVICES:
             BIND_ACTION_OK(cbs, action_ok_lakka_services);
+            break;
+         case MENU_ENUM_LABEL_NETPLAY_SETTINGS:
+            BIND_ACTION_OK(cbs, action_ok_netplay_sublist);
             break;
          case MENU_ENUM_LABEL_USER_SETTINGS:
             BIND_ACTION_OK(cbs, action_ok_user_list);

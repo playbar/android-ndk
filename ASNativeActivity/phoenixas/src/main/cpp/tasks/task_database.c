@@ -26,15 +26,15 @@
 #include <streams/file_stream.h>
 #include "tasks_internal.h"
 
-#include "../src/database_info.h"
+#include "../database_info.h"
 
-#include "../src/file_path_special.h"
-#include "../src/list_special.h"
-#include "../src/msg_hash.h"
-#include "../src/playlist.h"
-#include "../src/retroarch.h"
-#include "../src/verbosity.h"
-#include "../src/core_info.h"
+#include "../file_path_special.h"
+#include "../list_special.h"
+#include "../msg_hash.h"
+#include "../playlist.h"
+#include "../retroarch.h"
+#include "../verbosity.h"
+#include "../core_info.h"
 
 #ifndef COLLECTION_SIZE
 #define COLLECTION_SIZE                99999

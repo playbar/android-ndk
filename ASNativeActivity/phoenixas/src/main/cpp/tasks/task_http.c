@@ -20,9 +20,9 @@
 #include <compat/strl.h>
 #include <file/file_path.h>
 #include <net/net_compat.h>
-#include <retro_stat.h>
+#include <retro_timers.h>
 
-#include "../src/verbosity.h"
+#include "../verbosity.h"
 #include "tasks_internal.h"
 
 enum http_status_enum
@@ -73,7 +73,7 @@ static int task_http_conn_iterate_transfer_parse(
       if (http->connection.handle && http->connection.cb)
          http->connection.cb(http, 0);
    }
-
+   
    net_http_connection_free(http->connection.handle);
 
    http->connection.handle = NULL;

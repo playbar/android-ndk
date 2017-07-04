@@ -31,14 +31,14 @@
 #include "../config.h"
 #endif
 
-#include "../src/database_info.h"
+#include "../database_info.h"
 
 #include "tasks_internal.h"
 
-#include "../src/driver.h"
-#include "../src/list_special.h"
-#include "../src/msg_hash.h"
-#include "../src/verbosity.h"
+#include "../driver.h"
+#include "../list_special.h"
+#include "../msg_hash.h"
+#include "../verbosity.h"
 
 #define MAGIC_LEN       17
 #define MAX_TOKEN_LEN   255
@@ -153,7 +153,7 @@ static int detect_ps1_game_sub(const char *track_path,
    uint8_t* boot_file;
    int skip, frame_size, is_mode1, cd_sector;
    uint8_t buffer[2048 * 2];
-   RFILE                *fp =
+   RFILE                *fp = 
       filestream_open(track_path, RFILE_MODE_READ, -1);
    if (!fp)
       return 0;
@@ -334,7 +334,7 @@ int detect_system(const char *track_path, const char **system_name)
    char magic[MAGIC_LEN];
    int i;
    RFILE *fd = filestream_open(track_path, RFILE_MODE_READ, -1);
-
+   
    if (!fd)
    {
       RARCH_LOG("Could not open data track of file '%s': %s\n",
@@ -356,9 +356,7 @@ int detect_system(const char *track_path, const char **system_name)
          goto clean;
       }
 
-      if (!string_is_empty(MAGIC_NUMBERS[i].magic) &&
-          !string_is_empty(magic) &&
-          string_is_equal_fast(MAGIC_NUMBERS[i].magic, magic, MAGIC_LEN))
+      if (string_is_equal_fast(MAGIC_NUMBERS[i].magic, magic, MAGIC_LEN))
       {
          *system_name = MAGIC_NUMBERS[i].system_name;
          rv = 0;
@@ -392,7 +390,7 @@ int find_first_data_track(const char *cue_path,
 {
    int rv;
    char tmp_token[MAX_TOKEN_LEN];
-   RFILE *fd                     =
+   RFILE *fd                     = 
       filestream_open(cue_path, RFILE_MODE_READ, -1);
 
    if (!fd)

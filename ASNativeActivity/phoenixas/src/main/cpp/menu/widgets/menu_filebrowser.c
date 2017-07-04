@@ -32,8 +32,8 @@
 #include "../menu_driver.h"
 #include "../menu_displaylist.h"
 
-#include "../../src/configuration.h"
-#include "../../src/paths.h"
+#include "../../configuration.h"
+#include "../../paths.h"
 
 static enum filebrowser_enums filebrowser_types = FILEBROWSER_NONE;
 
@@ -184,7 +184,7 @@ void filebrowser_parse(void *data, unsigned type_data)
 
          if (!is_dir && path_is_media_type(path) == RARCH_CONTENT_MUSIC)
             file_type = FILE_TYPE_MUSIC;
-         else if (!is_dir &&
+         else if (!is_dir && 
                (settings->bools.multimedia_builtin_mediaplayer_enable ||
                 settings->bools.multimedia_builtin_imageviewer_enable))
          {

@@ -27,13 +27,13 @@
 #include "../menu_setting.h"
 #include "../menu_shader.h"
 
-#include "../../src/configuration.h"
-#include "../../src/core.h"
-#include "../../src/core_info.h"
+#include "../../configuration.h"
+#include "../../core.h"
+#include "../../core_info.h"
 #include "../../managers/core_option_manager.h"
 #include "../../managers/cheat_manager.h"
-#include "../../src/retroarch.h"
-#include "../../src/performance_counters.h"
+#include "../../retroarch.h"
+#include "../../performance_counters.h"
 
 #include "../../gfx/video_driver.h"
 
@@ -194,7 +194,7 @@ static int action_start_core_setting(unsigned type,
 {
    unsigned idx                = type - MENU_SETTINGS_CORE_OPTION_START;
    core_option_manager_t *coreopts = NULL;
-
+   
    if (rarch_ctl(RARCH_CTL_CORE_OPTIONS_LIST_GET, &coreopts))
       core_option_manager_set_default(coreopts, idx);
 
@@ -354,7 +354,7 @@ int menu_cbs_init_bind_start(menu_file_list_cbs_t *cbs,
       return -1;
 
    BIND_ACTION_START(cbs, action_start_lookup_setting);
-
+   
    if (menu_cbs_init_bind_start_compare_label(cbs) == 0)
       return 0;
 

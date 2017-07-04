@@ -29,9 +29,9 @@
 #include "../config.h"
 #endif
 
-#include "../src/content.h"
-#include "../src/core_type.h"
-#include "../src/msg_hash.h"
+#include "../content.h"
+#include "../core_type.h"
+#include "../msg_hash.h"
 #include "../frontend/frontend_driver.h"
 
 RETRO_BEGIN_DECLS
@@ -134,7 +134,7 @@ bool task_push_dbscan(
 bool task_push_overlay_load_default(
         retro_task_callback_t cb, void *user_data);
 #endif
-
+    
 bool task_check_decompress(const char *source_file);
 
 bool task_push_decompress(
@@ -184,7 +184,7 @@ bool task_push_load_content_with_new_core_from_companion_ui(
       content_ctx_info_t *content_info,
       retro_task_callback_t cb,
       void *user_data);
-
+   
 #ifdef HAVE_MENU
 bool task_push_load_content_with_new_core_from_menu(
       const char *core_path,

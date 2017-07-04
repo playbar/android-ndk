@@ -42,19 +42,19 @@
 #include "widgets/menu_list.h"
 #include "menu_shader.h"
 
-#include "../src/config.def.h"
-#include "../src/content.h"
-#include "../src/core.h"
-#include "../src/configuration.h"
-#include "../src/dynamic.h"
-#include "../src/driver.h"
-#include "../src/retroarch.h"
-#include "../src/defaults.h"
+#include "../config.def.h"
+#include "../content.h"
+#include "../core.h"
+#include "../configuration.h"
+#include "../dynamic.h"
+#include "../driver.h"
+#include "../retroarch.h"
+#include "../defaults.h"
 #include "../frontend/frontend.h"
-#include "../src/list_special.h"
+#include "../list_special.h"
 #include "../tasks/tasks_internal.h"
 #include "../ui/ui_companion_driver.h"
-#include "../src/verbosity.h"
+#include "../verbosity.h"
 
 #define SCROLL_INDEX_SIZE          (2 * (26 + 2) + 1)
 
@@ -120,7 +120,7 @@ uintptr_t menu_display_white_texture;
 
 static video_coord_array_t menu_disp_ca;
 
-static enum
+static enum 
 menu_toggle_reason menu_display_toggle_reason    = MENU_TOGGLE_REASON_NONE;
 
 static unsigned menu_display_framebuf_width      = 0;
@@ -325,7 +325,7 @@ void menu_display_set_font_framebuffer(const uint8_t *buffer)
 }
 
 static bool menu_display_libretro_running(
-      bool rarch_is_inited,
+      bool rarch_is_inited, 
       bool rarch_is_dummy_core)
 {
    settings_t *settings = config_get_ptr();
@@ -543,7 +543,7 @@ void menu_display_draw_bg(menu_display_ctx_draw_t *draw,
 
    draw->coords      = &coords;
 
-   if (!video_info->libretro_running && !draw->pipeline.active)
+   if (draw->texture)
       add_opacity_to_wallpaper = true;
 
    if (add_opacity_to_wallpaper)
@@ -1396,7 +1396,7 @@ static void menu_driver_toggle(bool on)
    retro_keyboard_event_t *key_event          = NULL;
    retro_keyboard_event_t *frontend_key_event = NULL;
    settings_t                 *settings       = config_get_ptr();
-   bool pause_libretro                        = settings ?
+   bool pause_libretro                        = settings ? 
       settings->bools.menu_pause_libretro : false;
 
    menu_driver_toggled = on;
@@ -2107,7 +2107,7 @@ bool menu_driver_ctl(enum rarch_menu_ctl_state state, void *data)
                else if (menu_list_size > 0)
                   menu_driver_ctl(MENU_NAVIGATION_CTL_SET_LAST,  NULL);
             }
-
+            
             if (menu_driver_ctx->navigation_increment)
                menu_driver_ctx->navigation_increment(menu_userdata);
          }

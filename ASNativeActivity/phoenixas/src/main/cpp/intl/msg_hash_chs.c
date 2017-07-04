@@ -20,9 +20,9 @@
 #include <compat/strl.h>
 #include <string/stdstring.h>
 
-#include "../src/msg_hash.h"
-#include "../src/configuration.h"
-#include "../src/verbosity.h"
+#include "../msg_hash.h"
+#include "../configuration.h"
+#include "../verbosity.h"
 
 #if defined(_MSC_VER) && !defined(_XBOX)
 /* https://support.microsoft.com/en-us/kb/980263 */

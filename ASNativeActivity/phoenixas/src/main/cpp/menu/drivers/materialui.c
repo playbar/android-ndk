@@ -48,14 +48,14 @@
 #include "../widgets/menu_input_dialog.h"
 #include "../widgets/menu_osk.h"
 
-#include "../../src/core_info.h"
-#include "../../src/core.h"
-#include "../../src/configuration.h"
-#include "../../src/retroarch.h"
-#include "../../src/verbosity.h"
+#include "../../core_info.h"
+#include "../../core.h"
+#include "../../configuration.h"
+#include "../../retroarch.h"
+#include "../../verbosity.h"
 #include "../../tasks/tasks_internal.h"
 
-#include "../../src/file_path_special.h"
+#include "../../file_path_special.h"
 
 typedef struct
 {
@@ -673,7 +673,7 @@ static void mui_render_label_value(mui_handle_t *mui, mui_node_t *node,
    size_t usable_width             = width - (mui->margin * 2);
    uint32_t sublabel_color         = 0x888888ff;
 
-   label_str[0] = value_str[0]     =
+   label_str[0] = value_str[0]     = 
       sublabel_str[0]              = '\0';
 
    if (value_len * mui->glyph_width > usable_width / 2)
@@ -788,7 +788,7 @@ static void mui_render_menu_list(
    size_t i                                = 0;
    file_list_t *list                       = NULL;
    uint64_t frame_count                    = mui->frame_count;
-   unsigned header_height                  =
+   unsigned header_height                  = 
       menu_display_get_header_height();
 
    mui->raster_block.carr.coords.vertices  = 0;
@@ -796,7 +796,7 @@ static void mui_render_menu_list(
 
    menu_entries_ctl(MENU_ENTRIES_CTL_START_GET, &i);
 
-   list                                    =
+   list                                    = 
       menu_entries_get_selection_buf_ptr(0);
 
    for (; i < menu_entries_get_end(); i++)
@@ -808,7 +808,7 @@ static void mui_render_menu_list(
             menu_entries_get_userdata_at_offset(list, i);
       size_t selection    = menu_navigation_get_selection();
       int               y = header_height - mui->scroll_y + sum;
-      rich_label[0]       =
+      rich_label[0]       = 
          entry_value[0]   = '\0';
 
       menu_entry_get_value((unsigned)i, NULL, entry_value, sizeof(entry_value));
@@ -1646,7 +1646,7 @@ static void mui_context_reset(void *data, bool is_threaded)
    mui_context_reset_textures(mui);
 
    if (path_file_exists(settings->paths.path_menu_wallpaper))
-      task_push_image_load(settings->paths.path_menu_wallpaper,
+      task_push_image_load(settings->paths.path_menu_wallpaper, 
             menu_display_handle_wallpaper_upload, NULL);
 }
 
@@ -1791,7 +1791,7 @@ static int mui_list_push(void *data, void *userdata,
          }
 
          if (frontend_driver_parse_drive_list(info->list, true) != 0)
-            menu_entries_append_enum(info->list, "/",
+            menu_entries_append_enum(info->list, "/",          
                   msg_hash_to_str(MENU_ENUM_LABEL_FILE_DETECT_CORE_LIST_PUSH_DIR),
                   MENU_ENUM_LABEL_FILE_DETECT_CORE_LIST_PUSH_DIR,
                   MENU_SETTING_ACTION, 0, 0);
@@ -1845,8 +1845,19 @@ static int mui_list_push(void *data, void *userdata,
             menu_displaylist_ctl(DISPLAYLIST_SETTING_ENUM, &entry);
 
 #if defined(HAVE_NETWORKING)
-            entry.enum_idx      = MENU_ENUM_LABEL_ONLINE_UPDATER;
+#ifdef HAVE_LAKKA
+            entry.enum_idx      = MENU_ENUM_LABEL_UPDATE_LAKKA;
             menu_displaylist_ctl(DISPLAYLIST_SETTING_ENUM, &entry);
+#else
+            {
+               settings_t *settings      = config_get_ptr();
+               if (settings->bools.menu_show_online_updater)
+               {
+                  entry.enum_idx      = MENU_ENUM_LABEL_ONLINE_UPDATER;
+                  menu_displaylist_ctl(DISPLAYLIST_SETTING_ENUM, &entry);
+               }
+            }
+#endif
 
             entry.enum_idx      = MENU_ENUM_LABEL_NETPLAY;
             menu_displaylist_ctl(DISPLAYLIST_SETTING_ENUM, &entry);

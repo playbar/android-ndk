@@ -29,11 +29,11 @@
 #include "../menu/menu_driver.h"
 #endif
 
-#include "../src/verbosity.h"
+#include "../verbosity.h"
 #include "../gfx/video_driver.h"
 
+#include "input_driver.h"
 #include "input_overlay.h"
-#include "input_keyboard.h"
 
 #define OVERLAY_GET_KEY(state, key) (((state)->keys[(key) / 32] >> ((key) % 32)) & 1)
 #define OVERLAY_SET_KEY(state, key) (state)->keys[(key) / 32] |= 1 << ((key) % 32)
@@ -43,7 +43,7 @@ typedef struct input_overlay_state
    /* This is a bitmask of (1 << key_bind_id). */
    uint64_t buttons;
    /* Left X, Left Y, Right X, Right Y */
-   int16_t analog[4];
+   int16_t analog[4]; 
 
    uint32_t keys[RETROK_LAST / 32 + 1];
 } input_overlay_state_t;
@@ -142,7 +142,7 @@ static void input_overlay_set_vertex_geom(input_overlay_t *ol)
 void input_overlay_set_scale_factor(input_overlay_t *ol, float scale)
 {
    size_t i;
-
+    
    if (!ol)
       return;
 
@@ -229,7 +229,7 @@ static void input_overlay_enable(input_overlay_t *ol, bool enable)
  * Check whether the given @x and @y coordinates of the overlay
  * descriptor @desc is inside the overlay descriptor's hitbox.
  *
- * Returns: true (1) if X, Y coordinates are inside a hitbox, otherwise false (0).
+ * Returns: true (1) if X, Y coordinates are inside a hitbox, otherwise false (0). 
  **/
 static bool inside_hitbox(const struct overlay_desc *desc, float x, float y)
 {
@@ -248,7 +248,7 @@ static bool inside_hitbox(const struct overlay_desc *desc, float x, float y)
       }
 
       case OVERLAY_HITBOX_RECT:
-         return
+         return 
             (fabs(x - desc->x) <= desc->range_x_mod) &&
             (fabs(y - desc->y) <= desc->range_y_mod);
    }
@@ -346,7 +346,7 @@ static void input_overlay_poll(
  * input_overlay_update_desc_geom:
  * @ol                    : overlay handle.
  * @desc                  : overlay descriptors handle.
- *
+ * 
  * Update input overlay descriptors' vertex geometry.
  **/
 static void input_overlay_update_desc_geom(input_overlay_t *ol,

@@ -20,9 +20,6 @@
 #include <string.h>
 
 #include <libretro.h>
-#include <src/verbosity.h>
-#include <log.h>
-#include <stdio.h>
 
 #include "internal_cores.h"
 
@@ -115,7 +112,6 @@ void libretro_dummy_retro_set_input_poll(retro_input_poll_t cb)
 
 void libretro_dummy_retro_set_input_state(retro_input_state_t cb)
 {
-   LOGE("Retro: %s", __FUNCTION__);
    dummy_input_state_cb = cb;
 }
 

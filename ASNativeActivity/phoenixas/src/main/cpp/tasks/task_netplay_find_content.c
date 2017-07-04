@@ -28,13 +28,13 @@
 #include <lists/dir_list.h>
 
 #include "tasks_internal.h"
-#include "../src/file_path_special.h"
-#include "../src/verbosity.h"
-#include "../src/configuration.h"
-#include "../src/playlist.h"
-#include "../src/command.h"
-#include "../src/core_info.h"
-#include "../../src/retroarch.h"
+#include "../file_path_special.h"
+#include "../verbosity.h"
+#include "../configuration.h"
+#include "../playlist.h"
+#include "../command.h"
+#include "../core_info.h"
+#include "../../retroarch.h"
 #include "../../menu/menu_driver.h"
 
 typedef struct
@@ -69,7 +69,7 @@ static void netplay_crc_scan_callback(void *task_data,
    if (!string_is_empty(state->core_path) && !string_is_empty(state->content_path)
        && !state->contentless && !state->current)
    {
-      RARCH_LOG("[lobby] loading core %s with content file %s\n",
+      RARCH_LOG("[lobby] loading core %s with content file %s\n", 
          state->core_path, state->content_path);
 
       command_event(CMD_EVENT_NETPLAY_INIT_DIRECT_DEFERRED, state->hostname);
@@ -86,7 +86,7 @@ static void netplay_crc_scan_callback(void *task_data,
    else
 #endif
    /* contentless core */
-   if (!string_is_empty(state->core_path) && !string_is_empty(state->content_path)
+   if (!string_is_empty(state->core_path) && !string_is_empty(state->content_path) 
       && state->contentless)
    {
       content_ctx_info_t content_info = {0};
@@ -112,7 +112,7 @@ static void netplay_crc_scan_callback(void *task_data,
    /* no match found */
    else
    {
-      RARCH_LOG("Couldn't find a suitable %s\n",
+      RARCH_LOG("Couldn't find a suitable %s\n", 
          string_is_empty(state->content_path) ? "content file" : "core");
       runloop_msg_queue_push(
             msg_hash_to_str(MENU_ENUM_LABEL_VALUE_NETPLAY_LOAD_CONTENT_MANUALLY),
@@ -143,7 +143,7 @@ static void task_netplay_crc_scan_handler(retro_task_t *task)
       return;
    }
 
-   if (state->lpl_list->size == 0 &&
+   if (state->lpl_list->size == 0 && 
       string_is_not_equal_fast(state->content_path, "N/A", 3))
       goto no_playlists;
 
@@ -174,23 +174,26 @@ static void task_netplay_crc_scan_handler(retro_task_t *task)
          for (i = 0; i < state->lpl_list->size; i++)
          {
             playlist_t *playlist = NULL;
+            unsigned playlist_size = 0;
             const char *lpl_path = state->lpl_list->elems[i].data;
 
             if (!strstr(lpl_path, file_path_str(FILE_PATH_LPL_EXTENSION)))
                continue;
 
-            playlist = playlist_init(lpl_path, 99999);
+            playlist      = playlist_init(lpl_path, 99999);
+            playlist_size = playlist_get_size(playlist);
 
-            for (j = 0; j < playlist->size; j++)
+            for (j = 0; j < playlist_size; j++)
             {
-#if 0
-               RARCH_LOG("[lobby] playlist CRC: %s\n",
-                  playlist->entries[j].crc32);
-#endif
-               if (string_is_equal(playlist->entries[j].crc32, state->content_crc))
+               const char *playlist_crc32    = NULL;
+               const char *playlist_path     = NULL;
+               playlist_get_index(playlist,
+                     j, &playlist_path, NULL, NULL, NULL, NULL, &playlist_crc32);
+
+               if (string_is_equal(playlist_crc32, state->content_crc))
                {
-                  RARCH_LOG("[lobby] CRC match %s\n", playlist->entries[j].crc32);
-                  strlcpy(state->content_path, playlist->entries[j].path, sizeof(state->content_path));
+                  RARCH_LOG("[lobby] CRC match %s\n", playlist_crc32);
+                  strlcpy(state->content_path, playlist_path, sizeof(state->content_path));
                   state->found = true;
                   task_set_data(task, state);
                   task_set_progress(task, 100);
@@ -202,7 +205,7 @@ static void task_netplay_crc_scan_handler(retro_task_t *task)
                   return;
                }
 
-               task_set_progress(task, (int)(j/playlist->size*100.0));
+               task_set_progress(task, (int)(j / playlist_size * 100.0));
             }
 
             free(playlist);
@@ -222,17 +225,22 @@ filename_matching:
          for (i = 0; i < state->lpl_list->size; i++)
          {
             playlist_t *playlist = NULL;
+            unsigned playlist_size = 0;
             const char *lpl_path = state->lpl_list->elems[i].data;
 
             if (!strstr(lpl_path, file_path_str(FILE_PATH_LPL_EXTENSION)))
                continue;
 
-            playlist = playlist_init(lpl_path, 99999);
+            playlist      = playlist_init(lpl_path, 99999);
+            playlist_size = playlist_get_size(playlist);
 
-            for (j = 0; j < playlist->size; j++)
+            for (j = 0; j < playlist_size; j++)
             {
+               const char *playlist_path     = NULL;
+               playlist_get_index(playlist,
+                     j, &playlist_path, NULL, NULL, NULL, NULL, NULL);
                char entry[PATH_MAX_LENGTH];
-               const char* buf = path_basename(playlist->entries[j].path);
+               const char* buf = path_basename(playlist_path);
 
                entry[0]    = '\0';
 
@@ -240,18 +248,13 @@ filename_matching:
 
                path_remove_extension(entry);
 
-#if 0
-               RARCH_LOG("[lobby] playlist filename: %s\n",
-                  playlist->entries[j].path);
-#endif
-
-               if ( !string_is_empty(entry) &&
+               if ( !string_is_empty(entry) && 
                      string_is_equal(entry, state->content_path) &&
-                     strstr(state->core_extensions, path_get_extension(playlist->entries[j].path)))
+                     strstr(state->core_extensions, path_get_extension(playlist_path)))
                {
-                  RARCH_LOG("[lobby] filename match %s\n", playlist->entries[j].path);
+                  RARCH_LOG("[lobby] filename match %s\n", playlist_path);
 
-                  strlcpy(state->content_path, playlist->entries[j].path, sizeof(state->content_path));
+                  strlcpy(state->content_path, playlist_path, sizeof(state->content_path));
                   state->found = true;
                   task_set_data(task, state);
                   task_set_progress(task, 100);
@@ -263,7 +266,7 @@ filename_matching:
                   return;
                }
 
-               task_set_progress(task, (int)(j/playlist->size*100.0));
+               task_set_progress(task, (int)(j / playlist_size * 100.0));
             }
             free(playlist);
          }
@@ -308,7 +311,7 @@ bool task_push_netplay_crc_scan(uint32_t crc, char* name,
    netplay_crc_handle_t *state = (netplay_crc_handle_t*)calloc(1, sizeof(*state));
 
    core_info_get_list(&info);
-
+   
    if (!task || !state)
       goto error;
 
@@ -333,7 +336,7 @@ bool task_push_netplay_crc_scan(uint32_t crc, char* name,
    for (i=0; i < info->count; i++)
    {
       /* check if the core name matches.
-         TO-DO :we could try to load the core too to check
+         TO-DO :we could try to load the core too to check 
          if the version string matches too */
 #if 0
       printf("Info: %s State: %s", info->list[i].core_name, state->core_name);
@@ -342,7 +345,7 @@ bool task_push_netplay_crc_scan(uint32_t crc, char* name,
       {
          strlcpy(state->core_path, info->list[i].path, sizeof(state->core_path));
 
-         if (string_is_not_equal_fast(state->content_path, "N/A", 3) &&
+         if (string_is_not_equal_fast(state->content_path, "N/A", 3) && 
             !string_is_empty(info->list[i].supported_extensions))
          {
             strlcpy(state->core_extensions,
@@ -352,7 +355,7 @@ bool task_push_netplay_crc_scan(uint32_t crc, char* name,
       }
    }
 
-   /* blocking means no other task can run while this one is running,
+   /* blocking means no other task can run while this one is running, 
     * which is the default */
    task->type           = TASK_TYPE_BLOCKING;
    task->state          = state;

@@ -301,7 +301,6 @@ VIDEO DRIVER
 #include "../gfx/drivers/drm_gfx.c"
 #endif
 
-#include "../gfx/video_renderchain_driver.c"
 #include "../gfx/drivers_renderchain/null_renderchain.c"
 
 #ifdef HAVE_OPENGL
@@ -419,7 +418,6 @@ INPUT
 #include "../input/input_config.c"
 #include "../input/input_keymaps.c"
 #include "../input/input_remapping.c"
-#include "../input/input_keyboard.c"
 
 #ifdef HAVE_OVERLAY
 #include "../input/input_overlay.c"
@@ -485,7 +483,6 @@ INPUT
 
 #if defined(__linux__) && !defined(ANDROID)
 #include "../input/common/linux_common.c"
-#include "../input/common/epoll_common.c"
 #include "../input/drivers/linuxraw_input.c"
 #include "../input/drivers_joypad/linuxraw_joypad.c"
 #endif
@@ -495,7 +492,6 @@ INPUT
 #endif
 
 #ifdef HAVE_UDEV
-#include "../input/common/udev_common.c"
 #include "../input/drivers/udev_input.c"
 #include "../input/drivers_joypad/udev_joypad.c"
 #endif
@@ -507,7 +503,6 @@ INPUT
 INPUT (HID)
 ============================================================ */
 #ifdef HAVE_HID
-#include "../input/input_hid_driver.c"
 #include "../input/drivers_joypad/hid_joypad.c"
 #include "../input/drivers_hid/null_hid.c"
 
@@ -536,6 +531,7 @@ INPUT (HID)
 #include "../input/connect/connect_nesusb.c"
 #include "../input/connect/connect_wiiugca.c"
 #include "../input/connect/connect_ps2adapter.c"
+#include "../input/connect/connect_psxadapter.c"
 #endif
 
 /*============================================================
@@ -654,6 +650,10 @@ AUDIO
 #endif
 #endif
 
+#ifdef HAVE_TINYALSA
+#include "../audio/drivers/tinyalsa.c"
+#endif
+
 #ifdef HAVE_AL
 #include "../audio/drivers/openal.c"
 #endif
@@ -741,7 +741,6 @@ FILE
 #include "../libretro-common/streams/file_stream.c"
 #include "../libretro-common/streams/interface_stream.c"
 #include "../libretro-common/streams/memory_stream.c"
-#include "../libretro-common/file/retro_stat.c"
 #include "../list_special.c"
 #include "../libretro-common/string/stdstring.c"
 #include "../libretro-common/file/nbio/nbio_stdio.c"
@@ -785,10 +784,8 @@ FRONTEND
 #include "../frontend/drivers/platform_xenon.c"
 #elif defined(__QNX__)
 #include "../frontend/drivers/platform_qnx.c"
-#elif defined(__linux__)
-#include "../frontend/drivers/platform_linux.c"
-#elif defined(BSD) && !defined(__MACH__)
-#include "../frontend/drivers/platform_bsd.c"
+#elif defined(__linux__) || (defined(BSD) && !defined(__MACH__))
+#include "../frontend/drivers/platform_unix.c"
 #elif defined(DJGPP)
 #include "../frontend/drivers/platform_dos.c"
 #endif
@@ -1091,11 +1088,9 @@ DEPENDENCIES
 
 #ifdef HAVE_7ZIP
 #include "../deps/7zip/7zIn.c"
-#include "../deps/7zip/7zAlloc.c"
 #include "../deps/7zip/Bra86.c"
 #include "../deps/7zip/7zFile.c"
 #include "../deps/7zip/7zStream.c"
-#include "../deps/7zip/7zBuf2.c"
 #include "../deps/7zip/LzmaDec.c"
 #include "../deps/7zip/7zCrcOpt.c"
 #include "../deps/7zip/Bra.c"

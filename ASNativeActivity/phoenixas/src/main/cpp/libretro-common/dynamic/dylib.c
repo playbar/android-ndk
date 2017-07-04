@@ -31,8 +31,6 @@
 #include <windows.h>
 #else
 #include <dlfcn.h>
-#include <src/callstack.h>
-
 #endif
 
 #ifdef _WIN32
@@ -78,21 +76,8 @@ dylib_t dylib_load(const char *path)
    }
    last_dyn_error[0] = 0;
 #else
-//    callstacktest();
    dylib_t lib = dlopen(path, RTLD_LAZY);
 #endif
-//   FILE *pFile = fopen(path, "rb");
-//   FILE *pOut = fopen("/sdcard/2048_libretro_android.so","wb");
-//   char tmp[1024] = {0};
-//   while( true){
-//      int len = fread(tmp, 1, 1024, pFile);
-//      if( len <= 0 ){
-//         break;
-//      }
-//      fwrite(tmp, 1, len, pOut );
-//   }
-//   fclose(pFile);
-//   fclose(pOut);
    return lib;
 }
 

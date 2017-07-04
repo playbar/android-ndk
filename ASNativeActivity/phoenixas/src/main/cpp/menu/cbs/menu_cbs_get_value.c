@@ -30,15 +30,15 @@
 #include "../../tasks/tasks_internal.h"
 #include "../../input/input_config.h"
 
-#include "../../src/core.h"
-#include "../../src/core_info.h"
-#include "../../src/configuration.h"
-#include "../../src/file_path_special.h"
+#include "../../core.h"
+#include "../../core_info.h"
+#include "../../configuration.h"
+#include "../../file_path_special.h"
 #include "../../managers/core_option_manager.h"
 #include "../../managers/cheat_manager.h"
-#include "../../src/performance_counters.h"
-#include "../../src/paths.h"
-#include "../../src/retroarch.h"
+#include "../../performance_counters.h"
+#include "../../paths.h"
+#include "../../retroarch.h"
 #include "../../wifi/wifi_driver.h"
 
 #ifndef BIND_ACTION_GET_VALUE

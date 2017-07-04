@@ -24,7 +24,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <retro_assert.h>
 #include <retro_common.h>
 #include <lists/file_list.h>
 #include <string/stdstring.h>
@@ -41,10 +40,7 @@
  **/
 static struct item_file *realloc_file_list_capacity(file_list_t *list, size_t cap)
 {
-   struct item_file *new_data = NULL;
-   retro_assert(cap > list->size);
-
-   new_data = (struct item_file*)realloc(list->list,
+   struct item_file *new_data = (struct item_file*)realloc(list->list,
          cap * sizeof(struct item_file));
 
    if (!new_data)

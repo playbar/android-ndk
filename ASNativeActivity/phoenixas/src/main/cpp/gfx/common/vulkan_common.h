@@ -1,6 +1,6 @@
 /*  RetroArch - A frontend for libretro.
  *  Copyright (C) 2016-2017 - Hans-Kristian Arntzen
- *
+ * 
  *  RetroArch is free software: you can redistribute it and/or modify it under the terms
  *  of the GNU General Public License as published by the Free Software Found-
  *  ation, either version 3 of the License, or (at your option) any later version.
@@ -42,9 +42,9 @@
 #include <libretro.h>
 #include <libretro_vulkan.h>
 
-#include "../../src/driver.h"
-#include "../../src/retroarch.h"
-#include "../../src/verbosity.h"
+#include "../../driver.h"
+#include "../../retroarch.h"
+#include "../../verbosity.h"
 #include "../font_driver.h"
 #include "../video_driver.h"
 #include "../drivers_shader/shader_vulkan.h"

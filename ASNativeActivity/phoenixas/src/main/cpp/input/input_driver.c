@@ -1,7 +1,7 @@
 /*  RetroArch - A frontend for libretro.
  *  Copyright (C) 2010-2014 - Hans-Kristian Arntzen
  *  Copyright (C) 2011-2017 - Daniel De Matteis
- *
+ * 
  *  RetroArch is free software: you can redistribute it and/or modify it under the terms
  *  of the GNU General Public License as published by the Free Software Found-
  *  ation, either version 3 of the License, or (at your option) any later version.
@@ -18,6 +18,7 @@
 #include <string.h>
 #include <ctype.h>
 
+#include <encodings/utf.h>
 #include <string/stdstring.h>
 
 #ifdef HAVE_CONFIG_H
@@ -30,7 +31,6 @@
 
 #include "input_driver.h"
 #include "input_config.h"
-#include "input_keyboard.h"
 #include "input_remapping.h"
 
 #ifdef HAVE_MENU
@@ -39,14 +39,14 @@
 #include "../menu/widgets/menu_input_dialog.h"
 #endif
 
-#include "../src/configuration.h"
-#include "../src/driver.h"
-#include "../src/retroarch.h"
-#include "../src/movie.h"
-#include "../src/list_special.h"
-#include "../src/verbosity.h"
+#include "../configuration.h"
+#include "../driver.h"
+#include "../retroarch.h"
+#include "../movie.h"
+#include "../list_special.h"
+#include "../verbosity.h"
 #include "../tasks/tasks_internal.h"
-#include "../src/command.h"
+#include "../command.h"
 
 static const input_driver_t *input_drivers[] = {
 #ifdef __CELLOS_LV2__
@@ -164,6 +164,25 @@ static input_device_driver_t *joypad_drivers[] = {
    NULL,
 };
 
+#ifdef HAVE_HID
+static hid_driver_t *hid_drivers[] = {
+#if defined(HAVE_BTSTACK)
+   &btstack_hid,
+#endif
+#if defined(__APPLE__) && defined(HAVE_IOHIDMANAGER)
+   &iohidmanager_hid,
+#endif
+#if defined(HAVE_LIBUSB) && defined(HAVE_THREADS)
+   &libusb_hid,
+#endif
+#ifdef HW_RVL
+   &wiiusb_hid,
+#endif
+   &null_hid,
+   NULL,
+};
+#endif
+
 typedef struct turbo_buttons turbo_buttons_t;
 
 /* Turbo support. */
@@ -173,6 +192,31 @@ struct turbo_buttons
    uint16_t enable[MAX_USERS];
    unsigned count;
 };
+
+struct input_keyboard_line
+{
+   char *buffer;
+   size_t ptr;
+   size_t size;
+
+   /** Line complete callback. 
+    * Calls back after return is 
+    * pressed with the completed line.
+    * Line can be NULL.
+    **/
+   input_keyboard_line_complete_t cb;
+   void *userdata;
+};
+
+static bool input_driver_keyboard_linefeed_enable = false;
+static input_keyboard_line_t *g_keyboard_line     = NULL;
+
+static void *g_keyboard_press_data                = NULL;
+
+static unsigned osk_last_codepoint                = 0;
+static unsigned osk_last_codepoint_len            = 0;
+
+static input_keyboard_press_t g_keyboard_press_cb;
 
 static turbo_buttons_t input_driver_turbo_btns;
 #ifdef HAVE_COMMAND
@@ -190,6 +234,10 @@ bool input_driver_flushing_input                  = false;
 static bool input_driver_data_own                 = false;
 static float input_driver_axis_threshold          = 0.0f;
 static unsigned input_driver_max_users            = 0;
+
+#ifdef HAVE_HID
+static const void *hid_data                       = NULL;
+#endif
 
 /**
  * input_driver_find_handle:
@@ -289,7 +337,7 @@ void input_driver_set(const input_driver_t **input, void **input_data)
       *input      = current_input;
       *input_data = current_input_data;
    }
-
+   
    input_driver_set_own_driver();
 }
 
@@ -338,7 +386,7 @@ void input_poll(void)
    size_t i;
    settings_t *settings           = config_get_ptr();
    unsigned max_users             = input_driver_max_users;
-
+   
    current_input->poll(current_input_data);
 
    input_driver_turbo_btns.count++;
@@ -347,7 +395,7 @@ void input_poll(void)
    {
       input_driver_turbo_btns.frame_enable[i] = 0;
 
-      if (!input_driver_block_libretro_input &&
+      if (!input_driver_block_libretro_input && 
             libretro_input_binds[i][RARCH_TURBO_ENABLE].valid)
       {
          rarch_joypad_info_t joypad_info;
@@ -393,7 +441,7 @@ void input_poll(void)
  *
  * Input state callback function.
  *
- * Returns: Non-zero if the given key (identified by @id)
+ * Returns: Non-zero if the given key (identified by @id) 
  * was pressed by the user (assigned to @port).
  **/
 int16_t input_state(unsigned port, unsigned device,
@@ -412,7 +460,7 @@ int16_t input_state(unsigned port, unsigned device,
       bsv_movie_ctl(BSV_MOVIE_CTL_SET_END, NULL);
    }
 
-   if (     !input_driver_flushing_input
+   if (     !input_driver_flushing_input 
          && !input_driver_block_libretro_input)
    {
       settings_t *settings = config_get_ptr();
@@ -474,8 +522,8 @@ int16_t input_state(unsigned port, unsigned device,
           *
           * If turbo button is held, all buttons pressed except
           * for D-pad will go into a turbo mode. Until the button is
-          * released again, the input state will be modulated by a
-          * periodic pulse defined by the configured duty cycle.
+          * released again, the input state will be modulated by a 
+          * periodic pulse defined by the configured duty cycle. 
           */
          if (res && input_driver_turbo_btns.frame_enable[port])
             input_driver_turbo_btns.enable[port] |= (1 << id);
@@ -485,7 +533,7 @@ int16_t input_state(unsigned port, unsigned device,
          if (input_driver_turbo_btns.enable[port] & (1 << id))
          {
             /* if turbo button is enabled for this key ID */
-            res = res && ((input_driver_turbo_btns.count
+            res = res && ((input_driver_turbo_btns.count 
                      % settings->uints.input_turbo_period)
                   < settings->uints.input_turbo_duty_cycle);
          }
@@ -622,69 +670,84 @@ uint64_t input_menu_keys_pressed(void *data, uint64_t last_input)
    const struct retro_keybind *binds_norm       = NULL;
    const struct retro_keybind *binds_auto       = NULL;
    unsigned max_users                           = input_driver_max_users;
-
-   for (i = 0; i < max_users; i++)
-   {
-      struct retro_keybind *auto_binds          = input_autoconf_binds[i];
-
-      input_push_analog_dpad(auto_binds, ANALOG_DPAD_LSTICK);
-   }
-
-   joypad_info.joy_idx                          = settings->uints.input_joypad_map[0];
-   joypad_info.auto_binds                       = input_autoconf_binds[joypad_info.joy_idx];
-   joypad_info.axis_threshold                   = input_driver_axis_threshold;
+   unsigned port;
+   unsigned port_max                  = 
+            settings->bools.input_all_users_control_menu 
+            ? max_users : 1;
 
    input_driver_block_libretro_input            = false;
    input_driver_block_hotkey                    = false;
 
-   if (current_input->keyboard_mapping_is_blocked
+   if (current_input->keyboard_mapping_is_blocked 
          && current_input->keyboard_mapping_is_blocked(current_input_data))
       input_driver_block_hotkey = true;
 
-   binds_norm = &input_config_binds[0][RARCH_ENABLE_HOTKEY];
-   binds_auto = &input_autoconf_binds[0][RARCH_ENABLE_HOTKEY];
-
    for (i = 0; i < max_users; i++)
-      binds[i] = input_config_binds[i];
-
-   if (check_input_driver_block_hotkey(binds_norm, binds_auto))
    {
-      const struct retro_keybind *htkey = &input_config_binds[0][RARCH_ENABLE_HOTKEY];
+      struct retro_keybind *auto_binds          = input_autoconf_binds[i];
+      binds[i]                                  = input_config_binds[i];
 
+      input_push_analog_dpad(auto_binds, ANALOG_DPAD_LSTICK);
+   }
 
-      if (htkey->valid
-            && current_input->input_state(current_input_data, joypad_info,
-               &binds[0], 0, RETRO_DEVICE_JOYPAD, 0, RARCH_ENABLE_HOTKEY))
-         input_driver_block_libretro_input = true;
-      else
-         input_driver_block_hotkey         = true;
+   for (port = 0; port < port_max; port++)
+   {
+      binds_norm = &input_config_binds[port][RARCH_ENABLE_HOTKEY];
+      binds_auto = &input_autoconf_binds[port][RARCH_ENABLE_HOTKEY];
+
+      if (check_input_driver_block_hotkey(binds_norm, binds_auto))
+      {
+         const struct retro_keybind *htkey = &input_config_binds[port][RARCH_ENABLE_HOTKEY];
+
+         joypad_info.joy_idx                          = settings->uints.input_joypad_map[port];
+         joypad_info.auto_binds                       = input_autoconf_binds[joypad_info.joy_idx];
+         joypad_info.axis_threshold                   = input_driver_axis_threshold;
+
+         if (htkey->valid 
+               && current_input->input_state(current_input_data, joypad_info,
+                  &binds[0], port, RETRO_DEVICE_JOYPAD, 0, RARCH_ENABLE_HOTKEY))
+         {
+            input_driver_block_libretro_input = true;
+            break;
+         }
+         else
+         {
+            input_driver_block_hotkey         = true;
+            break;
+         }
+      }
    }
 
    for (i = 0; i < RARCH_BIND_LIST_END; i++)
    {
-      const struct retro_keybind *mtkey = &input_config_binds[0][i];
-
       if (
             (((!input_driver_block_libretro_input && ((i < RARCH_FIRST_META_KEY)))
-              || !input_driver_block_hotkey)) && mtkey->valid
+              || !input_driver_block_hotkey))
          )
       {
-         unsigned port;
-         unsigned port_max                  =
-            settings->bools.input_all_users_control_menu
-            ? max_users : 1;
-         const input_device_driver_t *first = current_input->get_joypad_driver
+         const input_device_driver_t *first = current_input->get_joypad_driver 
             ? current_input->get_joypad_driver(current_input_data) : NULL;
-         const input_device_driver_t *sec   = current_input->get_sec_joypad_driver
+         const input_device_driver_t *sec   = current_input->get_sec_joypad_driver 
             ? current_input->get_sec_joypad_driver(current_input_data) : NULL;
 
          for (port = 0; port < port_max; port++)
          {
+            uint64_t joykey      = 0;
+            uint32_t joyaxis     = 0;
             bool      pressed    = false;
-            uint64_t  joykey     = (input_config_binds[0][i].joykey != NO_BTN)
-               ? input_config_binds[0][i].joykey : joypad_info.auto_binds[i].joykey;
-            uint32_t joyaxis     = (input_config_binds[0][i].joyaxis != AXIS_NONE) 
-               ? input_config_binds[0][i].joyaxis : joypad_info.auto_binds[i].joyaxis;
+            const struct retro_keybind *mtkey = &input_config_binds[port][i];
+
+            if (!mtkey->valid)
+               continue;
+
+            joypad_info.joy_idx                          = settings->uints.input_joypad_map[port];
+            joypad_info.auto_binds                       = input_autoconf_binds[joypad_info.joy_idx];
+            joypad_info.axis_threshold                   = input_driver_axis_threshold;
+
+            joykey     = (input_config_binds[port][i].joykey != NO_BTN)
+               ? input_config_binds[port][i].joykey : joypad_info.auto_binds[i].joykey;
+            joyaxis     = (input_config_binds[port][i].joyaxis != AXIS_NONE) 
+               ? input_config_binds[port][i].joyaxis : joypad_info.auto_binds[i].joyaxis;
             
             if (sec)
             {
@@ -712,7 +775,7 @@ uint64_t input_menu_keys_pressed(void *data, uint64_t last_input)
 
             if (pressed)
             {
-               ret |= (UINT64_C(1) << i);
+               BIT64_SET(ret, i);
                continue;
             }
          }
@@ -722,7 +785,7 @@ uint64_t input_menu_keys_pressed(void *data, uint64_t last_input)
       {
          if (current_input->meta_key_pressed(current_input_data, i))
          {
-            ret |= (UINT64_C(1) << i);
+            BIT64_SET(ret, i);
             continue;
          }
       }
@@ -730,7 +793,7 @@ uint64_t input_menu_keys_pressed(void *data, uint64_t last_input)
 #ifdef HAVE_OVERLAY
       if (overlay_ptr && input_overlay_key_pressed(overlay_ptr, i))
       {
-         ret |= (UINT64_C(1) << i);
+         BIT64_SET(ret, i);
          continue;
       }
 #endif
@@ -745,7 +808,7 @@ uint64_t input_menu_keys_pressed(void *data, uint64_t last_input)
 
          if (command_get(&handle))
          {
-            ret |= (UINT64_C(1) << i);
+            BIT64_SET(ret, i);
             continue;
          }
       }
@@ -754,7 +817,7 @@ uint64_t input_menu_keys_pressed(void *data, uint64_t last_input)
 #ifdef HAVE_NETWORKGAMEPAD
       if (input_driver_remote && input_remote_key_pressed(i, 0))
       {
-         ret |= (UINT64_C(1) << i);
+         BIT64_SET(ret, i);
          continue;
       }
 #endif
@@ -846,11 +909,11 @@ uint64_t input_keys_pressed(void *data, uint64_t last_input)
    joypad_info.joy_idx                          = settings->uints.input_joypad_map[0];
    joypad_info.auto_binds                       = input_autoconf_binds[joypad_info.joy_idx];
    joypad_info.axis_threshold                   = input_driver_axis_threshold;
-
+   
    input_driver_block_libretro_input            = false;
    input_driver_block_hotkey                    = false;
 
-   if (     current_input->keyboard_mapping_is_blocked
+   if (     current_input->keyboard_mapping_is_blocked 
          && current_input->keyboard_mapping_is_blocked(current_input_data))
       input_driver_block_hotkey = true;
 
@@ -867,7 +930,7 @@ uint64_t input_keys_pressed(void *data, uint64_t last_input)
 
    game_focus_toggle_valid                      = binds[RARCH_GAME_FOCUS_TOGGLE].valid;
 
-   /* Allows rarch_focus_toggle hotkey to still work
+   /* Allows rarch_focus_toggle hotkey to still work 
     * even though every hotkey is blocked */
    if (check_input_driver_block_hotkey(
             focus_normal, focus_binds_auto) && game_focus_toggle_valid)
@@ -887,7 +950,7 @@ uint64_t input_keys_pressed(void *data, uint64_t last_input)
                0, RETRO_DEVICE_JOYPAD, 0, i)
          )
       {
-         ret |= (UINT64_C(1) << i);
+         BIT64_SET(ret, i);
          continue;
       }
 
@@ -895,15 +958,15 @@ uint64_t input_keys_pressed(void *data, uint64_t last_input)
             current_input->meta_key_pressed(current_input_data, i)
             )
       {
-         ret |= (UINT64_C(1) << i);
+         BIT64_SET(ret, i);
          continue;
       }
 
 #ifdef HAVE_OVERLAY
-      if (overlay_ptr &&
+      if (overlay_ptr && 
             input_overlay_key_pressed(overlay_ptr, i))
       {
-         ret |= (UINT64_C(1) << i);
+         BIT64_SET(ret, i);
          continue;
       }
 #endif
@@ -918,17 +981,17 @@ uint64_t input_keys_pressed(void *data, uint64_t last_input)
 
          if (command_get(&handle))
          {
-            ret |= (UINT64_C(1) << i);
+            BIT64_SET(ret, i);
             continue;
          }
       }
 #endif
 
 #ifdef HAVE_NETWORKGAMEPAD
-      if (input_driver_remote &&
+      if (input_driver_remote && 
             input_remote_key_pressed(i, 0))
       {
-         ret |= (UINT64_C(1) << i);
+         BIT64_SET(ret, i);
          continue;
       }
 #endif
@@ -987,7 +1050,7 @@ void input_driver_destroy_data(void)
 
 void input_driver_destroy(void)
 {
-   input_keyboard_ctl(RARCH_INPUT_KEYBOARD_CTL_DESTROY, NULL);
+   input_driver_keyboard_linefeed_enable = false;
    input_driver_block_hotkey             = false;
    input_driver_block_libretro_input     = false;
    input_driver_nonblock_state           = false;
@@ -1127,7 +1190,7 @@ bool input_driver_init_command(void)
    }
 
    input_driver_command = command_new();
-
+   
    if (command_network_new(
             input_driver_command,
             stdin_cmd_enable && !grab_stdin,
@@ -1533,4 +1596,372 @@ void input_conv_analog_id_to_bind_id(unsigned idx, unsigned ident,
          *ident_plus  = RARCH_ANALOG_RIGHT_Y_PLUS;
          break;
    }
+}
+
+#ifdef HAVE_HID
+/**
+ * hid_driver_find_handle:
+ * @idx                : index of driver to get handle to.
+ *
+ * Returns: handle to HID driver at index. Can be NULL
+ * if nothing found.
+ **/
+const void *hid_driver_find_handle(int idx)
+{
+   const void *drv = hid_drivers[idx];
+   if (!drv)
+      return NULL;
+   return drv;
+}
+
+const void *hid_driver_get_data(void)
+{
+   return hid_data;
+}
+
+/**
+ * hid_driver_find_ident:
+ * @idx                : index of driver to get handle to.
+ *
+ * Returns: Human-readable identifier of HID driver at index. Can be NULL
+ * if nothing found.
+ **/
+const char *hid_driver_find_ident(int idx)
+{
+   const hid_driver_t *drv = hid_drivers[idx];
+   if (!drv)
+      return NULL;
+   return drv->ident;
+}
+
+/**
+ * config_get_hid_driver_options:
+ *
+ * Get an enumerated list of all HID driver names, separated by '|'.
+ *
+ * Returns: string listing of all HID driver names, separated by '|'.
+ **/
+const char* config_get_hid_driver_options(void)
+{
+   return char_list_new_special(STRING_LIST_INPUT_HID_DRIVERS, NULL);
+}
+
+/**
+ * input_hid_init_first:
+ *
+ * Finds first suitable HID driver and initializes.
+ *
+ * Returns: HID driver if found, otherwise NULL.
+ **/
+const hid_driver_t *input_hid_init_first(void)
+{
+   unsigned i;
+
+   for (i = 0; hid_drivers[i]; i++)
+   {
+      hid_data = hid_drivers[i]->init();
+
+      if (hid_data)
+      {
+         RARCH_LOG("Found HID driver: \"%s\".\n",
+               hid_drivers[i]->ident);
+         return hid_drivers[i];
+      }
+   }
+
+   return NULL;
+}
+#endif
+
+static void osk_update_last_codepoint(const char *word)
+{
+   const char *letter = word;
+   const char    *pos = letter;
+
+   for (;;)
+   {
+      unsigned codepoint = utf8_walk(&letter);
+      unsigned       len = (unsigned)(letter - pos);
+
+      if (letter[0] == 0)
+      {
+         osk_last_codepoint     = codepoint;
+         osk_last_codepoint_len = len;
+         break;
+      }
+
+      pos = letter;
+   }
+}
+
+/* Depends on ASCII character values */
+#define ISPRINT(c) (((int)(c) >= ' ' && (int)(c) <= '~') ? 1 : 0)
+
+/**
+ * input_keyboard_line_event:
+ * @state                    : Input keyboard line handle.
+ * @character                : Inputted character.
+ *
+ * Called on every keyboard character event.
+ *
+ * Returns: true (1) on success, otherwise false (0).
+ **/
+static bool input_keyboard_line_event(
+      input_keyboard_line_t *state, uint32_t character)
+{
+   char array[2];
+   bool ret         = false;
+   const char *word = NULL;
+   char c           = character >= 128 ? '?' : character;
+
+   /* Treat extended chars as ? as we cannot support 
+    * printable characters for unicode stuff. */
+
+   if (c == '\r' || c == '\n')
+   {
+      state->cb(state->userdata, state->buffer);
+
+      array[0] = c;
+      array[1] = 0;
+
+      word     = array;
+      ret      = true;
+   }
+   else if (c == '\b' || c == '\x7f') /* 0x7f is ASCII for del */
+   {
+      if (state->ptr)
+      {
+         unsigned i;
+
+         for (i = 0; i < osk_last_codepoint_len; i++)
+         {
+            memmove(state->buffer + state->ptr - 1,
+                  state->buffer + state->ptr,
+                  state->size - state->ptr + 1);
+            state->ptr--;
+            state->size--;
+         }
+
+         word     = state->buffer;
+      }
+   }
+   else if (ISPRINT(c))
+   {
+      /* Handle left/right here when suitable */
+      char *newbuf = (char*)
+         realloc(state->buffer, state->size + 2);
+      if (!newbuf)
+         return false;
+
+      memmove(newbuf + state->ptr + 1,
+            newbuf + state->ptr,
+            state->size - state->ptr + 1);
+      newbuf[state->ptr] = c;
+      state->ptr++;
+      state->size++;
+      newbuf[state->size] = '\0';
+
+      state->buffer = newbuf;
+
+      array[0] = c;
+      array[1] = 0;
+
+      word     = array;
+   }
+
+   if (word != NULL)
+   {
+      /* OSK - update last character */
+      if (word[0] == 0)
+      {
+         osk_last_codepoint     = 0;
+         osk_last_codepoint_len = 0;
+      }
+      else
+         osk_update_last_codepoint(word);
+   }
+
+   return ret;
+}
+
+bool input_keyboard_line_append(const char *word)
+{
+   unsigned i   = 0;
+   unsigned len = (unsigned)strlen(word);
+   char *newbuf = (char*)
+         realloc(g_keyboard_line->buffer,
+               g_keyboard_line->size + len*2);
+
+   if (!newbuf)
+      return false;
+
+   memmove(newbuf + g_keyboard_line->ptr + len,
+         newbuf + g_keyboard_line->ptr,
+         g_keyboard_line->size - g_keyboard_line->ptr + len);
+
+   for (i = 0; i < len; i++)
+   {
+      newbuf[g_keyboard_line->ptr] = word[i];
+      g_keyboard_line->ptr++;
+      g_keyboard_line->size++;
+   }
+
+   newbuf[g_keyboard_line->size] = '\0';
+
+   g_keyboard_line->buffer = newbuf;
+
+   if (word[0] == 0)
+   {
+      osk_last_codepoint     = 0;
+      osk_last_codepoint_len = 0;
+   }
+   else
+      osk_update_last_codepoint(word);
+
+   return false;
+}
+
+/**
+ * input_keyboard_start_line:
+ * @userdata                 : Userdata.
+ * @cb                       : Line complete callback function.
+ *
+ * Sets function pointer for keyboard line handle.
+ *
+ * The underlying buffer can be reallocated at any time 
+ * (or be NULL), but the pointer to it remains constant 
+ * throughout the objects lifetime.
+ *
+ * Returns: underlying buffer of the keyboard line.
+ **/
+const char **input_keyboard_start_line(void *userdata,
+      input_keyboard_line_complete_t cb)
+{
+   input_keyboard_line_t *state = (input_keyboard_line_t*)
+      calloc(1, sizeof(*state));
+   if (!state)
+      return NULL;
+
+   g_keyboard_line           = state;
+   g_keyboard_line->cb       = cb;
+   g_keyboard_line->userdata = userdata;
+
+   /* While reading keyboard line input, we have to block all hotkeys. */
+   input_driver_keyboard_mapping_set_block(true);
+
+   return (const char**)&g_keyboard_line->buffer;
+}
+
+/**
+ * input_keyboard_event:
+ * @down                     : Keycode was pressed down?
+ * @code                     : Keycode.
+ * @character                : Character inputted.
+ * @mod                      : TODO/FIXME: ???
+ *
+ * Keyboard event utils. Called by drivers when keyboard events are fired.
+ * This interfaces with the global system driver struct and libretro callbacks.
+ **/
+void input_keyboard_event(bool down, unsigned code,
+      uint32_t character, uint16_t mod, unsigned device)
+{
+   static bool deferred_wait_keys;
+
+   if (deferred_wait_keys)
+   {
+      if (down)
+         return;
+
+      g_keyboard_press_cb   = NULL;
+      g_keyboard_press_data = NULL;
+      input_driver_keyboard_mapping_set_block(false);
+      deferred_wait_keys    = false;
+   }
+   else if (g_keyboard_press_cb)
+   {
+      if (!down || code == RETROK_UNKNOWN)
+         return;
+      if (g_keyboard_press_cb(g_keyboard_press_data, code))
+         return;
+      deferred_wait_keys = true;
+   }
+   else if (g_keyboard_line)
+   {
+      if (!down)
+         return;
+
+      switch (device)
+      {
+         case RETRO_DEVICE_POINTER:
+            if (code != 0x12d)
+               character = (char)code;
+            /* fall-through */
+         default:
+            if (!input_keyboard_line_event(g_keyboard_line, character))
+               return;
+            break;
+      }
+
+      /* Line is complete, can free it now. */
+      input_keyboard_ctl(RARCH_INPUT_KEYBOARD_CTL_LINE_FREE, NULL);
+
+      /* Unblock all hotkeys. */
+      input_driver_keyboard_mapping_set_block(false);
+   }
+   else
+   {
+      retro_keyboard_event_t *key_event = NULL;
+      rarch_ctl(RARCH_CTL_KEY_EVENT_GET, &key_event);
+
+      if (key_event && *key_event)
+         (*key_event)(down, code, character, mod);
+   }
+}
+
+bool input_keyboard_ctl(enum rarch_input_keyboard_ctl_state state, void *data)
+{
+
+   switch (state)
+   {
+      case RARCH_INPUT_KEYBOARD_CTL_LINE_FREE:
+         if (g_keyboard_line)
+         {
+            free(g_keyboard_line->buffer);
+            free(g_keyboard_line);
+         }
+         g_keyboard_line = NULL;
+         break;
+      case RARCH_INPUT_KEYBOARD_CTL_START_WAIT_KEYS:
+         {
+            input_keyboard_ctx_wait_t *keys = (input_keyboard_ctx_wait_t*)data;
+
+            if (!keys)
+               return false;
+
+            g_keyboard_press_cb   = keys->cb;
+            g_keyboard_press_data = keys->userdata;
+         }
+
+         /* While waiting for input, we have to block all hotkeys. */
+         input_driver_keyboard_mapping_set_block(true);
+         break;
+      case RARCH_INPUT_KEYBOARD_CTL_CANCEL_WAIT_KEYS:
+         g_keyboard_press_cb   = NULL;
+         g_keyboard_press_data = NULL;
+         input_driver_keyboard_mapping_set_block(false);
+         break;
+      case RARCH_INPUT_KEYBOARD_CTL_SET_LINEFEED_ENABLED:
+         input_driver_keyboard_linefeed_enable = true;
+         break;
+      case RARCH_INPUT_KEYBOARD_CTL_UNSET_LINEFEED_ENABLED:
+         input_driver_keyboard_linefeed_enable = false;
+         break;
+      case RARCH_INPUT_KEYBOARD_CTL_IS_LINEFEED_ENABLED:
+         return input_driver_keyboard_linefeed_enable;
+      case RARCH_INPUT_KEYBOARD_CTL_NONE:
+      default:
+         break;
+   }
+
+   return true;
 }

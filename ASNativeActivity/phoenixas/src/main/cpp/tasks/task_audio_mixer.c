@@ -27,8 +27,8 @@
 
 #include "../audio/audio_driver.h"
 
-#include "../src/file_path_special.h"
-#include "../src/verbosity.h"
+#include "../file_path_special.h"
+#include "../verbosity.h"
 
 #include "tasks_internal.h"
 
@@ -60,7 +60,7 @@ static void task_audio_mixer_load_free(retro_task_t *task)
 
 static int cb_nbio_audio_mixer_load(void *data, size_t len)
 {
-   nbio_handle_t *nbio             = (nbio_handle_t*)data;
+   nbio_handle_t *nbio             = (nbio_handle_t*)data; 
    struct audio_mixer_handle *image= (struct audio_mixer_handle*)nbio->data;
    void *ptr                       = nbio_get_ptr(nbio->handle, &len);
    nbio_buf_t *buffer              = (nbio_buf_t*)calloc(1, sizeof(*image->buffer));
@@ -126,8 +126,8 @@ bool task_audio_mixer_load_handler(retro_task_t *task)
    nbio_handle_t             *nbio  = (nbio_handle_t*)task->state;
    struct audio_mixer_handle *image = (struct audio_mixer_handle*)nbio->data;
 
-   if (
-         nbio->is_finished
+   if (       
+         nbio->is_finished 
          && (image && !image->is_finished)
          && (image->copy_data_over)
          && (!task_get_cancelled(task)))
@@ -168,7 +168,7 @@ bool task_push_audio_mixer_load(const char *fullpath, retro_task_callback_t cb, 
 
    strlcpy(nbio->path, fullpath, sizeof(nbio->path));
 
-   image              = (struct audio_mixer_handle*)calloc(1, sizeof(*image));
+   image              = (struct audio_mixer_handle*)calloc(1, sizeof(*image));   
    if (!image)
       goto error;
 

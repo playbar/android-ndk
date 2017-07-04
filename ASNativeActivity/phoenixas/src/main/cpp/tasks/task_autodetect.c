@@ -26,10 +26,10 @@
 
 #include "../input/input_config.h"
 
-#include "../src/configuration.h"
-#include "../src/file_path_special.h"
-#include "../src/list_special.h"
-#include "../src/verbosity.h"
+#include "../configuration.h"
+#include "../file_path_special.h"
+#include "../list_special.h"
+#include "../verbosity.h"
 
 #include "tasks_internal.h"
 
@@ -144,7 +144,7 @@ static void input_autoconfigure_joypad_add(config_file_t *conf,
    char msg[128], display_name[128], device_type[128];
    /* This will be the case if input driver is reinitialized.
     * No reason to spam autoconfigure messages every time. */
-   bool block_osd_spam                =
+   bool block_osd_spam                = 
       input_autoconfigured[params->idx]
       && !string_is_empty(params->name);
 
@@ -245,7 +245,7 @@ static bool input_autoconfigure_joypad_from_conf_dir(
    if(!list)
       return false;
 
-   RARCH_LOG("[Autodetect]: %d profiles found.\n", list->size);
+   RARCH_LOG("[Autoconf]: %d profiles found.\n", list->size);
 
    for (i = 0; i < list->size; i++)
    {
@@ -274,7 +274,7 @@ static bool input_autoconfigure_joypad_from_conf_dir(
 
          config_get_config_path(conf, conf_path, sizeof(conf_path));
 
-         RARCH_LOG("[Autodetect]: selected configuration: %s\n", conf_path);
+         RARCH_LOG("[Autoconf]: selected configuration: %s\n", conf_path);
          input_autoconfigure_joypad_add(conf, params, task);
          config_file_free(conf);
          ret = 1;
@@ -326,7 +326,7 @@ static void input_autoconfigure_connect_handler(retro_task_t *task)
       strlcpy(params->name, "Android Gamepad", sizeof(params->name));
       if(input_autoconfigure_joypad_from_conf_internal(params, task))
       {
-         RARCH_LOG("[Autodetect]: no profiles found for %s (%d/%d). Using fallback\n",
+         RARCH_LOG("[Autoconf]: no profiles found for %s (%d/%d). Using fallback\n",
                params->name, params->vid, params->pid);
 
          snprintf(msg, sizeof(msg), "%s (%ld/%ld) %s.",
@@ -334,7 +334,7 @@ static void input_autoconfigure_connect_handler(retro_task_t *task)
                msg_hash_to_str(MSG_DEVICE_NOT_CONFIGURED_FALLBACK));
       }
 #else
-      RARCH_LOG("[Autodetect]: no profiles found for %s (%d/%d).\n",
+      RARCH_LOG("[Autoconf]: no profiles found for %s (%d/%d).\n",
             params->name, params->vid, params->pid);
 
       snprintf(msg, sizeof(msg), "%s (%ld/%ld) %s.",
@@ -376,7 +376,7 @@ bool input_autoconfigure_disconnect(unsigned i, const char *ident)
 
    state->idx  = i;
 
-   snprintf(msg, sizeof(msg), "%s #%u (%s).",
+   snprintf(msg, sizeof(msg), "%s #%u (%s).", 
          msg_hash_to_str(MSG_DEVICE_DISCONNECTED_FROM_PORT),
          i, ident);
 

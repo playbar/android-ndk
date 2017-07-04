@@ -33,6 +33,7 @@
 #include <streams/file_stream.h>
 #include <libretro.h>
 #include <features/features_cpu.h>
+#include <retro_timers.h>
 
 #if defined(_WIN32) && !defined(_XBOX)
 #include <windows.h>
@@ -54,6 +55,7 @@
 #endif
 
 #if defined(PSP)
+#include <pspkernel.h>
 #include <sys/time.h>
 #include <psprtc.h>
 #endif

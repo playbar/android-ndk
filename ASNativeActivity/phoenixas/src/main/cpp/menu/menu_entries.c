@@ -25,9 +25,9 @@
 
 #include "widgets/menu_list.h"
 
-#include "../src/core.h"
-#include "../src/retroarch.h"
-#include "../src/version.h"
+#include "../core.h"
+#include "../retroarch.h"
+#include "../version.h"
 
 /* Flagged when menu entries need to be refreshed */
 static bool menu_entries_need_refresh              = false;
@@ -252,7 +252,7 @@ int menu_entries_get_title(char *s, size_t len)
    const char *label             = NULL;
    enum msg_hash_enums enum_idx  = MSG_UNKNOWN;
    menu_file_list_cbs_t *cbs = menu_entries_get_last_stack_actiondata();
-
+   
    if (!cbs)
       return -1;
 
@@ -296,7 +296,7 @@ bool menu_entries_current_core_is_no_core(void)
    return string_is_equal(corename, no_core_str);
 }
 
-/* Sets 's' to the name of the current core
+/* Sets 's' to the name of the current core 
  * (shown at the top of the UI). */
 int menu_entries_get_core_title(char *s, size_t len)
 {
@@ -556,7 +556,7 @@ size_t menu_entries_get_size(void)
 rarch_setting_t *menu_entries_get_setting(uint32_t i)
 {
    file_list_t *selection_buf = menu_entries_get_selection_buf_ptr(0);
-   menu_file_list_cbs_t *cbs  =
+   menu_file_list_cbs_t *cbs  = 
       menu_entries_get_actiondata_at_offset(selection_buf, i);
 
    if (!cbs)
@@ -661,7 +661,7 @@ bool menu_entries_ctl(enum menu_entries_ctl_state state, void *data)
       case MENU_ENTRIES_CTL_INIT:
          return menu_entries_init();
       case MENU_ENTRIES_CTL_SHOW_BACK:
-         /* Returns true if a Back button should be shown
+         /* Returns true if a Back button should be shown 
           * (i.e. we are at least
           * one level deep in the menu hierarchy). */
          return (menu_entries_get_stack_size(0) > 1);

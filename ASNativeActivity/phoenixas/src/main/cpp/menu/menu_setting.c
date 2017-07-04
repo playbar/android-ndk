@@ -35,8 +35,8 @@
 #include "../config.h"
 #endif
 
-#include "../src/config.def.h"
-#include "../src/config.def.keybinds.h"
+#include "../config.def.h"
+#include "../config.def.keybinds.h"
 
 #if defined(__CELLOS_LV2__)
 #include <sdk_version.h>
@@ -56,16 +56,16 @@
 #include "menu_animation.h"
 #include "menu_input.h"
 
-#include "../src/core.h"
-#include "../src/configuration.h"
-#include "../src/msg_hash.h"
-#include "../src/defaults.h"
-#include "../src/driver.h"
-#include "../src/dirs.h"
-#include "../src/paths.h"
-#include "../src/dynamic.h"
-#include "../src/list_special.h"
-#include "../src/verbosity.h"
+#include "../core.h"
+#include "../configuration.h"
+#include "../msg_hash.h"
+#include "../defaults.h"
+#include "../driver.h"
+#include "../dirs.h"
+#include "../paths.h"
+#include "../dynamic.h"
+#include "../list_special.h"
+#include "../verbosity.h"
 #include "../camera/camera_driver.h"
 #include "../wifi/wifi_driver.h"
 #include "../location/location_driver.h"
@@ -73,12 +73,12 @@
 #include "../audio/audio_driver.h"
 #include "../input/input_config.h"
 #include "../tasks/tasks_internal.h"
-#include "../src/config.def.h"
+#include "../config.def.h"
 #include "../ui/ui_companion_driver.h"
-#include "../src/performance_counters.h"
-#include "../src/setting_list.h"
-#include "../src/lakka.h"
-#include "../src/retroarch.h"
+#include "../performance_counters.h"
+#include "../setting_list.h"
+#include "../lakka.h"
+#include "../retroarch.h"
 
 #include "../tasks/tasks_internal.h"
 
@@ -140,10 +140,10 @@ static void setting_get_string_representation_uint_custom_viewport_width(void *d
    rarch_setting_t *setting             = (rarch_setting_t*)data;
    if (!setting)
       return;
-
+   
    av_info = video_viewport_get_system_av_info();
    geom    = (struct retro_game_geometry*)&av_info->geometry;
-
+   
    if (*setting->value.target.unsigned_integer%geom->base_width == 0)
       snprintf(s, len, "%u (%ux)",
             *setting->value.target.unsigned_integer,
@@ -161,10 +161,10 @@ static void setting_get_string_representation_uint_custom_viewport_height(void *
    rarch_setting_t *setting             = (rarch_setting_t*)data;
    if (!setting)
       return;
-
+   
    av_info = video_viewport_get_system_av_info();
    geom    = (struct retro_game_geometry*)&av_info->geometry;
-
+   
    if (*setting->value.target.unsigned_integer%geom->base_height == 0)
       snprintf(s, len, "%u (%ux)",
             *setting->value.target.unsigned_integer,
@@ -754,7 +754,7 @@ int menu_action_handle_setting(rarch_setting_t *setting,
    return -1;
 }
 
-static rarch_setting_t *menu_setting_find_internal(rarch_setting_t *setting,
+static rarch_setting_t *menu_setting_find_internal(rarch_setting_t *setting, 
       const char *label)
 {
    uint32_t needle        = msg_hash_calculate(label);
@@ -784,7 +784,7 @@ static rarch_setting_t *menu_setting_find_internal(rarch_setting_t *setting,
    return NULL;
 }
 
-static rarch_setting_t *menu_setting_find_internal_enum(rarch_setting_t *setting,
+static rarch_setting_t *menu_setting_find_internal_enum(rarch_setting_t *setting, 
      enum msg_hash_enums enum_idx)
 {
    rarch_setting_t **list = &setting;
@@ -1041,7 +1041,7 @@ static int setting_action_start_libretro_device_type(void *data)
 
    if (system)
    {
-      /* Only push RETRO_DEVICE_ANALOG as default if we use an
+      /* Only push RETRO_DEVICE_ANALOG as default if we use an 
        * older core which doesn't use SET_CONTROLLER_INFO. */
       if (!system->ports.size)
          devices[types++] = RETRO_DEVICE_ANALOG;
@@ -1145,7 +1145,7 @@ static int setting_action_left_libretro_device_type(
 
    if (system)
    {
-      /* Only push RETRO_DEVICE_ANALOG as default if we use an
+      /* Only push RETRO_DEVICE_ANALOG as default if we use an 
        * older core which doesn't use SET_CONTROLLER_INFO. */
       if (!system->ports.size)
          devices[types++] = RETRO_DEVICE_ANALOG;
@@ -1210,7 +1210,7 @@ static int setting_action_right_libretro_device_type(
 
    if (system)
    {
-      /* Only push RETRO_DEVICE_ANALOG as default if we use an
+      /* Only push RETRO_DEVICE_ANALOG as default if we use an 
        * older core which doesn't use SET_CONTROLLER_INFO. */
       if (!system->ports.size)
          devices[types++] = RETRO_DEVICE_ANALOG;
@@ -1299,7 +1299,36 @@ static int setting_action_right_bind_device(void *data, bool wraparound)
    return 0;
 }
 
+static int setting_action_left_mouse_index(void *data, bool wraparound)
+{
+   rarch_setting_t *setting = (rarch_setting_t*)data;
+   settings_t *settings     = config_get_ptr();
 
+   if (!setting)
+      return -1;
+
+   if (settings->uints.input_mouse_index[setting->index_offset])
+   {
+      --settings->uints.input_mouse_index[setting->index_offset];
+      settings->modified = true;
+   }
+
+   return 0;
+}
+
+static int setting_action_right_mouse_index(void *data, bool wraparound)
+{
+   rarch_setting_t *setting = (rarch_setting_t*)data;
+   settings_t *settings     = config_get_ptr();
+
+   if (!setting)
+      return -1;
+
+   ++settings->uints.input_mouse_index[setting->index_offset];
+   settings->modified = true;
+
+   return 0;
+}
 
 /**
  ******* ACTION OK CALLBACK FUNCTIONS *******
@@ -1352,7 +1381,7 @@ static int setting_action_ok_bind_defaults(void *data, bool wraparound)
       return -1;
 
    target    =  &input_config_binds[setting->index_offset][0];
-   def_binds =  (setting->index_offset) ?
+   def_binds =  (setting->index_offset) ? 
       retro_keybinds_rest : retro_keybinds_1;
 
    lim.min   = MENU_SETTINGS_BIND_BEGIN;
@@ -1467,7 +1496,7 @@ static void get_string_representation_bind_device(void * data, char *s,
  * Get associated label of a setting.
  **/
 void menu_setting_get_label(void *data, char *s,
-      size_t len, unsigned *w, unsigned type,
+      size_t len, unsigned *w, unsigned type, 
       const char *menu_label, const char *label, unsigned idx)
 {
    rarch_setting_t *setting = NULL;
@@ -1597,7 +1626,7 @@ void general_write_handler(void *data)
             file_list_t *menu_stack      = menu_entries_get_menu_stack_ptr(0);
 
             info.list          = menu_stack;
-            info.type          = 0;
+            info.type          = 0; 
             info.directory_ptr = 0;
             strlcpy(info.label,
                   msg_hash_to_str(MENU_ENUM_LABEL_HELP), sizeof(info.label));
@@ -1658,14 +1687,14 @@ void general_write_handler(void *data)
          settings->uints.input_joypad_map[4] = *setting->value.target.integer;
          break;
       case MENU_ENUM_LABEL_LOG_VERBOSITY:
-         if (setting
-               && setting->value.target.boolean
+         if (setting 
+               && setting->value.target.boolean 
                && *setting->value.target.boolean)
             verbosity_enable();
          else
             verbosity_disable();
 
-         if (setting
+         if (setting 
                && setting->value.target.boolean
                && *setting->value.target.boolean)
             retroarch_override_setting_set(RARCH_OVERRIDE_SETTING_VERBOSITY, NULL);
@@ -1686,7 +1715,10 @@ void general_write_handler(void *data)
          }
          break;
       case MENU_ENUM_LABEL_AUDIO_VOLUME:
-         audio_driver_set_volume_gain(db_to_gain(*setting->value.target.fraction));
+         audio_set_float(AUDIO_ACTION_VOLUME_GAIN, *setting->value.target.fraction);
+         break;
+      case MENU_ENUM_LABEL_AUDIO_MIXER_VOLUME:
+         audio_set_float(AUDIO_ACTION_MIXER_VOLUME_GAIN, *setting->value.target.fraction);
          break;
       case MENU_ENUM_LABEL_AUDIO_LATENCY:
       case MENU_ENUM_LABEL_AUDIO_DEVICE:
@@ -1710,7 +1742,7 @@ void general_write_handler(void *data)
          {
 #if defined(__CELLOS_LV2__) && (CELL_SDK_VERSION > 0x340000)
             cellSysutilEnableBgmPlayback();
-#endif
+#endif         
          }
          else
          {
@@ -1918,6 +1950,7 @@ static bool setting_append_list_input_player_options(
       static char key_bind_all[MAX_USERS][64];
       static char key_bind_all_save_autoconfig[MAX_USERS][64];
       static char key_bind_defaults[MAX_USERS][64];
+      static char mouse_index[MAX_USERS][64];
 
       static char label[MAX_USERS][64];
       static char label_type[MAX_USERS][64];
@@ -1925,6 +1958,7 @@ static bool setting_append_list_input_player_options(
       static char label_bind_all[MAX_USERS][64];
       static char label_bind_all_save_autoconfig[MAX_USERS][64];
       static char label_bind_defaults[MAX_USERS][64];
+      static char label_mouse_index[MAX_USERS][64];
 
       tmp_string[0] = '\0';
 
@@ -1946,6 +1980,8 @@ static bool setting_append_list_input_player_options(
       fill_pathname_join_delim(key_bind_defaults[user],
             tmp_string, "bind_defaults", '_',
             sizeof(key_bind_defaults[user]));
+      fill_pathname_join_delim(mouse_index[user], tmp_string, "mouse_index", '_',
+            sizeof(mouse_index[user]));
 
       snprintf(label[user], sizeof(label[user]),
                "%s %u %s", msg_hash_to_str(MENU_ENUM_LABEL_VALUE_USER), user + 1,
@@ -1965,6 +2001,9 @@ static bool setting_append_list_input_player_options(
       snprintf(label_bind_all_save_autoconfig[user], sizeof(label_bind_all_save_autoconfig[user]),
                "%s %u %s", msg_hash_to_str(MENU_ENUM_LABEL_VALUE_USER), user + 1,
                msg_hash_to_str(MENU_ENUM_LABEL_VALUE_INPUT_SAVE_AUTOCONFIG));
+      snprintf(label_mouse_index[user], sizeof(label_mouse_index[user]),
+               "%s %u %s", msg_hash_to_str(MENU_ENUM_LABEL_VALUE_USER), user + 1,
+               msg_hash_to_str(MENU_ENUM_LABEL_VALUE_INPUT_MOUSE_INDEX));
 
       CONFIG_UINT_ALT(
             list, list_info,
@@ -1983,7 +2022,7 @@ static bool setting_append_list_input_player_options(
       (*list)[list_info->index - 1].action_right  = &setting_action_right_libretro_device_type;
       (*list)[list_info->index - 1].action_select = &setting_action_right_libretro_device_type;
       (*list)[list_info->index - 1].action_start  = &setting_action_start_libretro_device_type;
-      (*list)[list_info->index - 1].get_string_representation =
+      (*list)[list_info->index - 1].get_string_representation = 
          &setting_get_string_representation_uint_libretro_device;
       menu_settings_list_current_add_enum_idx(list, list_info, (enum msg_hash_enums)(MENU_ENUM_LABEL_INPUT_LIBRETRO_DEVICE + user));
 
@@ -2004,7 +2043,7 @@ static bool setting_append_list_input_player_options(
       (*list)[list_info->index - 1].action_right  = &setting_action_right_analog_dpad_mode;
       (*list)[list_info->index - 1].action_select = &setting_action_right_analog_dpad_mode;
       (*list)[list_info->index - 1].action_start = &setting_action_start_analog_dpad_mode;
-      (*list)[list_info->index - 1].get_string_representation =
+      (*list)[list_info->index - 1].get_string_representation = 
          &setting_get_string_representation_uint_analog_dpad_mode;
       menu_settings_list_current_add_enum_idx(list, list_info, (enum msg_hash_enums)(MENU_ENUM_LABEL_INPUT_PLAYER_ANALOG_DPAD_MODE + user));
 
@@ -2058,6 +2097,22 @@ static bool setting_append_list_input_player_options(
       (*list)[list_info->index - 1].index_offset   = user;
       (*list)[list_info->index - 1].action_ok      = &setting_action_ok_bind_all_save_autoconfig;
       (*list)[list_info->index - 1].action_cancel  = NULL;
+
+      CONFIG_UINT_ALT(
+            list, list_info,
+            &settings->uints.input_mouse_index[user],
+            mouse_index[user],
+            label_mouse_index[user],
+            0,
+            &group_info,
+            &subgroup_info,
+            parent_group,
+            general_write_handler,
+            general_read_handler);
+      (*list)[list_info->index - 1].index        = user + 1;
+      (*list)[list_info->index - 1].index_offset = user;
+      (*list)[list_info->index - 1].action_left  = &setting_action_left_mouse_index;
+      (*list)[list_info->index - 1].action_right = &setting_action_right_mouse_index;
    }
 
    for (i = 0; i < RARCH_BIND_LIST_END; i ++)
@@ -2082,7 +2137,7 @@ static bool setting_append_list_input_player_options(
          )
       {
          if (system->input_desc_btn[user][i])
-            strlcat(label,
+            strlcat(label, 
                   system->input_desc_btn[user][i],
                   sizeof(label));
          else
@@ -2279,6 +2334,15 @@ static bool setting_append_list(
                &subgroup_info,
                parent_group);
 
+#ifdef HAVE_LAKKA
+         CONFIG_ACTION(
+               list, list_info,
+               MENU_ENUM_LABEL_UPDATE_LAKKA,
+               MENU_ENUM_LABEL_VALUE_UPDATE_LAKKA,
+               &group_info,
+               &subgroup_info,
+               parent_group);
+#else
          CONFIG_ACTION(
                list, list_info,
                MENU_ENUM_LABEL_ONLINE_UPDATER,
@@ -2286,6 +2350,8 @@ static bool setting_append_list(
                &group_info,
                &subgroup_info,
                parent_group);
+#endif
+
 #endif
 
          CONFIG_ACTION(
@@ -2547,12 +2613,19 @@ static bool setting_append_list(
 
          CONFIG_ACTION(
                list, list_info,
+               MENU_ENUM_LABEL_MENU_VIEWS_SETTINGS,
+               MENU_ENUM_LABEL_VALUE_MENU_VIEWS_SETTINGS,
+               &group_info,
+               &subgroup_info,
+               parent_group);
+
+         CONFIG_ACTION(
+               list, list_info,
                MENU_ENUM_LABEL_USER_INTERFACE_SETTINGS,
                MENU_ENUM_LABEL_VALUE_USER_INTERFACE_SETTINGS,
                &group_info,
                &subgroup_info,
                parent_group);
-         settings_data_list_current_add_flags(list, list_info, SD_FLAG_LAKKA_ADVANCED);
 
          CONFIG_ACTION(
                list, list_info,
@@ -2934,7 +3007,7 @@ static bool setting_append_list(
                   general_write_handler,
                   general_read_handler);
             menu_settings_list_current_add_range(list, list_info, 0, 3, 1.0, true, true);
-            (*list)[list_info->index - 1].get_string_representation =
+            (*list)[list_info->index - 1].get_string_representation = 
                &setting_get_string_representation_uint_libretro_log_level;
             settings_data_list_current_add_flags(list, list_info, SD_FLAG_ADVANCED);
 
@@ -3049,7 +3122,7 @@ static bool setting_append_list(
             menu_settings_list_current_add_cmd(list, list_info, CMD_EVENT_AUTOSAVE_INIT);
             menu_settings_list_current_add_range(list, list_info, 0, 0, 1, true, false);
             settings_data_list_current_add_flags(list, list_info, SD_FLAG_CMD_APPLY_AUTO);
-            (*list)[list_info->index - 1].get_string_representation =
+            (*list)[list_info->index - 1].get_string_representation = 
                &setting_get_string_representation_uint_autosave_interval;
 #endif
 
@@ -3176,7 +3249,7 @@ static bool setting_append_list(
                   general_read_handler);
             menu_settings_list_current_add_cmd(list, list_info, CMD_EVENT_REINIT);
             menu_settings_list_current_add_range(list, list_info, 0, 1, 1, true, false);
-            (*list)[list_info->index - 1].get_string_representation =
+            (*list)[list_info->index - 1].get_string_representation = 
                &setting_get_string_representation_uint_video_monitor_index;
 
             if (video_driver_has_windowed())
@@ -3274,7 +3347,7 @@ static bool setting_append_list(
             (*list)[list_info->index - 1].action_start  = &setting_action_start_video_refresh_rate_auto;
             (*list)[list_info->index - 1].action_ok     = &setting_action_ok_video_refresh_rate_auto;
             (*list)[list_info->index - 1].action_select = &setting_action_ok_video_refresh_rate_auto;
-            (*list)[list_info->index - 1].get_string_representation =
+            (*list)[list_info->index - 1].get_string_representation = 
                &setting_get_string_representation_st_float_video_refresh_rate_auto;
             settings_data_list_current_add_flags(list, list_info, SD_FLAG_LAKKA_ADVANCED);
 
@@ -3324,7 +3397,7 @@ static bool setting_append_list(
                   true,
                   true);
             settings_data_list_current_add_flags(list, list_info, SD_FLAG_CMD_APPLY_AUTO);
-            (*list)[list_info->index - 1].get_string_representation =
+            (*list)[list_info->index - 1].get_string_representation = 
                &setting_get_string_representation_uint_aspect_ratio_index;
 
             CONFIG_FLOAT(
@@ -3553,7 +3626,7 @@ static bool setting_append_list(
                   general_write_handler,
                   general_read_handler);
             menu_settings_list_current_add_range(list, list_info, 0, 3, 1, true, true);
-            (*list)[list_info->index - 1].get_string_representation =
+            (*list)[list_info->index - 1].get_string_representation = 
                &setting_get_string_representation_uint_video_rotation;
             settings_data_list_current_add_flags(list, list_info, SD_FLAG_ADVANCED);
 
@@ -3802,12 +3875,42 @@ static bool setting_append_list(
                SD_FLAG_NONE
                );
 
+         CONFIG_BOOL(
+               list, list_info,
+               audio_get_bool_ptr(AUDIO_ACTION_MIXER_MUTE_ENABLE),
+               MENU_ENUM_LABEL_AUDIO_MIXER_MUTE,
+               MENU_ENUM_LABEL_VALUE_AUDIO_MIXER_MUTE,
+               false,
+               MENU_ENUM_LABEL_VALUE_OFF,
+               MENU_ENUM_LABEL_VALUE_ON,
+               &group_info,
+               &subgroup_info,
+               parent_group,
+               general_write_handler,
+               general_read_handler,
+               SD_FLAG_NONE
+               );
+
          CONFIG_FLOAT(
                list, list_info,
                &settings->floats.audio_volume,
                MENU_ENUM_LABEL_AUDIO_VOLUME,
                MENU_ENUM_LABEL_VALUE_AUDIO_VOLUME,
                audio_volume,
+               "%.1f",
+               &group_info,
+               &subgroup_info,
+               parent_group,
+               general_write_handler,
+               general_read_handler);
+         menu_settings_list_current_add_range(list, list_info, -80, 12, 1.0, true, true);
+
+         CONFIG_FLOAT(
+               list, list_info,
+               &settings->floats.audio_mixer_volume,
+               MENU_ENUM_LABEL_AUDIO_MIXER_VOLUME,
+               MENU_ENUM_LABEL_VALUE_AUDIO_MIXER_VOLUME,
+               audio_mixer_volume,
                "%.1f",
                &group_info,
                &subgroup_info,
@@ -3868,7 +3971,7 @@ static bool setting_append_list(
                &settings->uints.audio_latency,
                MENU_ENUM_LABEL_AUDIO_LATENCY,
                MENU_ENUM_LABEL_VALUE_AUDIO_LATENCY,
-               g_defaults.settings.out_latency ?
+               g_defaults.settings.out_latency ? 
                g_defaults.settings.out_latency : out_latency,
                &group_info,
                &subgroup_info,
@@ -4543,7 +4646,7 @@ static bool setting_append_list(
                      &retro_keybinds_1[i],
                      &group_info, &subgroup_info, parent_group);
                (*list)[list_info->index - 1].bind_type = i + MENU_SETTINGS_BIND_BEGIN;
-               menu_settings_list_current_add_enum_idx(list, list_info,
+               menu_settings_list_current_add_enum_idx(list, list_info, 
                      (enum msg_hash_enums)(MENU_ENUM_LABEL_INPUT_HOTKEY_BIND_BEGIN + i));
             }
 
@@ -5300,7 +5403,7 @@ static bool setting_append_list(
                   general_read_handler,
                   SD_FLAG_NONE);
             settings_data_list_current_add_flags(list, list_info, SD_FLAG_LAKKA_ADVANCED);
-#endif
+#endif				  
          }
 
 #endif
@@ -5541,6 +5644,7 @@ static bool setting_append_list(
                general_write_handler,
                general_read_handler,
                SD_FLAG_NONE);
+         settings_data_list_current_add_flags(list, list_info, SD_FLAG_LAKKA_ADVANCED);
 
 #if !defined(RARCH_MOBILE)
          CONFIG_BOOL(
@@ -5558,6 +5662,41 @@ static bool setting_append_list(
                general_read_handler,
                SD_FLAG_CMD_APPLY_AUTO);
          menu_settings_list_current_add_cmd(list, list_info, CMD_EVENT_REINIT);
+         settings_data_list_current_add_flags(list, list_info, SD_FLAG_LAKKA_ADVANCED);
+#endif
+
+#if defined(HAVE_NETWORKING)
+#ifndef HAVE_LAKKA
+         CONFIG_BOOL(
+               list, list_info,
+               &settings->bools.menu_show_online_updater,
+               MENU_ENUM_LABEL_MENU_SHOW_ONLINE_UPDATER,
+               MENU_ENUM_LABEL_VALUE_MENU_SHOW_ONLINE_UPDATER,
+               menu_show_online_updater,
+               MENU_ENUM_LABEL_VALUE_OFF,
+               MENU_ENUM_LABEL_VALUE_ON,
+               &group_info,
+               &subgroup_info,
+               parent_group,
+               general_write_handler,
+               general_read_handler,
+               SD_FLAG_NONE);
+
+         CONFIG_BOOL(
+               list, list_info,
+               &settings->bools.menu_show_core_updater,
+               MENU_ENUM_LABEL_MENU_SHOW_CORE_UPDATER,
+               MENU_ENUM_LABEL_VALUE_MENU_SHOW_CORE_UPDATER,
+               menu_show_online_updater,
+               MENU_ENUM_LABEL_VALUE_OFF,
+               MENU_ENUM_LABEL_VALUE_ON,
+               &group_info,
+               &subgroup_info,
+               parent_group,
+               general_write_handler,
+               general_read_handler,
+               SD_FLAG_NONE);
+#endif
 #endif
 
          if (string_is_not_equal_fast(ui_companion_driver_get_ident(), "null", 4))
@@ -5652,7 +5791,7 @@ static bool setting_append_list(
          menu_settings_list_current_add_range(list, list_info, 0, 0, 1.0, true, false);
 
          END_SUB_GROUP(list, list_info, parent_group);
-
+		 
 		 START_SUB_GROUP(list, list_info, "Playlist", &group_info, &subgroup_info, parent_group);
 
 		 CONFIG_BOOL(
@@ -5669,9 +5808,9 @@ static bool setting_append_list(
                general_write_handler,
                general_read_handler,
                SD_FLAG_NONE);
-
+		 
          END_SUB_GROUP(list, list_info, parent_group);
-
+		 
          END_GROUP(list, list_info, parent_group);
          break;
       case SETTINGS_LIST_CHEEVOS:
@@ -5748,7 +5887,7 @@ static bool setting_append_list(
                sizeof(settings->paths.network_buildbot_url),
                MENU_ENUM_LABEL_CORE_UPDATER_BUILDBOT_URL,
                MENU_ENUM_LABEL_VALUE_CORE_UPDATER_BUILDBOT_URL,
-               buildbot_server_url,
+               buildbot_server_url, 
                &group_info,
                &subgroup_info,
                parent_group,
@@ -5762,7 +5901,7 @@ static bool setting_append_list(
                sizeof(settings->paths.network_buildbot_assets_url),
                MENU_ENUM_LABEL_BUILDBOT_ASSETS_URL,
                MENU_ENUM_LABEL_VALUE_BUILDBOT_ASSETS_URL,
-               buildbot_assets_server_url,
+               buildbot_assets_server_url, 
                &group_info,
                &subgroup_info,
                parent_group,
@@ -6280,7 +6419,7 @@ static bool setting_append_list(
                true,
                true);
          menu_settings_list_current_add_cmd(list, list_info, CMD_EVENT_MENU_REFRESH);
-         (*list)[list_info->index - 1].get_string_representation =
+         (*list)[list_info->index - 1].get_string_representation = 
             &setting_get_string_representation_uint_user_language;
 #endif
 
@@ -6345,7 +6484,7 @@ static bool setting_append_list(
                parent_group,
                general_write_handler,
                general_read_handler);
-         (*list)[list_info->index - 1].get_string_representation =
+         (*list)[list_info->index - 1].get_string_representation = 
             &setting_get_string_representation_cheevos_password;
          settings_data_list_current_add_flags(list, list_info, SD_FLAG_ALLOW_INPUT);
 #endif
@@ -6383,7 +6522,7 @@ static bool setting_append_list(
                sizeof(settings->paths.directory_core_assets),
                MENU_ENUM_LABEL_CORE_ASSETS_DIRECTORY,
                MENU_ENUM_LABEL_VALUE_CORE_ASSETS_DIRECTORY,
-               g_defaults.dirs[DEFAULT_DIR_CORE_ASSETS],
+               g_defaults.dirs[DEFAULT_DIR_CORE_ASSETS], 
                MENU_ENUM_LABEL_VALUE_DIRECTORY_DEFAULT,
                &group_info,
                &subgroup_info,
@@ -6427,7 +6566,7 @@ static bool setting_append_list(
                sizeof(settings->paths.directory_thumbnails),
                MENU_ENUM_LABEL_THUMBNAILS_DIRECTORY,
                MENU_ENUM_LABEL_VALUE_THUMBNAILS_DIRECTORY,
-               g_defaults.dirs[DEFAULT_DIR_THUMBNAILS],
+               g_defaults.dirs[DEFAULT_DIR_THUMBNAILS], 
                MENU_ENUM_LABEL_VALUE_DIRECTORY_DEFAULT,
                &group_info,
                &subgroup_info,
@@ -6837,7 +6976,7 @@ static rarch_setting_t *menu_setting_new_internal(rarch_setting_info_t *list_inf
 {
    unsigned i;
    rarch_setting_t* resized_list        = NULL;
-   enum settings_list_type list_types[] =
+   enum settings_list_type list_types[] = 
    {
       SETTINGS_LIST_MAIN_MENU,
       SETTINGS_LIST_DRIVERS,

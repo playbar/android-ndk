@@ -1,6 +1,6 @@
 /*  RetroArch - A frontend for libretro.
  *  Copyright (C) 2010-2017 - Hans-Kristian Arntzen
- *
+ * 
  *  RetroArch is free software: you can redistribute it and/or modify it under the terms
  *  of the GNU General Public License as published by the Free Software Found-
  *  ation, either version 3 of the License, or (at your option) any later version.
@@ -17,7 +17,7 @@
 #include "slang_reflection.hpp"
 #include <vector>
 #include <stdio.h>
-#include "../../src/verbosity.h"
+#include "../../verbosity.h"
 
 using namespace std;
 using namespace spirv_cross;
@@ -560,7 +560,7 @@ static bool slang_reflect(const Compiler &vertex_compiler, const Compiler &fragm
       unsigned array_index = 0;
       slang_texture_semantic index = slang_name_to_texture_semantic(*reflection->texture_semantic_map,
             texture.name, &array_index);
-
+      
       if (index == SLANG_INVALID_TEXTURE_SEMANTIC)
       {
          RARCH_ERR("[slang]: Non-semantic textures not supported yet.\n");

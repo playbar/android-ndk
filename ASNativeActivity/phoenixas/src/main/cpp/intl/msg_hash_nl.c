@@ -19,7 +19,7 @@
 #include <compat/strl.h>
 #include <string/stdstring.h>
 
-#include "../src/msg_hash.h"
+#include "../msg_hash.h"
 
 int menu_hash_get_help_nl_enum(enum msg_hash_enums msg, char *s, size_t len)
 {

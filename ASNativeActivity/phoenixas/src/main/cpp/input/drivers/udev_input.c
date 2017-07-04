@@ -26,6 +26,7 @@
 #include <sys/stat.h>
 
 #include <sys/epoll.h>
+#include <sys/poll.h>
 
 #include <libudev.h>
 #include <linux/types.h>
@@ -48,14 +49,20 @@
 #include "../input_config.h"
 #include "../input_driver.h"
 #include "../input_keymaps.h"
-#include "../input_keyboard.h"
 
 #include "../../gfx/video_driver.h"
 #include "../common/linux_common.h"
-#include "../common/udev_common.h"
-#include "../common/epoll_common.h"
+#include "../../configuration.h"
 
 #include "../../verbosity.h"
+
+<<<<<<< HEAD
+#if defined(HAVE_XKBCOMMON) && defined(HAVE_PLAIN_DRM)
+=======
+#if defined(HAVE_XKBCOMMON) && defined(HAVE_KMS)
+>>>>>>> e7d623f971c6904c4037a9f130284b2474b8c632
+#define UDEV_XKB_HANDLING
+#endif
 
 #define UDEV_MAX_KEYS (KEY_MAX + 7) / 8
 
@@ -85,6 +92,13 @@ typedef struct
    bool wu, wd, whu, whd;
 } udev_input_mouse_t;
 
+typedef struct
+{
+   struct input_absinfo info_x;
+   struct input_absinfo info_y;
+   udev_input_mouse_t mouse; /* touch-pad will be presented to RA/core as mouse */
+} udev_input_touchpad_t;
+
 struct udev_input_device
 {
    int fd;
@@ -97,15 +111,7 @@ struct udev_input_device
    union
    {
       udev_input_mouse_t mouse;
-
-      struct
-      {
-         float x, y;
-         float mod_x, mod_y;
-         struct input_absinfo info_x;
-         struct input_absinfo info_y;
-         bool touch;
-      } touchpad;
+      udev_input_touchpad_t touchpad;
    } state;
 };
 
@@ -124,23 +130,60 @@ struct udev_input
    int epfd;
    udev_input_device_t **devices;
    unsigned num_devices;
+
+#ifdef UDEV_XKB_HANDLING
+   bool xkb_handling;
+#endif
 };
 
+#ifdef UDEV_XKB_HANDLING
+int init_xkb(int fd, size_t size);
+void free_xkb(void);
+int handle_xkb(int code, int value);
+#endif
+
 static uint8_t udev_key_state[UDEV_MAX_KEYS];
+
+static unsigned input_unify_ev_key_code(unsigned code)
+{
+   /* input_keymaps_translate_keysym_to_rk does not support the case
+      where multiple keysyms translate to the same RETROK_* code,
+      so unify remote control keysyms to keyboard keysyms here.  */
+   switch (code)
+   {
+      case KEY_OK:
+         return KEY_ENTER;
+      case KEY_BACK:
+         return KEY_BACKSPACE;
+      default:
+         return code;
+   }
+}
 
 static void udev_handle_keyboard(void *data,
       const struct input_event *event, udev_input_device_t *dev)
 {
+#ifdef UDEV_XKB_HANDLING
+   udev_input_t *udev = (udev_input_t*)data;
+#endif
+   unsigned keysym;
+
    switch (event->type)
    {
       case EV_KEY:
+         keysym = input_unify_ev_key_code(event->code);
          if (event->value)
-            BIT_SET(udev_key_state, event->code);
+            BIT_SET(udev_key_state, keysym);
          else
-            BIT_CLEAR(udev_key_state, event->code);
+            BIT_CLEAR(udev_key_state, keysym);
+
+#ifdef UDEV_XKB_HANDLING
+         if (udev->xkb_handling && handle_xkb(keysym, event->value) == 0)
+            return;
+#endif
 
          input_keyboard_event(event->value,
-               input_keymaps_translate_keysym_to_rk(event->code),
+               input_keymaps_translate_keysym_to_rk(keysym),
                0, 0, RETRO_DEVICE_KEYBOARD);
          break;
 
@@ -155,80 +198,82 @@ static void udev_input_kb_free(void)
 
    for (i = 0; i < UDEV_MAX_KEYS; i++)
       udev_key_state[i] = 0;
+
+#ifdef UDEV_XKB_HANDLING
+   free_xkb();
+#endif
+}
+
+static udev_input_mouse_t *udev_get_mouse(struct udev_input *udev, unsigned port)
+{
+   unsigned i;
+   unsigned mouse_index      = 0;
+   settings_t *settings      = config_get_ptr();
+   udev_input_mouse_t *mouse = NULL;
+
+   if (port >= MAX_USERS)
+      return NULL;
+
+   for (i = 0; i < udev->num_devices; ++i)
+   {
+      if (udev->devices[i]->type == UDEV_INPUT_KEYBOARD)
+         continue;
+
+      if (mouse_index == settings->uints.input_mouse_index[port])
+      {
+         if (udev->devices[i]->type == UDEV_INPUT_MOUSE)
+            mouse = &udev->devices[i]->state.mouse;
+         else
+            mouse = &udev->devices[i]->state.touchpad.mouse;
+         break;
+      }
+
+      ++mouse_index;
+   }
+
+   return mouse;
 }
 
 static void udev_handle_touchpad(void *data,
       const struct input_event *event, udev_input_device_t *dev)
 {
-   unsigned i;
-   udev_input_t *udev        = (udev_input_t*)data;
-   udev_input_mouse_t *mouse = NULL;
-
-   for (i = 0; i < udev->num_devices; ++i)
-   {
-      if (udev->devices[i]->type == UDEV_INPUT_MOUSE)
-      {
-         mouse = &udev->devices[i]->state.mouse;
-         break;
-      }
-   }
+   int16_t pos;
+   unsigned width                  = 0;
+   unsigned height                 = 0;
+   udev_input_touchpad_t *touchpad = &dev->state.touchpad;
+   udev_input_mouse_t *mouse       = &dev->state.touchpad.mouse;
 
    switch (event->type)
    {
       case EV_ABS:
+         video_driver_get_size(&width, &height);
          switch (event->code)
          {
             case ABS_X:
-            {
-               int x        = event->value - dev->state.touchpad.info_x.minimum;
-               int range    = dev->state.touchpad.info_x.maximum - 
-                  dev->state.touchpad.info_x.minimum;
-               float x_norm = (float)x / range;
-               float rel_x  = x_norm - dev->state.touchpad.x;
-
-               if (dev->state.touchpad.touch && mouse)
-                  mouse->dlt_x += (int16_t)roundf(dev->state.touchpad.mod_x * rel_x);
-
-               dev->state.touchpad.x = x_norm;
-               /* Some factor, not sure what's good to do here ... */
-               dev->state.touchpad.mod_x = 500.0f;
+               pos = (float)(event->value - touchpad->info_x.minimum) /
+                     (touchpad->info_x.maximum - touchpad->info_x.minimum) * width;
+               mouse->dlt_x += pos - mouse->x;
+               mouse->x = pos;
                break;
-            }
-
             case ABS_Y:
-            {
-               int y        = event->value - dev->state.touchpad.info_y.minimum;
-               int range    = dev->state.touchpad.info_y.maximum - 
-                  dev->state.touchpad.info_y.minimum;
-               float y_norm = (float)y / range;
-               float rel_y  = y_norm - dev->state.touchpad.y;
-
-               if (dev->state.touchpad.touch && mouse)
-                  mouse->dlt_y += (int16_t)roundf(dev->state.touchpad.mod_y * rel_y);
-
-               dev->state.touchpad.y = y_norm;
-
-               /* Some factor, not sure what's good to do here ... */
-               dev->state.touchpad.mod_y = 500.0f;
-               break;
-            }
-
-            default:
-               break;
+               pos = (float)(event->value - touchpad->info_y.minimum) /
+                     (touchpad->info_y.maximum - touchpad->info_y.minimum) * height;
+               mouse->dlt_y += pos - mouse->y;
+               mouse->y = pos;
          }
          break;
 
       case EV_KEY:
          switch (event->code)
          {
-            case BTN_TOUCH:
-               dev->state.touchpad.touch = event->value;
-               dev->state.touchpad.mod_x = 0.0f; /* First ABS event is not a relative one. */
-               dev->state.touchpad.mod_y = 0.0f;
+            case BTN_LEFT:
+               mouse->l = event->value;
                break;
-
-            default:
+            case BTN_MIDDLE:
+               mouse->m = event->value;
                break;
+            case BTN_RIGHT:
+               mouse->r = event->value;
          }
    }
 }
@@ -289,6 +334,7 @@ static bool udev_input_add_device(udev_input_t *udev,
 {
    int fd;
    struct stat st;
+   struct epoll_event event;
    udev_input_device_t **tmp;
    udev_input_device_t *device = NULL;
 
@@ -327,7 +373,15 @@ static bool udev_input_add_device(udev_input_t *udev,
    tmp[udev->num_devices++] = device;
    udev->devices            = tmp;
 
-   epoll_add(&udev->epfd, fd, device);
+   event.events             = EPOLLIN;
+   event.data.ptr           = device;
+
+   /* Shouldn't happen, but just check it. */
+   if (epoll_ctl(udev->epfd, EPOLL_CTL_ADD, fd, &event) < 0)
+   {
+      RARCH_ERR("Failed to add FD (%d) to epoll list (%s).\n",
+            fd, strerror(errno));
+   }
 
    return true;
 
@@ -360,7 +414,7 @@ static void udev_input_handle_hotplug(udev_input_t *udev)
 {
    device_handle_cb cb;
    enum udev_input_dev_type dev_type = UDEV_INPUT_KEYBOARD;
-   const char *val_keyboard          = NULL;
+   const char *val_key               = NULL;
    const char *val_mouse             = NULL;
    const char *val_touchpad          = NULL;
    const char *action                = NULL;
@@ -371,14 +425,15 @@ static void udev_input_handle_hotplug(udev_input_t *udev)
    if (!dev)
       return;
 
-   val_keyboard  = udev_device_get_property_value(dev, "ID_INPUT_KEYBOARD");
+   val_key       = udev_device_get_property_value(dev, "ID_INPUT_KEY");
    val_mouse     = udev_device_get_property_value(dev, "ID_INPUT_MOUSE");
    val_touchpad  = udev_device_get_property_value(dev, "ID_INPUT_TOUCHPAD");
    action        = udev_device_get_action(dev);
    devnode       = udev_device_get_devnode(dev);
 
-   if (val_keyboard && string_is_equal_fast(val_keyboard, "1", 1) && devnode)
+   if (val_key && string_is_equal_fast(val_key, "1", 1) && devnode)
    {
+      /* EV_KEY device, can be a keyboard or a remote control device.  */
       dev_type   = UDEV_INPUT_KEYBOARD;
       cb         = udev_handle_keyboard;
    }
@@ -425,6 +480,17 @@ static void udev_input_get_pointer_position(int *x, int *y)
 }
 #endif
 
+static bool udev_input_poll_hotplug_available(struct udev_monitor *dev)
+{
+   struct pollfd fds;		
+
+   fds.fd      = udev_monitor_get_fd(dev);		
+   fds.events  = POLLIN;		
+   fds.revents = 0;		
+
+   return (poll(&fds, 1, 0) == 1) && (fds.revents & POLLIN);
+}
+
 static void udev_input_poll(void *data)
 {
    int i, ret;
@@ -443,22 +509,27 @@ static void udev_input_poll(void *data)
    {
       if (udev->devices[i]->type == UDEV_INPUT_MOUSE)
       {
-         mouse        = &udev->devices[i]->state.mouse;
-         mouse->x     = x;
-         mouse->y     = y;
-         mouse->dlt_x = 0;
-         mouse->dlt_y = 0;
-         mouse->wu    = false;
-         mouse->wd    = false;
-         mouse->whu   = false;
-         mouse->whd   = false;
+         mouse    = &udev->devices[i]->state.mouse;
+         mouse->x = x;
+         mouse->y = y;
       }
+      else if (udev->devices[i]->type == UDEV_INPUT_TOUCHPAD)
+         mouse = &udev->devices[i]->state.touchpad.mouse;
+      else
+         continue;
+
+      mouse->dlt_x = 0;
+      mouse->dlt_y = 0;
+      mouse->wu    = false;
+      mouse->wd    = false;
+      mouse->whu   = false;
+      mouse->whd   = false;
    }
 
-   while (udev->monitor && udev_hotplug_available(udev->monitor))
+   while (udev->monitor && udev_input_poll_hotplug_available(udev->monitor))
       udev_input_handle_hotplug(udev);
 
-   ret = epoll_waiting(&udev->epfd, events, ARRAY_SIZE(events), 0);
+   ret = epoll_wait(udev->epfd, events, ARRAY_SIZE(events), 0);
 
    for (i = 0; i < ret; i++)
    {
@@ -485,20 +556,7 @@ static void udev_input_poll(void *data)
 static int16_t udev_mouse_state(udev_input_t *udev,
       unsigned port, unsigned id, bool screen)
 {
-   unsigned i, j;
-   udev_input_mouse_t *mouse = NULL;
-
-   for (i = j = 0; i < udev->num_devices; ++i)
-   {
-      if (udev->devices[i]->type != UDEV_INPUT_MOUSE)
-         continue;
-      if (j == port)
-      {
-         mouse = &udev->devices[i]->state.mouse;
-         break;
-      }
-      ++j;
-   }
+   udev_input_mouse_t *mouse = udev_get_mouse(udev, port);
 
    if (!mouse)
       return 0;
@@ -531,20 +589,7 @@ static int16_t udev_mouse_state(udev_input_t *udev,
 static int16_t udev_lightgun_state(udev_input_t *udev,
       unsigned port, unsigned id)
 {
-   unsigned i, j;
-   udev_input_mouse_t *mouse = NULL;
-
-   for (i = j = 0; i < udev->num_devices; ++i)
-   {
-      if (udev->devices[i]->type != UDEV_INPUT_MOUSE)
-         continue;
-      if (j == port)
-      {
-         mouse = &udev->devices[i]->state.mouse;
-         break;
-      }
-      ++j;
-   }
+   udev_input_mouse_t *mouse = udev_get_mouse(udev, port);
 
    if (!mouse)
       return 0;
@@ -596,13 +641,12 @@ static int16_t udev_pointer_state(udev_input_t *udev,
       unsigned port, unsigned id, bool screen)
 {
    struct video_viewport vp;
-   unsigned i, j;
    bool inside                 = false;
    int16_t res_x               = 0;
    int16_t res_y               = 0;
    int16_t res_screen_x        = 0;
    int16_t res_screen_y        = 0;
-   udev_input_mouse_t *mouse   = NULL;
+   udev_input_mouse_t *mouse   = udev_get_mouse(udev, port);
 
    vp.x                        = 0;
    vp.y                        = 0;
@@ -610,18 +654,6 @@ static int16_t udev_pointer_state(udev_input_t *udev,
    vp.height                   = 0;
    vp.full_width               = 0;
    vp.full_height              = 0;
-
-   for (i = j = 0; i < udev->num_devices; ++i)
-   {
-      if (udev->devices[i]->type != UDEV_INPUT_MOUSE)
-         continue;
-      if (j == port)
-      {
-         mouse = &udev->devices[i]->state.mouse;
-         break;
-      }
-      ++j;
-   }
 
    if (!mouse)
       return 0;
@@ -659,25 +691,24 @@ static int16_t udev_input_state(void *data,
       const struct retro_keybind **binds,
       unsigned port, unsigned device, unsigned idx, unsigned id)
 {
+   int16_t ret                = 0;
    udev_input_t *udev         = (udev_input_t*)data;
 
    switch (device)
    {
       case RETRO_DEVICE_JOYPAD:
-         if (BIT_GET(udev_key_state, rarch_keysym_lut[binds[port][id].key]))
-            return true;
-         return input_joypad_pressed(udev->joypad,
-               joypad_info, port, binds[port], id);
+         ret = BIT_GET(udev_key_state,
+               rarch_keysym_lut[binds[port][id].key]);
+         if (!ret)
+            ret = input_joypad_pressed(udev->joypad,
+                  joypad_info, port, binds[port], id);
+         return ret;
       case RETRO_DEVICE_ANALOG:
-         if (binds[port])
-         {
-            int16_t ret = udev_analog_pressed(binds[port], idx, id);
-            if (!ret)
-               ret = input_joypad_analog(udev->joypad,
-                     joypad_info, port, idx, id, binds[port]);
-            return ret;
-         }
-         break;
+         ret = udev_analog_pressed(binds[port], idx, id);
+         if (!ret && binds[port])
+            ret = input_joypad_analog(udev->joypad,
+                  joypad_info, port, idx, id, binds[port]);
+         return ret;
       case RETRO_DEVICE_KEYBOARD:
          return id < RETROK_LAST && BIT_GET(udev_key_state,
                rarch_keysym_lut[(enum retro_key)id]);
@@ -712,7 +743,10 @@ static void udev_input_free(void *data)
    if (udev->joypad)
       udev->joypad->destroy();
 
-   epoll_free(&udev->epfd);
+   if (udev->epfd >= 0)
+      close(udev->epfd);
+
+   udev->epfd = -1;
 
    for (i = 0; i < udev->num_devices; i++)
    {
@@ -779,6 +813,10 @@ static bool open_devices(udev_input_t *udev,
 
 static void *udev_input_init(const char *joypad_driver)
 {
+   int fd;
+#ifdef UDEV_XKB_HANDLING
+   gfx_ctx_ident_t ctx_ident;
+#endif
    udev_input_t *udev   = (udev_input_t*)calloc(1, sizeof(*udev));
 
    if (!udev)
@@ -798,11 +836,26 @@ static void *udev_input_init(const char *joypad_driver)
       udev_monitor_enable_receiving(udev->monitor);
    }
 
+#ifdef UDEV_XKB_HANDLING
+   if (init_xkb(-1, 0) == -1)
+      goto error;
+
+   video_context_driver_get_ident(&ctx_ident);
+   udev->xkb_handling = string_is_equal_fast(ctx_ident.ident, "kms", 4);
+#endif
+
+<<<<<<< HEAD
    if (!epoll_new(&udev->epfd))
+=======
+   fd = epoll_create(32);
+   if (fd < 0)
+>>>>>>> e7d623f971c6904c4037a9f130284b2474b8c632
    {
       RARCH_ERR("Failed to create epoll FD.\n");
       goto error;
    }
+
+   udev->epfd  = fd;
 
    if (!open_devices(udev, UDEV_INPUT_KEYBOARD, udev_handle_keyboard))
    {

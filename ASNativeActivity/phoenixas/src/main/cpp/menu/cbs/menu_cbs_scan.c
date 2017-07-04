@@ -27,7 +27,7 @@
 
 #include "../../input/input_config.h"
 
-#include "../../src/configuration.h"
+#include "../../configuration.h"
 #include "../../tasks/tasks_internal.h"
 
 #ifndef BIND_ACTION_SCAN

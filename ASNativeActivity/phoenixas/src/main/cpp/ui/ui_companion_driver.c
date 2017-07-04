@@ -18,7 +18,7 @@
 #include <boolean.h>
 #include <string/stdstring.h>
 
-#include "../src/configuration.h"
+#include "../configuration.h"
 
 #ifdef HAVE_CONFIG_H
 #include "../config.h"
@@ -87,7 +87,7 @@ bool ui_companion_is_on_foreground(void)
  *
  * Finds first suitable driver and initialize.
  *
- * Returns: pointer to first suitable driver, otherwise NULL.
+ * Returns: pointer to first suitable driver, otherwise NULL. 
  **/
 const ui_companion_driver_t *ui_companion_init_first(void)
 {

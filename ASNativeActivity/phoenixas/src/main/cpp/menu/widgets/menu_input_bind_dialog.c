@@ -23,11 +23,10 @@
 #include "../menu_driver.h"
 
 #include "../../input/input_driver.h"
-#include "../../input/input_keyboard.h"
 #include "../../input/input_config.h"
 
-#include "../../src/configuration.h"
-#include "../../src/performance_counters.h"
+#include "../../configuration.h"
+#include "../../performance_counters.h"
 
 #define MENU_MAX_BUTTONS 219
 #define MENU_MAX_AXES    32
@@ -74,7 +73,7 @@ static bool menu_input_key_bind_custom_bind_keyboard_cb(
    menu_input_binds.target->key = (enum retro_key)code;
    menu_input_binds.begin++;
    menu_input_binds.target++;
-
+   
    rarch_timer_begin_new_time(&menu_input_binds.timer, settings->uints.input_bind_timeout);
 
    return (menu_input_binds.begin <= menu_input_binds.last);

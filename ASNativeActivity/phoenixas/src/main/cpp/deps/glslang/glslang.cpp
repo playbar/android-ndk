@@ -1,6 +1,6 @@
 /*  RetroArch - A frontend for libretro.
  *  Copyright (C) 2016 - Hans-Kristian Arntzen
- *
+ * 
  *  RetroArch is free software: you can redistribute it and/or modify it under the terms
  *  of the GNU General Public License as published by the Free Software Found-
  *  ation, either version 3 of the License, or (at your option) any later version.
@@ -22,7 +22,7 @@
 #include <cstring>
 #include <cstdlib>
 
-#include "../../src/verbosity.h"
+#include "../../verbosity.h"
 
 using namespace glslang;
 using namespace std;
@@ -75,7 +75,7 @@ SlangProcess::SlangProcess()
       "MaxComputeImageUniforms 8\n"
       "MaxComputeAtomicCounters 8\n"
       "MaxComputeAtomicCounterBuffers 1\n"
-      "MaxVaryingComponents 60\n"
+      "MaxVaryingComponents 60\n" 
       "MaxVertexOutputComponents 64\n"
       "MaxGeometryInputComponents 64\n"
       "MaxGeometryOutputComponents 128\n"

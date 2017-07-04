@@ -22,7 +22,7 @@
 #include <retro_common_api.h>
 #include <retro_miscellaneous.h>
 
-#include "../../src/msg_hash.h"
+#include "../../msg_hash.h"
 
 #include "../menu_input.h"
 

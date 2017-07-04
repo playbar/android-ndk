@@ -25,7 +25,6 @@
 #include <string/stdstring.h>
 #include <lists/string_list.h>
 #include <lists/dir_list.h>
-#include <retro_stat.h>
 
 #include "nk_menu.h"
 
@@ -82,7 +81,7 @@ bool nk_wnd_file_picker(nk_menu_handle_t *nk, char* title, char* in, char* out, 
    if (!string_is_empty(in) && string_is_empty(path))
    {
       strlcpy(path, in, sizeof(path));
-      files = dir_list_new(path, filter, true, settings->show_hidden_files, true, false);
+      files = dir_list_new(path, filter, true, settings->bools.show_hidden_files, true, false);
    }
 
    if (!assets_loaded)
@@ -101,7 +100,7 @@ bool nk_wnd_file_picker(nk_menu_handle_t *nk, char* title, char* in, char* out, 
          {
             fill_pathname_join(path, "/",
                   "", sizeof(path));
-            files = dir_list_new(path, filter, true, settings->show_hidden_files, true, false);
+            files = dir_list_new(path, filter, true, settings->bools.show_hidden_files, true, false);
          }
       }
       else
@@ -113,7 +112,7 @@ bool nk_wnd_file_picker(nk_menu_handle_t *nk, char* title, char* in, char* out, 
             {
                fill_pathname_join(path, drives->list[i].path,
                      "", sizeof(path));
-               files = dir_list_new(path, filter, true, settings->show_hidden_files, true, false);
+               files = dir_list_new(path, filter, true, settings->bools.show_hidden_files, true, false);
             }
          }
       }
@@ -129,7 +128,7 @@ bool nk_wnd_file_picker(nk_menu_handle_t *nk, char* title, char* in, char* out, 
             {
                strlcpy (path, files->elems[i].data, sizeof(path));
                if (path_is_directory (path))
-                  files = dir_list_new(path, filter, true, settings->show_hidden_files, true, false);
+                  files = dir_list_new(path, filter, true, settings->bools.show_hidden_files, true, false);
             }
          }
       }

@@ -18,7 +18,7 @@
 
 #include "../menu_driver.h"
 #include "../menu_cbs.h"
-#include "../../src/file_path_special.h"
+#include "../../file_path_special.h"
 
 #ifndef BIND_ACTION_LABEL
 #define BIND_ACTION_LABEL(cbs, name) \

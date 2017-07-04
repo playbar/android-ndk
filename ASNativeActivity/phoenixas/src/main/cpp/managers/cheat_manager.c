@@ -35,11 +35,11 @@
 
 #include "cheat_manager.h"
 
-#include "../src/msg_hash.h"
-#include "../src/retroarch.h"
-#include "../src/dynamic.h"
-#include "../src/core.h"
-#include "../src/verbosity.h"
+#include "../msg_hash.h"
+#include "../retroarch.h"
+#include "../dynamic.h"
+#include "../core.h"
+#include "../verbosity.h"
 
 struct item_cheat
 {

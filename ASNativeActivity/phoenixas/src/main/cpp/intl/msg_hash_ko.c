@@ -21,9 +21,9 @@
 #include <compat/strl.h>
 #include <string/stdstring.h>
 
-#include "../src/msg_hash.h"
-#include "../src/configuration.h"
-#include "../src/verbosity.h"
+#include "../msg_hash.h"
+#include "../configuration.h"
+#include "../verbosity.h"
 
 int menu_hash_get_help_ko_enum(enum msg_hash_enums msg, char *s, size_t len) {
     uint32_t driver_hash = 0;

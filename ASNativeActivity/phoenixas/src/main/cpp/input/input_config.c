@@ -34,13 +34,13 @@
 #include "input_keymaps.h"
 #include "input_remapping.h"
 
-#include "../src/config.def.keybinds.h"
+#include "../config.def.keybinds.h"
 
-#include "../src/msg_hash.h"
-#include "../src/configuration.h"
-#include "../src/file_path_special.h"
+#include "../msg_hash.h"
+#include "../configuration.h"
+#include "../file_path_special.h"
 #include "../tasks/tasks_internal.h"
-#include "../src/verbosity.h"
+#include "../verbosity.h"
 
 /* Input config. */
 struct input_bind_map
@@ -162,7 +162,7 @@ static const void *input_config_bind_map_get(unsigned i)
 
 bool input_config_bind_map_get_valid(unsigned i)
 {
-   const struct input_bind_map *keybind =
+   const struct input_bind_map *keybind = 
       (const struct input_bind_map*)input_config_bind_map_get(i);
    if (!keybind)
       return false;
@@ -171,7 +171,7 @@ bool input_config_bind_map_get_valid(unsigned i)
 
 unsigned input_config_bind_map_get_meta(unsigned i)
 {
-   const struct input_bind_map *keybind =
+   const struct input_bind_map *keybind = 
       (const struct input_bind_map*)input_config_bind_map_get(i);
    if (!keybind)
       return 0;
@@ -180,7 +180,7 @@ unsigned input_config_bind_map_get_meta(unsigned i)
 
 const char *input_config_bind_map_get_base(unsigned i)
 {
-   const struct input_bind_map *keybind =
+   const struct input_bind_map *keybind = 
       (const struct input_bind_map*)input_config_bind_map_get(i);
    if (!keybind)
       return NULL;
@@ -189,7 +189,7 @@ const char *input_config_bind_map_get_base(unsigned i)
 
 const char *input_config_bind_map_get_desc(unsigned i)
 {
-   const struct input_bind_map *keybind =
+   const struct input_bind_map *keybind = 
       (const struct input_bind_map*)input_config_bind_map_get(i);
    if (!keybind)
       return NULL;
@@ -259,7 +259,7 @@ enum retro_key input_config_translate_str_to_rk(const char *str)
  *
  * Translate string representation to bind ID.
  *
- * Returns: Bind ID value on success, otherwise
+ * Returns: Bind ID value on success, otherwise 
  * RARCH_BIND_LIST_END on not found.
  **/
 unsigned input_config_translate_str_to_bind_id(const char *str)
@@ -585,7 +585,7 @@ void input_config_reset(void)
    for (i = 1; i < MAX_USERS; i++)
       memcpy(input_config_binds[i], retro_keybinds_rest,
             sizeof(retro_keybinds_rest));
-
+   
    for (i = 0; i < MAX_USERS; i++)
    {
       input_config_vid[i]     = 0;

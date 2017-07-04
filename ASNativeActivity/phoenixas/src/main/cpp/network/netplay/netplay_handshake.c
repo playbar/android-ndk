@@ -22,6 +22,7 @@
 #include <boolean.h>
 #include <compat/strl.h>
 #include <rhash.h>
+#include <retro_timers.h>
 
 #include "netplay_private.h"
 
@@ -29,11 +30,11 @@
 #include "../../config.h"
 #endif
 
-#include "../../src/autosave.h"
-#include "../../src/configuration.h"
-#include "../../src/content.h"
-#include "../../src/retroarch.h"
-#include "../../src/version.h"
+#include "../../autosave.h"
+#include "../../configuration.h"
+#include "../../content.h"
+#include "../../retroarch.h"
+#include "../../version.h"
 #include "../../input/input_config.h"
 
 #ifdef HAVE_MENU
@@ -211,7 +212,7 @@ bool netplay_handshake_init_send(netplay_t *netplay,
    header[3] = 0;
 
    if (netplay->is_server &&
-       (settings->paths.netplay_password[0] ||
+       (settings->paths.netplay_password[0] || 
         settings->paths.netplay_spectate_password[0]))
    {
       /* Demand a password */
@@ -441,14 +442,14 @@ static void netplay_handshake_ready(netplay_t *netplay,
    if (netplay->is_server)
    {
       unsigned slot = (unsigned)(connection - netplay->connections);
-
+      
       netplay_log_connection(&connection->addr,
             slot, connection->nick, msg, sizeof(msg));
 
       RARCH_LOG("%s %u\n", msg_hash_to_str(MSG_CONNECTION_SLOT), slot);
 
       /* Send them the savestate */
-      if (!(netplay->quirks &
+      if (!(netplay->quirks & 
                (NETPLAY_QUIRK_NO_SAVESTATES|NETPLAY_QUIRK_NO_TRANSMISSION)))
          netplay->force_send_savestate = true;
    }
@@ -563,7 +564,7 @@ bool netplay_handshake_sync(netplay_t *netplay,
    /* Now send the device info */
    for (i = 0; i < MAX_USERS; i++)
    {
-      device = htonl(input_config_get_device(i));
+      device = htonl(input_config_get_device((unsigned)i));
       if (!netplay_send(&connection->send_packet_buffer, connection->fd,
                &device, sizeof(device)))
          return false;
@@ -668,7 +669,7 @@ bool netplay_handshake_pre_nick(netplay_t *netplay,
    {
       settings_t *settings = config_get_ptr();
 
-      if (  settings->paths.netplay_password[0] ||
+      if (  settings->paths.netplay_password[0] || 
             settings->paths.netplay_spectate_password[0])
       {
          /* There's a password, so just put them in PRE_PASSWORD mode */

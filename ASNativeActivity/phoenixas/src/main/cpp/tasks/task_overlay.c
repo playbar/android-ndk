@@ -26,12 +26,12 @@
 
 #include "tasks_internal.h"
 
-#include "../src/file_path_special.h"
+#include "../file_path_special.h"
 #include "../gfx/video_driver.h"
 #include "../input/input_config.h"
 #include "../input/input_overlay.h"
-#include "../src/configuration.h"
-#include "../src/verbosity.h"
+#include "../configuration.h"
+#include "../verbosity.h"
 
 typedef struct overlay_loader overlay_loader_t;
 
@@ -126,7 +126,7 @@ static bool task_overlay_load_desc(
    const char *box                      = NULL;
    config_file_t *conf                  = loader->conf;
 
-   overlay_desc_key[0] = conf_key[0] =
+   overlay_desc_key[0] = conf_key[0] = 
       overlay_desc_normalized_key[0] = overlay[0] = '\0';
 
    snprintf(overlay_desc_key, sizeof(overlay_desc_key),
@@ -203,7 +203,7 @@ static bool task_overlay_load_desc(
             for (; tmp; tmp = strtok_r(NULL, "|", &save))
             {
                if (!string_is_equal(tmp, file_path_str(FILE_PATH_NUL)))
-                  desc->key_mask |= UINT64_C(1)
+                  desc->key_mask |= UINT64_C(1) 
                      << input_config_translate_str_to_bind_id(tmp);
             }
 

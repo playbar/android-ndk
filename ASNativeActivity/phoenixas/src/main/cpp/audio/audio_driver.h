@@ -38,7 +38,10 @@ enum audio_action
 {
    AUDIO_ACTION_NONE = 0,
    AUDIO_ACTION_RATE_CONTROL_DELTA,
+   AUDIO_ACTION_MIXER_MUTE_ENABLE,
    AUDIO_ACTION_MUTE_ENABLE,
+   AUDIO_ACTION_VOLUME_GAIN,
+   AUDIO_ACTION_MIXER_VOLUME_GAIN,
    AUDIO_ACTION_MIXER
 };
 
@@ -201,8 +204,6 @@ size_t audio_driver_sample_batch_rewind(const int16_t *data, size_t frames);
 
 bool audio_driver_mixer_extension_supported(const char *ext);
 
-void audio_driver_set_volume_gain(float gain);
-
 void audio_driver_dsp_filter_free(void);
 
 void audio_driver_dsp_filter_init(const char *device);
@@ -258,6 +259,7 @@ extern audio_driver_t audio_rsound;
 extern audio_driver_t audio_oss;
 extern audio_driver_t audio_alsa;
 extern audio_driver_t audio_alsathread;
+extern audio_driver_t audio_tinyalsa;
 extern audio_driver_t audio_roar;
 extern audio_driver_t audio_openal;
 extern audio_driver_t audio_opensl;

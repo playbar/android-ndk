@@ -52,10 +52,10 @@
 
 #include "../menu_event.h"
 
-#include "../../src/verbosity.h"
-#include "../../src/configuration.h"
-#include "../../src/playlist.h"
-#include "../../src/retroarch.h"
+#include "../../verbosity.h"
+#include "../../configuration.h"
+#include "../../playlist.h"
+#include "../../retroarch.h"
 
 #include "../../tasks/tasks_internal.h"
 
@@ -610,7 +610,7 @@ static void xmb_draw_icon(
 static void xmb_draw_thumbnail(
       menu_display_frame_info_t menu_disp_info,
       xmb_handle_t *xmb, float *color,
-      unsigned width, unsigned height,
+      unsigned width, unsigned height, 
       float x, float y,
       float w, float h, uintptr_t texture)
 {
@@ -826,7 +826,7 @@ static void xmb_render_messagebox_internal(
    {
       const char *msg = list->elems[i].data;
       int len         = (int)utf8len(msg);
-
+       
       if (len > longest)
       {
          longest = len;
@@ -2579,10 +2579,10 @@ static void xmb_draw_bg(
          draw.texture = texture;
          menu_display_set_alpha(draw.color, coord_white[3]);
 
-         if (!running && draw.texture)
+         if (draw.texture)
             draw.color = &coord_white[0];
 
-         if (video_info->xmb_color_theme == XMB_THEME_WALLPAPER)
+         if (running || video_info->xmb_color_theme == XMB_THEME_WALLPAPER)
             add_opacity = true;
 
          menu_display_draw_bg(&draw, video_info, add_opacity);
@@ -4066,8 +4066,19 @@ static int xmb_list_push(void *data, void *userdata,
             entry.enum_idx      = MENU_ENUM_LABEL_ADD_CONTENT_LIST;
             menu_displaylist_ctl(DISPLAYLIST_SETTING_ENUM, &entry);
 #if defined(HAVE_NETWORKING)
-            entry.enum_idx      = MENU_ENUM_LABEL_ONLINE_UPDATER;
+#ifdef HAVE_LAKKA
+            entry.enum_idx      = MENU_ENUM_LABEL_UPDATE_LAKKA;
             menu_displaylist_ctl(DISPLAYLIST_SETTING_ENUM, &entry);
+#else
+            {
+               settings_t *settings      = config_get_ptr();
+               if (settings->bools.menu_show_online_updater)
+               {
+                  entry.enum_idx      = MENU_ENUM_LABEL_ONLINE_UPDATER;
+                  menu_displaylist_ctl(DISPLAYLIST_SETTING_ENUM, &entry);
+               }
+            }
+#endif
 #endif
             entry.enum_idx      = MENU_ENUM_LABEL_INFORMATION_LIST;
             menu_displaylist_ctl(DISPLAYLIST_SETTING_ENUM, &entry);

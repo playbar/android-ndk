@@ -1,7 +1,7 @@
 /*  RetroArch - A frontend for libretro.
  *  Copyright (C) 2010-2016 - Hans-Kristian Arntzen
  *  Copyright (C) 2011-2017 - Daniel De Matteis
- *
+ * 
  *  RetroArch is free software: you can redistribute it and/or modify it under the terms
  *  of the GNU General Public License as published by the Free Software Found-
  *  ation, either version 3 of the License, or (at your option) any later version.
@@ -31,8 +31,8 @@
 #include "slang_reflection.hpp"
 
 #include "../video_driver.h"
-#include "../../src/verbosity.h"
-#include "../../src/msg_hash.h"
+#include "../../verbosity.h"
+#include "../../msg_hash.h"
 
 using namespace std;
 
@@ -966,8 +966,8 @@ bool vulkan_filter_chain::init()
    {
       auto &pass = passes[i];
       RARCH_LOG("[slang]: Building pass #%u (%s)\n", i,
-            pass->get_name().empty() ?
-            msg_hash_to_str(MENU_ENUM_LABEL_VALUE_NOT_AVAILABLE) :
+            pass->get_name().empty() ? 
+            msg_hash_to_str(MENU_ENUM_LABEL_VALUE_NOT_AVAILABLE) : 
             pass->get_name().c_str());
 
       source = pass->set_pass_info(max_input_size,
@@ -1014,7 +1014,7 @@ void vulkan_filter_chain::build_offscreen_passes(VkCommandBuffer cmd,
 
    unsigned i;
    DeferredDisposer disposer(deferred_calls[current_sync_index]);
-   const Texture original = {
+   const Texture original = { 
       input_texture,
       passes.front()->get_source_filter(),
       passes.front()->get_mip_filter(),
@@ -1114,7 +1114,7 @@ void vulkan_filter_chain::build_viewport_pass(
 
    Texture source;
    DeferredDisposer disposer(deferred_calls[current_sync_index]);
-   const Texture original = {
+   const Texture original = { 
       input_texture,
       passes.front()->get_source_filter(),
       passes.front()->get_mip_filter(),
@@ -1397,7 +1397,7 @@ bool Pass::init_pipeline_layout()
       }
    }
 
-   VkDescriptorSetLayoutCreateInfo set_layout_info = {
+   VkDescriptorSetLayoutCreateInfo set_layout_info = { 
       VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO };
    set_layout_info.bindingCount = bindings.size();
    set_layout_info.pBindings    = bindings.data();
@@ -1406,7 +1406,7 @@ bool Pass::init_pipeline_layout()
             &set_layout_info, NULL, &set_layout) != VK_SUCCESS)
       return false;
 
-   VkPipelineLayoutCreateInfo layout_info = {
+   VkPipelineLayoutCreateInfo layout_info = { 
       VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
    layout_info.setLayoutCount             = 1;
    layout_info.pSetLayouts                = &set_layout;
@@ -1434,7 +1434,7 @@ bool Pass::init_pipeline_layout()
             &layout_info, NULL, &pipeline_layout) != VK_SUCCESS)
       return false;
 
-   VkDescriptorPoolCreateInfo pool_info = {
+   VkDescriptorPoolCreateInfo pool_info = { 
       VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO };
    pool_info.maxSets                    = num_sync_indices;
    pool_info.poolSizeCount              = desc_counts.size();
@@ -1442,7 +1442,7 @@ bool Pass::init_pipeline_layout()
    if (vkCreateDescriptorPool(device, &pool_info, nullptr, &pool) != VK_SUCCESS)
       return false;
 
-   VkDescriptorSetAllocateInfo alloc_info = {
+   VkDescriptorSetAllocateInfo alloc_info = { 
       VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
    alloc_info.descriptorPool     = pool;
    alloc_info.descriptorSetCount = 1;
@@ -1462,7 +1462,7 @@ bool Pass::init_pipeline()
       return false;
 
    // Input assembly
-   VkPipelineInputAssemblyStateCreateInfo input_assembly = {
+   VkPipelineInputAssemblyStateCreateInfo input_assembly = { 
       VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO };
    input_assembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP;
 
@@ -1483,7 +1483,7 @@ bool Pass::init_pipeline()
    binding.stride         = 4 * sizeof(float);
    binding.inputRate      = VK_VERTEX_INPUT_RATE_VERTEX;
 
-   VkPipelineVertexInputStateCreateInfo vertex_input = {
+   VkPipelineVertexInputStateCreateInfo vertex_input = { 
       VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO };
    vertex_input.vertexBindingDescriptionCount   = 1;
    vertex_input.pVertexBindingDescriptions      = &binding;
@@ -1491,7 +1491,7 @@ bool Pass::init_pipeline()
    vertex_input.pVertexAttributeDescriptions    = attributes;
 
    // Raster state
-   VkPipelineRasterizationStateCreateInfo raster = {
+   VkPipelineRasterizationStateCreateInfo raster = { 
       VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO };
    raster.polygonMode = VK_POLYGON_MODE_FILL;
    raster.cullMode = VK_CULL_MODE_NONE;
@@ -1503,7 +1503,7 @@ bool Pass::init_pipeline()
 
    // Blend state
    VkPipelineColorBlendAttachmentState blend_attachment = {0};
-   VkPipelineColorBlendStateCreateInfo blend = {
+   VkPipelineColorBlendStateCreateInfo blend = { 
       VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO };
    blend_attachment.blendEnable    = false;
    blend_attachment.colorWriteMask = 0xf;
@@ -1511,13 +1511,13 @@ bool Pass::init_pipeline()
    blend.pAttachments              = &blend_attachment;
 
    // Viewport state
-   VkPipelineViewportStateCreateInfo viewport = {
+   VkPipelineViewportStateCreateInfo viewport = { 
       VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO };
    viewport.viewportCount = 1;
    viewport.scissorCount  = 1;
 
    // Depth-stencil state
-   VkPipelineDepthStencilStateCreateInfo depth_stencil = {
+   VkPipelineDepthStencilStateCreateInfo depth_stencil = { 
       VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO };
    depth_stencil.depthTestEnable       = false;
    depth_stencil.depthWriteEnable      = false;
@@ -1527,14 +1527,14 @@ bool Pass::init_pipeline()
    depth_stencil.maxDepthBounds        = 1.0f;
 
    // Multisample state
-   VkPipelineMultisampleStateCreateInfo multisample = {
+   VkPipelineMultisampleStateCreateInfo multisample = { 
       VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO };
    multisample.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
 
    // Dynamic state
-   VkPipelineDynamicStateCreateInfo dynamic = {
+   VkPipelineDynamicStateCreateInfo dynamic = { 
       VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO };
-   static const VkDynamicState dynamics[] = {
+   static const VkDynamicState dynamics[] = { 
       VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };
    dynamic.pDynamicStates    = dynamics;
    dynamic.dynamicStateCount = sizeof(dynamics) / sizeof(dynamics[0]);
@@ -1545,7 +1545,7 @@ bool Pass::init_pipeline()
       { VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO },
    };
 
-   VkShaderModuleCreateInfo module_info = {
+   VkShaderModuleCreateInfo module_info = { 
       VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO };
    module_info.codeSize     = vertex_shader.size() * sizeof(uint32_t);
    module_info.pCode        = vertex_shader.data();
@@ -1559,7 +1559,7 @@ bool Pass::init_pipeline()
    shader_stages[1].pName   = "main";
    vkCreateShaderModule(device, &module_info, NULL, &shader_stages[1].module);
 
-   VkGraphicsPipelineCreateInfo pipe = {
+   VkGraphicsPipelineCreateInfo pipe = { 
       VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO };
    pipe.stageCount          = 2;
    pipe.pStages             = shader_stages;
@@ -1571,7 +1571,7 @@ bool Pass::init_pipeline()
    pipe.pViewportState      = &viewport;
    pipe.pDepthStencilState  = &depth_stencil;
    pipe.pDynamicState       = &dynamic;
-   pipe.renderPass          = final_pass ? swapchain_render_pass :
+   pipe.renderPass          = final_pass ? swapchain_render_pass : 
       framebuffer->get_render_pass();
    pipe.layout              = pipeline_layout;
 
@@ -2050,9 +2050,9 @@ void Pass::build_commands(
             reflection.ubo_size);
    }
 
-   // The final pass is always executed inside
-   // another render pass since the frontend will
-   // want to overlay various things on top for
+   // The final pass is always executed inside 
+   // another render pass since the frontend will 
+   // want to overlay various things on top for 
    // the passes that end up on-screen.
    if (!final_pass)
    {
@@ -2066,7 +2066,7 @@ void Pass::build_commands(
             VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
             VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 
-      VkRenderPassBeginInfo rp_info = {
+      VkRenderPassBeginInfo rp_info = { 
          VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO };
       rp_info.renderPass               = framebuffer->get_render_pass();
       rp_info.framebuffer              = framebuffer->get_framebuffer();
@@ -2119,7 +2119,7 @@ void Pass::build_commands(
       };
       const VkRect2D sci = {
          { 0, 0 },
-         {
+         { 
             current_framebuffer_size.width,
             current_framebuffer_size.height
          },
@@ -2370,7 +2370,7 @@ void Framebuffer::init(DeferredDisposer *disposer)
    info.arrayLayers       = 1;
    info.samples           = VK_SAMPLE_COUNT_1_BIT;
    info.tiling            = VK_IMAGE_TILING_OPTIMAL;
-   info.usage             = VK_IMAGE_USAGE_SAMPLED_BIT |
+   info.usage             = VK_IMAGE_USAGE_SAMPLED_BIT | 
       VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
       VK_IMAGE_USAGE_TRANSFER_DST_BIT |
       VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
@@ -2409,7 +2409,7 @@ void Framebuffer::init(DeferredDisposer *disposer)
 
    vkBindImageMemory(device, image, memory.memory, 0);
 
-   VkImageViewCreateInfo view_info           = {
+   VkImageViewCreateInfo view_info           = { 
       VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO };
    view_info.viewType                        = VK_IMAGE_VIEW_TYPE_2D;
    view_info.format                          = format;
@@ -2433,9 +2433,9 @@ void Framebuffer::init(DeferredDisposer *disposer)
 
 void Framebuffer::init_render_pass()
 {
-   VkRenderPassCreateInfo rp_info = {
+   VkRenderPassCreateInfo rp_info = { 
       VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO };
-   VkAttachmentReference color_ref = { 0,
+   VkAttachmentReference color_ref = { 0, 
       VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
 
    // We will always write to the entire framebuffer,
@@ -2466,7 +2466,7 @@ void Framebuffer::init_render_pass()
 
 void Framebuffer::init_framebuffer()
 {
-   VkFramebufferCreateInfo info = {
+   VkFramebufferCreateInfo info = { 
       VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO };
    info.renderPass      = render_pass;
    info.attachmentCount = 1;
@@ -2893,7 +2893,7 @@ vulkan_filter_chain_t *vulkan_filter_chain_create_from_preset(
       pass_info.scale_type_y  = VULKAN_FILTER_CHAIN_SCALE_ORIGINAL;
       pass_info.scale_x       = 0.0f;
       pass_info.scale_y       = 0.0f;
-      pass_info.rt_format     = VK_FORMAT_UNDEFINED;
+      pass_info.rt_format     = VK_FORMAT_UNDEFINED; 
       pass_info.source_filter = VULKAN_FILTER_CHAIN_LINEAR;
       pass_info.mip_filter    = VULKAN_FILTER_CHAIN_LINEAR;
       pass_info.address       = VULKAN_FILTER_CHAIN_ADDRESS_REPEAT;
@@ -2974,7 +2974,7 @@ vulkan_filter_chain_t *vulkan_filter_chain_create_from_preset(
       else
       {
          pass_info.source_filter =
-            pass->filter == RARCH_FILTER_LINEAR ? VULKAN_FILTER_CHAIN_LINEAR :
+            pass->filter == RARCH_FILTER_LINEAR ? VULKAN_FILTER_CHAIN_LINEAR : 
             VULKAN_FILTER_CHAIN_NEAREST;
       }
       pass_info.address    = wrap_to_address(pass->wrap);
@@ -2997,11 +2997,11 @@ vulkan_filter_chain_t *vulkan_filter_chain_create_from_preset(
 
       if (!pass->fbo.valid)
       {
-         pass_info.scale_type_x = i + 1 == shader->passes
-            ? VULKAN_FILTER_CHAIN_SCALE_VIEWPORT
+         pass_info.scale_type_x = i + 1 == shader->passes 
+            ? VULKAN_FILTER_CHAIN_SCALE_VIEWPORT 
             : VULKAN_FILTER_CHAIN_SCALE_SOURCE;
-         pass_info.scale_type_y = i + 1 == shader->passes
-            ? VULKAN_FILTER_CHAIN_SCALE_VIEWPORT
+         pass_info.scale_type_y = i + 1 == shader->passes 
+            ? VULKAN_FILTER_CHAIN_SCALE_VIEWPORT 
             : VULKAN_FILTER_CHAIN_SCALE_SOURCE;
          pass_info.scale_x = 1.0f;
          pass_info.scale_y = 1.0f;

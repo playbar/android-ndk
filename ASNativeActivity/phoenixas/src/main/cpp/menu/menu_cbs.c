@@ -18,7 +18,7 @@
 
 #include "menu_driver.h"
 #include "menu_cbs.h"
-#include "../src/verbosity.h"
+#include "../verbosity.h"
 
 #if 0
 #define DEBUG_LOG

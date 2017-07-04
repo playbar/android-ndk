@@ -43,13 +43,13 @@
 #include "../network/netplay/netplay.h"
 #endif
 
-#include "../src/core.h"
-#include "../src/file_path_special.h"
-#include "../src/configuration.h"
+#include "../core.h"
+#include "../file_path_special.h"
+#include "../configuration.h"
 #include "../gfx/video_driver.h"
-#include "../src/msg_hash.h"
-#include "../src/retroarch.h"
-#include "../src/verbosity.h"
+#include "../msg_hash.h"
+#include "../retroarch.h"
+#include "../verbosity.h"
 #include "tasks_internal.h"
 
 #define SAVE_STATE_CHUNK 4096
@@ -398,9 +398,9 @@ bool content_undo_load_state(void)
          undo_load_buf.size,
          msg_hash_to_str(MSG_BYTES));
 
-   /* TODO/FIXME - This checking of SRAM overwrite,
+   /* TODO/FIXME - This checking of SRAM overwrite, 
     * the backing up of it and
-    * its flushing could all be in their
+    * its flushing could all be in their 
     * own functions... */
    if (settings->bools.block_sram_overwrite && task_save_files
          && task_save_files->size)
