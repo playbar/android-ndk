@@ -1534,11 +1534,11 @@ bool task_push_load_content_from_cli(
       void *user_data)
 {
    /* Load content */
-//   if (!task_load_content_callback(content_info, true, true))
-//      return false;
-
-      if (!task_push_start_current_core(content_info))
+   if (!task_load_content_callback(content_info, true, true))
       return false;
+
+//      if (!task_push_start_current_core(content_info))
+//      return false;
 
    return true;
 }

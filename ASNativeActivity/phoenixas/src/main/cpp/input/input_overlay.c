@@ -495,11 +495,13 @@ void input_overlay_loaded(void *task_data, void *user_data, const char *err)
    }
 #endif
 
+#ifdef HAVE_OVERLAY
    if (!data->overlay_enable || !video_driver_overlay_interface(&iface) || !iface)
    {
       RARCH_ERR("Overlay interface is not present in video driver, or not enabled.\n");
       goto abort_load;
    }
+#endif
 
    ol             = (input_overlay_t*)calloc(1, sizeof(*ol));
    ol->overlays   = data->overlays;

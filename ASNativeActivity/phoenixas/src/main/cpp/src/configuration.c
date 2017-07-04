@@ -507,6 +507,12 @@ static settings_t *configuration_settings = NULL;
 
 settings_t *config_get_ptr(void)
 {
+    static int count = 0;
+    ++count;
+    if( count == 39 )
+        count = 39;
+   if( configuration_settings->bools.video_fps_show )
+      configuration_settings->bools.video_fps_show = true;
    return configuration_settings;
 }
 
@@ -1120,7 +1126,7 @@ static struct config_bool_setting *populate_settings_bool(settings_t *settings, 
    SETTING_BOOL("check_firmware_before_loading", &settings->bools.check_firmware_before_loading, true, check_firmware_before_loading, false);
    SETTING_BOOL("builtin_mediaplayer_enable",    &settings->bools.multimedia_builtin_mediaplayer_enable, false, false /* TODO */, false);
    SETTING_BOOL("builtin_imageviewer_enable",    &settings->bools.multimedia_builtin_imageviewer_enable, true, true, false);
-   SETTING_BOOL("fps_show",                      &settings->bools.video_fps_show, true, false, false);
+   SETTING_BOOL("fps_show",                      &settings->bools.video_fps_show, false, false, false);
    SETTING_BOOL("ui_menubar_enable",             &settings->bools.ui_menubar_enable, true, true, false);
    SETTING_BOOL("suspend_screensaver_enable",    &settings->bools.ui_suspend_screensaver_enable, true, true, false);
    SETTING_BOOL("rewind_enable",                 &settings->bools.rewind_enable, true, rewind_enable, false);

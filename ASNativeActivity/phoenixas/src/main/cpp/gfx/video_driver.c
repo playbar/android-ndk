@@ -29,6 +29,8 @@
 #include <gfx/scaler/scaler.h>
 #include <gfx/video_frame.h>
 #include <formats/image.h>
+#include <pthread.h>
+#include <src/log.h>
 
 #ifdef HAVE_CONFIG_H
 #include "../config.h"
@@ -2235,8 +2237,10 @@ void video_driver_frame(const void *data, unsigned width,
    unsigned output_height                            = 0;
    unsigned output_pitch                             = 0;
    const char *msg                                   = NULL;
-   retro_time_t        new_time                      =
-      cpu_features_get_time_usec();
+   retro_time_t        new_time                      = cpu_features_get_time_usec();
+
+    pthread_t pid = pthread_self();
+    LOGE("threadid:videodrivframe, pid=%ld", pid);
 
    if (!video_driver_active)
       return;
