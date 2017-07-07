@@ -1536,6 +1536,26 @@ bool task_push_load_content_from_cli(
    if (!task_load_content_callback(content_info, true, true))
       return false;
 
+//    if (!task_push_start_current_core(content_info))
+//        return false;
+
+//    if (!retroarch_main_init(content_info->argc, content_info->argv))
+//        return false;
+
+//
+      const char* path = "/storage/emulated/0/apsp/9000715.iso";
+   const char* new_core_path = "/data/data/com.retroarch/cores/ppsspp_libretro_android.so";
+    content_ctx_info_t ctinfo;
+    ctinfo.argc                   = 0;
+    ctinfo.argv                   = NULL;
+    ctinfo.args                   = NULL;
+    ctinfo.environ_get            = NULL;
+   if (!task_push_load_content_from_playlist_from_menu(
+           new_core_path, path,
+           &ctinfo,
+           NULL, NULL))
+      return -1;
+
    return true;
 }
 
