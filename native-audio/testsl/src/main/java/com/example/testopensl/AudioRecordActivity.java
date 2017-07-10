@@ -19,10 +19,10 @@ public class AudioRecordActivity extends Activity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        createEngine();
         setContentView(R.layout.open_sl_audio_record);
         findViewById(R.id.start).setOnClickListener(this);
         findViewById(R.id.stop).setOnClickListener(this);
-        createEngine();
     }
 
     @Override

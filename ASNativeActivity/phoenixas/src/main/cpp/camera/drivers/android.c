@@ -16,8 +16,6 @@
  */
 
 #include <glsym/glsym.h>
-#include <jni.h>
-#include <frontend/drivers/platform_unix.h>
 
 #include "../camera_driver.h"
 

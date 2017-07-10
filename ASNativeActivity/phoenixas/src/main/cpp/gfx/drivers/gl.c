@@ -39,7 +39,6 @@
 
 #include <gfx/gl_capabilities.h>
 #include <gfx/video_frame.h>
-#include <log.h>
 
 #include "../drivers_renderchain/gl_legacy_renderchain.h"
 
@@ -378,7 +377,6 @@ void gl_set_viewport(void *data, video_frame_info_t *video_info,
 #endif
 
    glViewport(gl->vp.x, gl->vp.y, gl->vp.width, gl->vp.height);
-   LOGE("gl_set_viewport, x=%d, y=%d, w=%d, h=%d", gl->vp.x, gl->vp.y, gl->vp.width, gl->vp.height );
    gl_set_projection(gl, &default_ortho, allow_rotate);
 
    /* Set last backbuffer viewport. */
@@ -1494,9 +1492,7 @@ static bool resolve_extensions(gl_t *gl, const char *context_ident)
 
    /* GLES3 has unpack_subimage and sRGB in core. */
    gl->support_unpack_row_length = gl_check_capability(GL_CAPS_UNPACK_ROW_LENGTH);
-#ifdef HAVE_FBO
    gl->has_srgb_fbo_gles3        = gl_check_capability(GL_CAPS_SRGB_FBO_ES3);
-#endif
 
    /* TODO/FIXME - No extensions for float FBO currently. */
 #endif

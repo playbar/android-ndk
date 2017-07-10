@@ -126,7 +126,7 @@ typedef struct android_input
    int64_t quick_tap_time;
 } android_input_t;
 
-void frontend_android_get_version_sdk(int32_t *sdk);
+static void frontend_android_get_version_sdk(int32_t *sdk);
 static void frontend_android_get_name(char *s, size_t len);
 
 bool (*engine_lookup_name)(char *buf,

@@ -21,7 +21,6 @@
 
 #include <rthreads/rthreads.h>
 #include <libretro-common/include/retro_math.h>
-#include <verbosity.h>
 
 #include "../audio_driver.h"
 

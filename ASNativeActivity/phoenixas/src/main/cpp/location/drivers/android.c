@@ -14,8 +14,6 @@
  *  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <jni.h>
-#include <frontend/drivers/platform_unix.h>
 #include "../location_driver.h"
 
 typedef struct android_location

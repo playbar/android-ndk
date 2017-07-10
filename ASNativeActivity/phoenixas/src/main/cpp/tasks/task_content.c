@@ -248,7 +248,8 @@ static bool content_load(content_ctx_info_t *info)
    char *argv_copy [MAX_ARGS]        = {NULL};
    char **rarch_argv_ptr             = (char**)info->argv;
    int *rarch_argc_ptr               = (int*)&info->argc;
-   struct rarch_main_wrap *wrap_args = (struct rarch_main_wrap*) calloc(1, sizeof(*wrap_args));
+   struct rarch_main_wrap *wrap_args = (struct rarch_main_wrap*)
+      calloc(1, sizeof(*wrap_args));
 
    if (!wrap_args)
       return false;
@@ -256,7 +257,8 @@ static bool content_load(content_ctx_info_t *info)
    retro_assert(wrap_args);
 
    if (info->environ_get)
-      info->environ_get(rarch_argc_ptr, rarch_argv_ptr, info->args, wrap_args);
+      info->environ_get(rarch_argc_ptr,
+            rarch_argv_ptr, info->args, wrap_args);
 
    if (wrap_args->touched)
    {
@@ -1479,17 +1481,17 @@ static bool task_load_content_callback(content_ctx_info_t *content_info,
    if (content_ctx.directory_system)
       free(content_ctx.directory_system);
 
-//   if (!ret)
-//   {
-//      if (error_string)
-//      {
-//         runloop_msg_queue_push(error_string, 2, 90, true);
-//         RARCH_ERR(error_string);
-//         free(error_string);
-//      }
-//
-//      return false;
-//   }
+   if (!ret)
+   {
+      if (error_string)
+      {
+         runloop_msg_queue_push(error_string, 2, 90, true);
+         RARCH_ERR(error_string);
+         free(error_string);
+      }
+
+      return false;
+   }
 
    return true;
 }
@@ -1534,28 +1536,21 @@ bool task_push_load_content_from_cli(
 //   if (!task_load_content_callback(content_info, true, true))
 //      return false;
 
-//    if (!task_push_start_current_core(content_info))
-//        return false;
-
-//    if (!retroarch_main_init(content_info->argc, content_info->argv))
-//        return false;
-
-//
-
    if( !content_load(content_info))
-        return false;
-    const char* path = "/storage/emulated/0/apsp/9000715.iso";
-   const char* new_core_path = "/data/data/com.retroarch/cores/ppsspp_libretro_android.so";
-    content_ctx_info_t ctinfo;
-    ctinfo.argc                   = 0;
-    ctinfo.argv                   = NULL;
-    ctinfo.args                   = NULL;
-    ctinfo.environ_get            = NULL;
-   if (!task_push_load_content_from_playlist_from_menu(
-           new_core_path, path,
-           &ctinfo,
-           NULL, NULL))
-      return -1;
+      return false;
+//
+//   core_path = "/data/data/com.retroarch/lib/ppsspp_libretro_android.so";
+   core_path = "/data/data/com.retroarch/lib/libppsspp.so";
+//    core_path = "/storage/emulated/0/apsp/libppsspp.so";
+   fullpath = "/storage/emulated/0/apsp/9000715.iso";
+//
+   content_ctx_info_t ctinfo;
+   ctinfo.argc = 0;
+   ctinfo.argv = NULL;
+//    ctinfo.args                   = NULL;
+   ctinfo.environ_get = NULL;
+   if (!task_push_load_content_from_playlist_from_menu(core_path, fullpath, &ctinfo, NULL, NULL))
+      return false;
 
    return true;
 }

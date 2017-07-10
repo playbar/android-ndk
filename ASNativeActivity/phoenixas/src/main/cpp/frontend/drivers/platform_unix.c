@@ -572,8 +572,7 @@ bool test_permissions(const char *path)
    bool ret                  = false;
    char buf[PATH_MAX_LENGTH] = {0};
 
-   __android_log_print(ANDROID_LOG_INFO,
-      "RetroArch", "Testing permissions for %s\n",path);
+   __android_log_print(ANDROID_LOG_INFO, "RetroArch", "Testing permissions for %s\n",path);
 
    fill_pathname_join(buf, path, ".retroarch", sizeof(buf));
    ret = path_mkdir(buf);

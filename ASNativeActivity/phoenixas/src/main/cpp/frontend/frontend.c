@@ -102,8 +102,6 @@ int rarch_main(int argc, char *argv[], void *data)
    rarch_ctl(RARCH_CTL_PREINIT, NULL);
    frontend_driver_init_first(args);
    rarch_ctl(RARCH_CTL_INIT, NULL);
-
-    path_set(RARCH_PATH_CORE, "lib2048.so");
    
    if (frontend_driver_is_inited())
    {
@@ -125,33 +123,17 @@ int rarch_main(int argc, char *argv[], void *data)
    }
 
    ui_companion_driver_init_first();
-   bool bload = true;
 
 #ifndef HAVE_MAIN
    do
    {
       unsigned sleep_ms = 0;
-      int ret = runloop_iterate(&sleep_ms);
+      int           ret = runloop_iterate(&sleep_ms);
 
       if (ret == 1 && sleep_ms > 0)
          retro_sleep(sleep_ms);
 
       task_queue_check();
-//      if( bload){
-//         bload = false;
-//         const char* path = "/storage/emulated/0/apsp/9000715.iso";
-//         const char* new_core_path = "/data/data/com.retroarch/cores/ppsspp_libretro_android.so";
-//         content_ctx_info_t ctinfo;
-//         ctinfo.argc                   = 0;
-//         ctinfo.argv                   = NULL;
-//         ctinfo.args                   = NULL;
-//         ctinfo.environ_get            = NULL;
-//         if (!task_push_load_content_from_playlist_from_menu(
-//                 new_core_path, path,
-//                 &ctinfo,
-//                 NULL, NULL))
-//            return -1;
-//      }
 
       if (ret == -1)
          break;

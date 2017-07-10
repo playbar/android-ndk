@@ -30,7 +30,6 @@
 
 #ifdef HAVE_OPENGLES
 #include "../common/gl_common.h"
-#include "GLES3/gl3.h"
 #endif
 
 #ifdef HAVE_VULKAN
@@ -101,14 +100,14 @@ static void android_gfx_ctx_destroy(void *data)
 
 static void *android_gfx_ctx_init(video_frame_info_t *video_info, void *video_driver)
 {
-    GLint format;
-#ifdef HAVE_EGL
-   GLint n, major, minor;
+#ifdef HAVE_OPENGLES
+   EGLint n, major, minor;
+   EGLint format;
 #if 0
    struct retro_hw_render_callback *hwr = video_driver_get_hw_context();
    bool debug = hwr->debug_context;
 #endif
-   GLint attribs[] = {
+   EGLint attribs[] = {
       EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
       EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
       EGL_BLUE_SIZE, 8,
@@ -125,7 +124,7 @@ static void *android_gfx_ctx_init(video_frame_info_t *video_info, void *video_dr
    if (!android_app || !and)
       return false;
 
-#ifdef HAVE_EGL
+#ifdef HAVE_OPENGLES
    if (g_es3)
       attribs[1] = EGL_OPENGL_ES3_BIT_KHR;
 #endif

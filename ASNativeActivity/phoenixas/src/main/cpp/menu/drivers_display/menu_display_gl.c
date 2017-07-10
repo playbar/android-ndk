@@ -14,7 +14,6 @@
  */
 
 #include <retro_miscellaneous.h>
-#include <log.h>
 
 #ifdef HAVE_CONFIG_H
 #include "../../config.h"
@@ -105,7 +104,6 @@ static void menu_display_gl_viewport(void *data)
    if (!gl || !draw)
       return;
    glViewport(draw->x, draw->y, draw->width, draw->height);
-   LOGE("menu_display_gl_viewport, x=%d, y=%d, w=%d, h=%d", draw->x, draw->y, draw->width, draw->height );
 }
 
 static void menu_display_gl_bind_texture(void *data)

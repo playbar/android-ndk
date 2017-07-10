@@ -31,7 +31,7 @@ static uint8_t android_key_state[MAX_PADS+1][MAX_KEYS];
 
 bool android_keyboard_port_input_pressed(const struct retro_keybind *binds, unsigned id)
 {
-   if (id < RARCH_BIND_LIST_END)
+   if (RARCH_BIND_LIST_END > id)
    {
       const struct retro_keybind *bind = &binds[id];
       unsigned bit                     = rarch_keysym_lut[bind->key];
