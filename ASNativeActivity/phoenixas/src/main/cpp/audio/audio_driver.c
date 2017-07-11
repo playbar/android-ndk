@@ -26,6 +26,7 @@
 #include <file/file_path.h>
 #include <lists/dir_list.h>
 #include <string/stdstring.h>
+#include <libretro-common/include/rthreads/rthreads.h>
 
 #ifdef HAVE_CONFIG_H
 #include "../config.h"
@@ -47,6 +48,12 @@
 #define AUDIO_BUFFER_FREE_SAMPLES_COUNT (8 * 1024)
 
 #define AUDIO_MIXER_MAX_STREAMS 8
+
+const int16_t gdata[4096];
+size_t  gframes;
+slock_t *glock;
+scond_t *gcond;
+bool gaudioeable = false;
 
 static const audio_driver_t *audio_drivers[] = {
 #ifdef HAVE_ALSA
@@ -335,6 +342,8 @@ static bool audio_driver_init_internal(bool audio_cb_inited)
    size_t outsamples_max = AUDIO_CHUNK_SIZE_NONBLOCKING * 2 * AUDIO_MAX_RATIO * 
       settings->floats.slowmotion_ratio;
 
+   audio_cb_inited = true;
+
    convert_s16_to_float_init_simd();
    convert_float_to_s16_init_simd();
 
@@ -538,8 +547,7 @@ static bool audio_driver_flush(const int16_t *data, size_t samples)
    bool is_slowmotion                                   = false;
    const void *output_data                              = NULL;
    unsigned output_frames                               = 0;
-   float audio_volume_gain                              = !audio_driver_mute_enable ? 
-      audio_driver_volume_gain : 0.0f;
+   float audio_volume_gain                              = !audio_driver_mute_enable ? audio_driver_volume_gain : 0.0f;
 
    src_data.data_in                                     = NULL;
    src_data.data_out                                    = NULL;
@@ -682,6 +690,7 @@ void audio_driver_sample(int16_t left, int16_t right)
    audio_driver_data_ptr = 0;
 }
 
+
 /**
  * audio_driver_sample_batch:
  * @data                 : pointer to audio buffer.
@@ -697,7 +706,16 @@ size_t audio_driver_sample_batch(const int16_t *data, size_t frames)
    if (frames > (AUDIO_CHUNK_SIZE_NONBLOCKING >> 1))
       frames = AUDIO_CHUNK_SIZE_NONBLOCKING >> 1;
 
-   audio_driver_flush(data, frames << 1);
+   slock_lock(glock);
+   gaudioeable = true;
+    gframes = frames;
+    memcpy(gdata, data, sizeof(int16_t) * gframes * 2);
+//   scond_signal(gcond);
+   slock_unlock(glock);
+
+//    audio_driver_flush(gdata, gframes << 1);
+
+//   audio_driver_flush(data, frames << 1);
 
    return frames;
 }
@@ -891,6 +909,8 @@ bool audio_driver_new_devices_list(void)
 
 bool audio_driver_init(void)
 {
+    glock = slock_new();
+    gcond = scond_new();
    return audio_driver_init_internal(audio_callback.callback != NULL);
 }
 
@@ -1081,7 +1101,7 @@ static void audio_driver_mixer_deinit(void)
 {
    unsigned i;
 
-   audio_set_bool(AUDIO_ACTION_MIXER, false);
+   audio_set_bool(AUDIO_ACTION_MIXER, true);
 
    for (i = 0; i < AUDIO_MIXER_MAX_STREAMS; i++)
       audio_driver_mixer_remove_stream(i);
@@ -1141,11 +1161,20 @@ void audio_driver_monitor_set_rate(void)
 
 bool audio_driver_callback(void)
 {
-   if (!audio_callback.callback)
-      return false;
+   slock_lock(glock);
+   if(gaudioeable && gframes > 0) {
+//      scond_wait(gcond, glock);
+      audio_driver_flush(gdata, gframes << 1);
+//      memset(gdata, 0, sizeof(int16_t)* 4096);
+      gframes = 0;
+   }
+   slock_unlock(glock);
 
-   if (audio_callback.callback)
-      audio_callback.callback();
+//   if (!audio_callback.callback)
+//      return false;
+//
+//   if (audio_callback.callback)
+//      audio_callback.callback();
 
    return true;
 }
