@@ -1,2 +1,4 @@
 include ':app'
+include ':audiodemo'
+include ':audiotest'
 include ':testsl'
