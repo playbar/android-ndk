@@ -26,6 +26,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
+import com.android.shader.glsl.CirclePlane;
+
 import java.nio.FloatBuffer;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -90,30 +92,28 @@ public class GLES3View extends GLESSurfaceView {
         mPreX = x;  
         mPreY = y;  
         return true;  
-    }  
-    
-    public final static TimerTask task = new TimerTask(){   
-    	
-        public void run(){   
-            EGL10 egl = (EGL10)EGLContext.getEGL();
-            EGLDisplay eglDisplay =egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY); // egl.eglGetCurrentDisplay();
-//      	  	EGLSurface eglSurface = egl.eglGetCurrentSurface(EGL10.EGL_DRAW);
-            
-//            EGLDisplay eglDisplay = EglHelper.mEglDisplay;
-//      	  	EGLSurface eglSurface = EGL10.EGL_NO_SURFACE; // EglHelper.mEglSurface;
-//      	  	EGLSurface eglSurface = egl.eglCreateWindowSurface(eglDisplay, EglHelper.mEglConfig, holder, null);
-//      	  	int error = egl.eglGetError();
-//      	  	eglContext = egl.eglGetCurrentContext();
-//      	  	int[] attrib_list = {0x3098, 2,EGL10.EGL_NONE };
-//      	  	eglContext = egl.eglCreateContext(eglDisplay, EglHelper.mEglConfig, EglHelper.mEglContext, attrib_list); 
-//          eglContext = egl.eglCreateContext(EglHelper.mEglDisplay, EglHelper.mEglConfig, EglHelper.mEglContext, attrib_list); 
-      	  	egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, eglContext);
-//      	  	error = egl.eglGetError();
-      		Bitmap bmp = Bitmap.createBitmap( 100, 100, Config.ARGB_8888);
-      		int texId = GLTextureUtils.initImageTexture( bmp, true );
-      		return;
-        }   
-    };   
+    }
+
+    public static int loadShader(int type, String shaderCode)
+    {
+        // create a shader type (GLES30.GL_VERTEX_SHADER)
+        // or a fragment shader type (GLES30.GL_FRAGMENT_SHADER)
+        int shader = GLES30.glCreateShader(type);
+        GLES30.glShaderSource(shader, shaderCode);
+        GLES30.glCompileShader(shader);
+
+        return shader;
+    }
+
+    public static void checkGLError(String glOperation)
+    {
+        int error;
+        while((error = GLES30.glGetError()) != (GLES30.GL_NO_ERROR))
+        {
+            Log.e(TAG, glOperation + ": glError " + error);
+            throw new RuntimeException(glOperation + ": glError " + error);
+        }
+    }
 
     private static class Renderer implements GLESSurfaceView.Renderer {
     		
@@ -126,14 +126,8 @@ public class GLES3View extends GLESSurfaceView {
     	    private final float[] mRotationMatrix = new float[16];  
     	//  private volatile float mAngle;  
     	      
-    	    private CirclePlane mCirclePlane;  
-    	    //定义环境光  
-    	    private FloatBuffer lightAmbient    = FloatBuffer.wrap(new float[]{0.5f, 0.5f, 0.5f, 1.0f});  
-    	    //定义漫散射  
-    	    private FloatBuffer lightDiffuse    = FloatBuffer.wrap(new float[]{1.0f, 1.0f, 1.0f, 1.0f});  
-    	    //光源的位置  
-    	    private FloatBuffer lightPosition   = FloatBuffer.wrap(new float[]{0.0f, 0.0f, 2.0f, 1.0f}); 
-    	    
+    	    private CirclePlane mCirclePlane;
+
     	    public Renderer(){
     	    	
     	    }
@@ -153,11 +147,6 @@ public class GLES3View extends GLESSurfaceView {
             return;
         }
 
-        public void TestMakeCurrent(){
-      	  	Timer timer = new Timer(); 
-      	  	timer.schedule(task, 5000 ); 
-        }
-        
         public void onSurfaceChanged(GL10 gl, int width, int height) {
             Log.e("GLES2JNIView", "onSurfaceChanged");
             float ratio = (float) width / height;
@@ -196,25 +185,6 @@ public class GLES3View extends GLESSurfaceView {
        
     }  // end of renderer
     
-    public static int loadShader(int type, String shaderCode)  
-    {  
-        // create a shader type (GLES30.GL_VERTEX_SHADER)  
-        // or a fragment shader type (GLES30.GL_FRAGMENT_SHADER)  
-        int shader = GLES30.glCreateShader(type);  
-        GLES30.glShaderSource(shader, shaderCode);  
-        GLES30.glCompileShader(shader);  
-          
-        return shader;  
-    }  
-    
-    public static void checkGLError(String glOperation)  
-    {  
-        int error;  
-        while((error = GLES30.glGetError()) != (GLES30.GL_NO_ERROR))  
-        {  
-            Log.e(TAG, glOperation + ": glError " + error);  
-            throw new RuntimeException(glOperation + ": glError " + error);  
-        }  
-    }
+
     
 }

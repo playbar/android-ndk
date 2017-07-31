@@ -1,9 +1,13 @@
-package com.android.shader;
+package com.android.shader.glsl;
 
 import java.nio.FloatBuffer;  
-import android.opengl.GLES30;  
-  
-  
+import android.opengl.GLES30;
+
+import com.android.shader.GLES3View;
+import com.android.shader.GLESUntil;
+import com.android.shader.Vertex3f;
+
+
 //@TargetApi(18)  
 public class CirclePlane {
 
@@ -24,7 +28,7 @@ public class CirclePlane {
     float color[] = { 1.0f, 1.0f, 1.0f, 1.0f }; //白色不透明
 
     private final String vertexShaderCode =
-    			"#version 300 es \n" +
+            "#version 300 es \n" +
             "uniform mat4 uMVPMatrix;" +
             "layout(location = 0) in vec4 vPosition;" +
             "out vec4 color;" +
@@ -54,7 +58,7 @@ public class CirclePlane {
         this.mRadius = radius;  
         this.createGraphics();  
           
-        int vertexShader = GLES3View.loadShader(GLES30.GL_VERTEX_SHADER, vertexShaderCode);  
+        int vertexShader = GLES3View.loadShader(GLES30.GL_VERTEX_SHADER, vertexShaderCode);
         int fragmentShader =GLES3View.loadShader(GLES30.GL_FRAGMENT_SHADER, fragmentShaderCode);  
           
         this.mProgram = GLES30.glCreateProgram();             // create empty OpenGL Program  
@@ -68,7 +72,7 @@ public class CirclePlane {
     }  
     private void createGraphics()  
     {  
-        Vertex3f vertexs[][] = new Vertex3f[this.mRow][this.mColumn];  
+        Vertex3f vertexs[][] = new Vertex3f[this.mRow][this.mColumn];
         float intervalR = this.mRadius / this.mRow;  
         Vertex3f centralPos = new Vertex3f(0.0f, 0.0f, 0.0f);  
         for(int i=0;i<this.mRow;i++)  
@@ -112,7 +116,7 @@ public class CirclePlane {
             plane[vertexI+2] = 0.5f;//tri[i].z;
         }  
           
-        this.mPlaneBuffer = GLESUntil.getFloatBuffer(plane);  
+        this.mPlaneBuffer = GLESUntil.getFloatBuffer(plane);
 //      plane = null;  
     }   
     public void Draw(float[] mvpMatrix)  
