@@ -22,6 +22,7 @@
 #include <features/features_cpu.h>
 #include <rthreads/rthreads.h>
 #include <string/stdstring.h>
+#include <log.h>
 
 #include "video_thread_wrapper.h"
 #include "font_driver.h"
@@ -269,8 +270,10 @@ static void video_thread_wait_reply(thread_video_t *thr, thread_packet_t *pkt)
 {
    slock_lock(thr->lock);
 
-   while (pkt->type != thr->reply_cmd)
+   while (pkt->type != thr->reply_cmd) {
+      LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
       scond_wait(thr->cond_cmd, thr->lock);
+   }
 
    *pkt               = thr->cmd_data;
    thr->cmd_data.type = CMD_VIDEO_NONE;
@@ -585,8 +588,10 @@ static void video_thread_loop(void *data)
       bool updated = false;
 
       slock_lock(thr->lock);
-      while (thr->send_cmd == CMD_VIDEO_NONE && !thr->frame.updated)
+      while (thr->send_cmd == CMD_VIDEO_NONE && !thr->frame.updated) {
+         LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
          scond_wait(thr->cond_thread, thr->lock);
+      }
       if (thr->frame.updated)
          updated = true;
 
@@ -789,8 +794,10 @@ static bool video_thread_frame(void *data, const void *frame_,
 #if defined(HAVE_MENU)
       if (thr->texture.enable)
       {
-         while (thr->frame.updated)
+         while (thr->frame.updated) {
+            LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
             scond_wait(thr->cond_cmd, thr->lock);
+         }
       }
 #endif
       thr->hit_count++;

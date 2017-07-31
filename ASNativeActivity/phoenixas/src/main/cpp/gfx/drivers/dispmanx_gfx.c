@@ -17,6 +17,7 @@
 #include <bcm_host.h>
 
 #include <rthreads/rthreads.h>
+#include <log.h>
 
 #ifdef HAVE_CONFIG_H
 #include "../../config.h"
@@ -151,8 +152,10 @@ static struct dispmanx_page *dispmanx_get_free_page(struct dispmanx_video *_disp
       if (!page)
       {
          slock_lock(_dispvars->pending_mutex);
-          if (_dispvars->pageflip_pending > 0)
+          if (_dispvars->pageflip_pending > 0) {
+             LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
              scond_wait(_dispvars->vsync_condition, _dispvars->pending_mutex);
+          }
          slock_unlock(_dispvars->pending_mutex);
       }
    }
@@ -206,8 +209,10 @@ static void dispmanx_surface_free(struct dispmanx_video *_dispvars,
     * We could be trying to get non-existant lock, signal non-existant condition..
     * So we wait for any pending flips to complete before freeing any surface. */ 
    slock_lock(_dispvars->pending_mutex);
-   if (_dispvars->pageflip_pending > 0)
+   if (_dispvars->pageflip_pending > 0) {
+      LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
       scond_wait(_dispvars->vsync_condition, _dispvars->pending_mutex);
+   }
    slock_unlock(_dispvars->pending_mutex);
 
    for (i = 0; i < surface->numpages; i++)
@@ -328,8 +333,10 @@ static void dispmanx_surface_update(struct dispmanx_video *_dispvars, const void
    /* Dispmanx doesn't support more than one pending pageflip. Doing so would overwrite
     * the page in the callback function, so we would be always freeing the same page. */
    slock_lock(_dispvars->pending_mutex);
-   if (_dispvars->pageflip_pending > 0)
+   if (_dispvars->pageflip_pending > 0) {
+      LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
       scond_wait(_dispvars->vsync_condition, _dispvars->pending_mutex);
+   }
    slock_unlock(_dispvars->pending_mutex);
 
    /* Issue a page flip that will be done at the next vsync. */

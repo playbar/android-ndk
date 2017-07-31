@@ -31,6 +31,7 @@
 #include <rthreads/rthreads.h>
 #include <retro_endianness.h>
 #include <string/stdstring.h>
+#include <log.h>
 
 #include "../audio_driver.h"
 #include "../../verbosity.h"
@@ -369,8 +370,10 @@ static ssize_t coreaudio_write(void *data, const void *buf_, size_t size)
                dev->cond, dev->lock, 3000000))
          g_interrupted = true;
 #else
-      if (write_avail == 0)
+      if (write_avail == 0) {
+         LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
          scond_wait(dev->cond, dev->lock);
+      }
 #endif
       slock_unlock(dev->lock);
    }

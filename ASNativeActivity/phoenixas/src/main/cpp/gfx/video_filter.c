@@ -45,6 +45,7 @@ struct rarch_soft_plug
 
 #ifdef HAVE_THREADS
 #include <rthreads/rthreads.h>
+#include <log.h>
 
 struct filter_thread_data
 {
@@ -65,8 +66,10 @@ static void filter_thread_loop(void *data)
    {
       bool die;
       slock_lock(thr->lock);
-      while (thr->done && !thr->die)
+      while (thr->done && !thr->die) {
+         LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
          scond_wait(thr->cond, thr->lock);
+      }
       die = thr->die;
       slock_unlock(thr->lock);
 
@@ -546,8 +549,10 @@ void rarch_softfilter_process(rarch_softfilter_t *filt,
       RARCH_LOG("Waiting for filter thread %u ...\n", i);
 #endif
       slock_lock(filt->thread_data[i].lock);
-      while (!filt->thread_data[i].done)
+      while (!filt->thread_data[i].done) {
+         LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
          scond_wait(filt->thread_data[i].cond, filt->thread_data[i].lock);
+      }
       slock_unlock(filt->thread_data[i].lock);
    }
 #else

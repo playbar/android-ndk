@@ -23,6 +23,7 @@
 #include <rthreads/rthreads.h>
 #include <queues/fifo_queue.h>
 #include <string/stdstring.h>
+#include <log.h>
 
 #include "../audio_driver.h"
 #include "../../verbosity.h"
@@ -277,8 +278,10 @@ static ssize_t alsa_thread_write(void *data, const void *buf, size_t size)
          {
             slock_unlock(alsa->fifo_lock);
             slock_lock(alsa->cond_lock);
-            if (!alsa->thread_dead)
+            if (!alsa->thread_dead) {
+               LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
                scond_wait(alsa->cond, alsa->cond_lock);
+            }
             slock_unlock(alsa->cond_lock);
          }
          else

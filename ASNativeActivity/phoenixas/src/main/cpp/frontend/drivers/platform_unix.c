@@ -170,8 +170,10 @@ static void android_app_set_input(struct android_app *android_app,
    android_app->pendingInputQueue = inputQueue;
    android_app_write_cmd(android_app, APP_CMD_INPUT_CHANGED);
 
-   while (android_app->inputQueue != android_app->pendingInputQueue)
+   while (android_app->inputQueue != android_app->pendingInputQueue) {
+      LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
       scond_wait(android_app->cond, android_app->mutex);
+   }
 
    slock_unlock(android_app->mutex);
 }
@@ -191,8 +193,10 @@ static void android_app_set_window(struct android_app *android_app,
    if (window)
       android_app_write_cmd(android_app, APP_CMD_INIT_WINDOW);
 
-   while (android_app->window != android_app->pendingWindow)
+   while (android_app->window != android_app->pendingWindow) {
+      LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
       scond_wait(android_app->cond, android_app->mutex);
+   }
 
    slock_unlock(android_app->mutex);
 }
@@ -205,8 +209,10 @@ static void android_app_set_activity_state(
 
    slock_lock(android_app->mutex);
    android_app_write_cmd(android_app, cmd);
-   while (android_app->activityState != cmd)
+   while (android_app->activityState != cmd) {
       scond_wait(android_app->cond, android_app->mutex);
+      LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
+   }
    slock_unlock(android_app->mutex);
 }
 
@@ -264,8 +270,10 @@ static void* onSaveInstanceState(
    android_app->stateSaved = 0;
    android_app_write_cmd(android_app, APP_CMD_SAVE_STATE);
 
-   while (!android_app->stateSaved)
+   while (!android_app->stateSaved) {
+      LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
       scond_wait(android_app->cond, android_app->mutex);
+   }
 
    if (android_app->savedState != NULL)
    {
@@ -444,8 +452,10 @@ static struct android_app* android_app_create(ANativeActivity* activity,
 
    /* Wait for thread to start. */
    slock_lock(android_app->mutex);
-   while (!android_app->running)
+   while (!android_app->running) {
+      LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
       scond_wait(android_app->cond, android_app->mutex);
+   }
    slock_unlock(android_app->mutex);
 
    return android_app;

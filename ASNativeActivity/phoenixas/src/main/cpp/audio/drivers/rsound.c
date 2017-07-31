@@ -20,6 +20,7 @@
 
 #include <queues/fifo_queue.h>
 #include <rthreads/rthreads.h>
+#include <log.h>
 
 #include "../audio_driver.h"
 #include "rsound.h"
@@ -138,6 +139,7 @@ static ssize_t rs_write(void *data, const void *buf, size_t size)
             if (!rsd->has_error)
             {
                slock_lock(rsd->cond_lock);
+               LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
                scond_wait(rsd->cond, rsd->cond_lock);
                slock_unlock(rsd->cond_lock);
             }

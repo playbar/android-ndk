@@ -1,2 +1,3 @@
 include ':app'
 include ':gles'
+include ':shader'

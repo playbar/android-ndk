@@ -74,6 +74,7 @@
 #include <retro_assert.h>
 #include <retro_miscellaneous.h>
 #include <retro_timers.h>
+#include <log.h>
 
 /* 
  ****************************************************************************   
@@ -801,6 +802,7 @@ static size_t rsnd_fill_buffer(rsound_t *rd, const char *buf, size_t size)
       scond_signal(rd->thread.cond);
 
       RSD_DEBUG("[RSound] rsnd_fill_buffer: Going to sleep.\n");
+      LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
       scond_wait(rd->thread.cond, rd->thread.cond_mutex);
       RSD_DEBUG("[RSound] rsnd_fill_buffer: Woke up.\n");
       slock_unlock(rd->thread.cond_mutex);
@@ -1176,6 +1178,7 @@ static void rsnd_thread ( void * thread_data )
          if ( rd->thread_active )
          {
             RSD_DEBUG("[RSound] Thread going to sleep.\n");
+            LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
             scond_wait(rd->thread.cond, rd->thread.cond_mutex);
             RSD_DEBUG("[RSound] Thread woke up.\n");
          }

@@ -28,6 +28,8 @@
 
 #ifdef HAVE_THREADS
 #include <rthreads/rthreads.h>
+#include <log.h>
+
 #define SLOCK_LOCK(x) slock_lock(x)
 #define SLOCK_UNLOCK(x) slock_unlock(x)
 #else
@@ -449,6 +451,7 @@ static void threaded_worker(void *userdata)
       task = tasks_running.front;
       if (task == NULL)
       {
+         LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
          scond_wait(worker_cond, running_lock);
          slock_unlock(running_lock);
          continue;

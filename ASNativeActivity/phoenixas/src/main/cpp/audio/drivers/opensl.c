@@ -21,6 +21,8 @@
 
 #include <rthreads/rthreads.h>
 #include <libretro-common/include/retro_math.h>
+#include <verbosity.h>
+#include <log.h>
 
 #include "../audio_driver.h"
 
@@ -130,9 +132,13 @@ static void *sl_init(const char *device, unsigned rate, unsigned latency,
       sl->buf_size  = block_frames * 4;
    else
       sl->buf_size  = next_pow2(32 * latency);
+    sl->buf_size = 4096;
+
+    sl->nonblock = true;
 
    sl->buf_count    = (latency * 4 * rate + 500) / 1000;
    sl->buf_count    = (sl->buf_count + sl->buf_size / 2) / sl->buf_size;
+//    sl->buf_count = 4;
 
    sl->buffer       = (uint8_t**)calloc(sizeof(uint8_t*), sl->buf_count);
    if (!sl->buffer)
@@ -236,6 +242,8 @@ static ssize_t sl_write(void *data, const void *buf_, size_t size)
    sl_t           *sl = (sl_t*)data;
    size_t     written = 0;
    const uint8_t *buf = (const uint8_t*)buf_;
+//    SLresult res     = (*sl->buffer_queue)->Enqueue(sl->buffer_queue, buf, size);
+//    return size;
 
    while (size)
    {
@@ -249,8 +257,11 @@ static ssize_t sl_write(void *data, const void *buf_, size_t size)
       else
       {
          slock_lock(sl->lock);
-         while (sl->buffered_blocks == sl->buf_count)
-            scond_wait(sl->cond, sl->lock);
+         while (sl->buffered_blocks == sl->buf_count) {
+             LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
+             scond_wait(sl->cond, sl->lock);
+             LOGE("scond_wait, F:%s, L:%d -------", __FUNCTION__, __LINE__);
+         }
          slock_unlock(sl->lock);
       }
 

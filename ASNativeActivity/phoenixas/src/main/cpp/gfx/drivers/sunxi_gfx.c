@@ -24,6 +24,7 @@
 
 #include <rthreads/rthreads.h>
 #include <string/stdstring.h>
+#include <log.h>
 
 #ifdef HAVE_CONFIG_H
 #include "../../config.h"
@@ -705,8 +706,10 @@ static void sunxi_update_main(const void *frame, struct sunxi_video *_dispvars)
 {
    slock_lock(_dispvars->pending_mutex);
 
-   if (_dispvars->pageflip_pending)
+   if (_dispvars->pageflip_pending) {
+      LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
       scond_wait(_dispvars->vsync_condition, _dispvars->pending_mutex);
+   }
 
    slock_unlock(_dispvars->pending_mutex);
 

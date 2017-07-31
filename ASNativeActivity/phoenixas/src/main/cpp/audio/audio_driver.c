@@ -342,7 +342,7 @@ static bool audio_driver_init_internal(bool audio_cb_inited)
    size_t outsamples_max = AUDIO_CHUNK_SIZE_NONBLOCKING * 2 * AUDIO_MAX_RATIO * 
       settings->floats.slowmotion_ratio;
 
-   audio_cb_inited = true;
+//   audio_cb_inited = true;
 
    convert_s16_to_float_init_simd();
    convert_float_to_s16_init_simd();
@@ -420,8 +420,7 @@ static bool audio_driver_init_internal(bool audio_cb_inited)
    }
 
    audio_driver_use_float = false;
-   if (     audio_driver_active 
-         && current_audio->use_float(audio_driver_context_audio_data))
+   if ( audio_driver_active && current_audio->use_float(audio_driver_context_audio_data))
       audio_driver_use_float = true;
 
    if (!settings->bools.audio_sync && audio_driver_active)
@@ -566,10 +565,9 @@ static bool audio_driver_flush(const int16_t *data, size_t samples)
    if (!audio_driver_active || !audio_driver_input_data)
       return false;
 
-   convert_s16_to_float(audio_driver_input_data, data, samples,
-         audio_volume_gain);
+   convert_s16_to_float(audio_driver_input_data, data, samples, audio_volume_gain);
 
-   src_data.data_in               = audio_driver_input_data;
+   src_data.data_in = audio_driver_input_data;
    src_data.input_frames          = samples >> 1;
 
 
@@ -599,11 +597,9 @@ static bool audio_driver_flush(const int16_t *data, size_t samples)
    if (audio_driver_control)
    {
       /* Readjust the audio input rate. */
-      unsigned write_idx   = audio_driver_free_samples_count++ &
-         (AUDIO_BUFFER_FREE_SAMPLES_COUNT - 1);
+      unsigned write_idx   = audio_driver_free_samples_count++ & (AUDIO_BUFFER_FREE_SAMPLES_COUNT - 1);
       int      half_size   = (int)(audio_driver_buffer_size / 2);
-      int      avail       = 
-         (int)current_audio->write_avail(audio_driver_context_audio_data);
+      int      avail       = (int)current_audio->write_avail(audio_driver_context_audio_data);
       int      delta_mid   = avail - half_size;
       double   direction   = (double)delta_mid / half_size;
       double   adjust      = 1.0 + audio_driver_rate_control_delta * direction;
@@ -652,15 +648,13 @@ static bool audio_driver_flush(const int16_t *data, size_t samples)
       output_frames  *= sizeof(float);
    else
    {
-      convert_float_to_s16(audio_driver_output_samples_conv_buf,
-            (const float*)output_data, output_frames * 2);
+      convert_float_to_s16(audio_driver_output_samples_conv_buf, (const float*)output_data, output_frames * 2);
 
       output_data     = audio_driver_output_samples_conv_buf;
       output_frames  *= sizeof(int16_t);
    }
 
-   if (current_audio->write(audio_driver_context_audio_data,
-            output_data, output_frames * 2) < 0)
+   if (current_audio->write(audio_driver_context_audio_data, output_data, output_frames * 2) < 0)
    {
       audio_driver_active = false;
       return false;
@@ -706,16 +700,15 @@ size_t audio_driver_sample_batch(const int16_t *data, size_t frames)
    if (frames > (AUDIO_CHUNK_SIZE_NONBLOCKING >> 1))
       frames = AUDIO_CHUNK_SIZE_NONBLOCKING >> 1;
 
-   slock_lock(glock);
-   gaudioeable = true;
-    gframes = frames;
-    memcpy(gdata, data, sizeof(int16_t) * gframes * 2);
+//   slock_lock(glock);
+//   gaudioeable = true;
+//    gframes = frames;
+//    memcpy(gdata, data, sizeof(int16_t) * gframes * 2);
 //   scond_signal(gcond);
-   slock_unlock(glock);
-
 //    audio_driver_flush(gdata, gframes << 1);
 
-//   audio_driver_flush(data, frames << 1);
+   audio_driver_flush(data, frames << 1);
+//   slock_unlock(glock);
 
    return frames;
 }
@@ -1165,7 +1158,7 @@ bool audio_driver_callback(void)
    if(gaudioeable && gframes > 0) {
 //      scond_wait(gcond, glock);
       audio_driver_flush(gdata, gframes << 1);
-//      memset(gdata, 0, sizeof(int16_t)* 4096);
+      memset(gdata, 0, sizeof(int16_t)* 4096);
       gframes = 0;
    }
    slock_unlock(glock);

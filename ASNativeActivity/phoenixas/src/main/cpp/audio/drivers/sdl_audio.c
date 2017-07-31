@@ -27,6 +27,7 @@
 #include <queues/fifo_queue.h>
 #include <retro_inline.h>
 #include <retro_math.h>
+#include <log.h>
 
 #include "../audio_driver.h"
 #include "../../verbosity.h"
@@ -173,6 +174,7 @@ static ssize_t sdl_audio_write(void *data, const void *buf, size_t size)
             SDL_UnlockAudio();
 #ifdef HAVE_THREADS
             slock_lock(sdl->lock);
+            LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
             scond_wait(sdl->cond, sdl->lock);
             slock_unlock(sdl->lock);
 #endif

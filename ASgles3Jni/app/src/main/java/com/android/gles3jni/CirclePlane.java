@@ -5,40 +5,45 @@ import android.opengl.GLES30;
   
   
 //@TargetApi(18)  
-public class CirclePlane {  
-      
-    static final int COORDS_PRE_VERTEX = 3;  
-    private final int vertexStride = COORDS_PRE_VERTEX * 4;  
-    private int vertexCount = 0;  
-      
-    private int mRow = 10;  
-    private int mColumn = 20;  
-    private float mRadius = 1.0f;  
-    private FloatBuffer mPlaneBuffer;  
-      
-    private final int mProgram;  
-    private int mColorHandle;  
-    private int mMVPMatrixHandle;  
-      
+public class CirclePlane {
+
+    static final int COORDS_PRE_VERTEX = 3;
+    private final int vertexStride = COORDS_PRE_VERTEX * 4;
+    private int vertexCount = 0;
+
+    private int mRow = 10;
+    private int mColumn = 20;
+    private float mRadius = 1.0f;
+    private FloatBuffer mPlaneBuffer;
+
+    private final int mProgram;
+    private int mColorHandle;
+    private int mMVPMatrixHandle;
+
     // Set color with red, green, blue and alpha (opacity) values  
-    float color[] = { 1.0f, 1.0f, 1.0f, 1.0f }; //白色不透明  
-      
-    private final String vertexShaderCode =  
+    float color[] = { 1.0f, 1.0f, 1.0f, 1.0f }; //白色不透明
+
+    private final String vertexShaderCode =
     			"#version 300 es \n" +
-            "uniform mat4 uMVPMatrix;" +   
-            "layout(location = 0) in vec4 vPosition;" +   
-            "void main()" +  
-            "{" +  
-            "   gl_Position = vPosition * uMVPMatrix;" +  
-            "}";  
-    private final String fragmentShaderCode =   
+            "uniform mat4 uMVPMatrix;" +
+            "layout(location = 0) in vec4 vPosition;" +
+            "out vec4 color;" +
+            "void main()" +
+            "{" +
+            "   color = vec4(0.0f, 1.0f, 0.0f, 1.0f);"+
+            "   if(vPosition.w>0.5f)"+
+            "       color = vec4(1.0f, 0.0f, 0.0f, 1.0f);"+
+            "   gl_Position = uMVPMatrix * vPosition;" +
+            "}";
+    private final String fragmentShaderCode =
     			"#version 300 es \n" +
-            "precision mediump float;" +   
-            "uniform vec4 vColor;" +   
+            "precision mediump float;" +
+            "uniform vec4 vColor;" +
+            "in vec4 color;" +
             "out vec4 v_color;" +
-            "void main()" +  
-            "{" +  
-            "   v_color = vColor;" +  
+            "void main()" +
+            "{" +
+            "   v_color = color;" +
             "}";  
       
     public CirclePlane(int row, int column, float radius)   
@@ -104,7 +109,7 @@ public class CirclePlane {
             int vertexI = 3 * i;  
             plane[vertexI] = tri[i].x;  
             plane[vertexI+1] = tri[i].y;  
-            plane[vertexI+2] = tri[i].z;  
+            plane[vertexI+2] = 0.5f;//tri[i].z;
         }  
           
         this.mPlaneBuffer = GLESUntil.getFloatBuffer(plane);  
@@ -117,8 +122,9 @@ public class CirclePlane {
         GLES30.glUniform4fv(this.mColorHandle, 1, this.color, 0);  
         GLES30.glUniformMatrix4fv(this.mMVPMatrixHandle, 1, false, mvpMatrix, 0);  
         
-        GLES30.glEnableVertexAttribArray(0);  
-        GLES30.glVertexAttribPointer(0, COORDS_PRE_VERTEX,   
+        GLES30.glEnableVertexAttribArray(0);
+//        COORDS_PRE_VERTEX
+        GLES30.glVertexAttribPointer(0, 2,
                                     GLES30.GL_FLOAT, false, this.vertexStride, this.mPlaneBuffer);  
         
         GLES30.glDrawArrays(GLES30.GL_TRIANGLES, 0, this.vertexCount);  

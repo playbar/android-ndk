@@ -24,6 +24,7 @@
 
 #include <boolean.h>
 #include <rthreads/rthreads.h>
+#include <log.h>
 
 #include "../audio_driver.h"
 #include "../../configuration.h"
@@ -277,6 +278,7 @@ static size_t write_buffer(jack_t *jd, const float *buf, size_t size)
       else
       {
          slock_lock(jd->cond_lock);
+         LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
          scond_wait(jd->cond, jd->cond_lock);
          slock_unlock(jd->cond_lock);
       }

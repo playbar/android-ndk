@@ -34,7 +34,6 @@
         </activity>
         <activity android:name="com.retroarch.browser.retroactivity.RetroActivityFuture"
             android:exported="true"
-            android:screenOrientation="landscape"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:launchMode="singleInstance">

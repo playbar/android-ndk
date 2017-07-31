@@ -19,6 +19,7 @@
 
 #include <queues/fifo_queue.h>
 #include <rthreads/rthreads.h>
+#include <log.h>
 
 #include "audio_thread_wrapper.h"
 #include "../verbosity.h"
@@ -71,8 +72,10 @@ static void audio_thread_loop(void *data)
    /* Wait until we start to avoid calling 
     * stop immediately after initialization. */
    slock_lock(thr->lock);
-   while (thr->stopped)
+   while (thr->stopped) {
+      LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
       scond_wait(thr->cond, thr->lock);
+   }
    slock_unlock(thr->lock);
 
    RARCH_LOG("[Audio Thread]: Starting audio.\n");
@@ -98,7 +101,7 @@ static void audio_thread_loop(void *data)
              * Signal in the loop instead. */
             thr->stopped_ack = true;
             scond_signal(thr->cond);
-
+            LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
             scond_wait(thr->cond, thr->lock);
          }
          thr->driver->start(thr->driver_data, thr->is_shutdown);
@@ -126,8 +129,10 @@ static void audio_thread_block(audio_thread_t *thr)
    scond_signal(thr->cond);
 
    /* Wait until audio driver actually goes to sleep. */
-   while (!thr->stopped_ack)
+   while (!thr->stopped_ack) {
+      LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
       scond_wait(thr->cond, thr->lock);
+   }
 
    slock_unlock(thr->lock);
 }
@@ -308,8 +313,10 @@ bool audio_init_thread(const audio_driver_t **out_driver,
 
    /* Wait until thread has initialized (or failed) the driver. */
    slock_lock(thr->lock);
-   while (!thr->inited)
+   while (!thr->inited) {
+      LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
       scond_wait(thr->cond, thr->lock);
+   }
    slock_unlock(thr->lock);
 
    if (thr->inited < 0) /* Thread failed. */

@@ -57,6 +57,7 @@ extern "C" {
 #include <libavutil/avconfig.h>
 #include <libavutil/pixdesc.h>
 #include <libswscale/swscale.h>
+#include <log.h>
 
 #ifdef __cplusplus
 }
@@ -846,6 +847,7 @@ static bool ffmpeg_push_video(void *data,
       if (handle->can_sleep)
       {
          handle->can_sleep = false;
+         LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
          scond_wait(handle->cond, handle->cond_lock);
          handle->can_sleep = true;
       }
@@ -908,6 +910,7 @@ static bool ffmpeg_push_audio(void *data,
       if (handle->can_sleep)
       {
          handle->can_sleep = false;
+         LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
          scond_wait(handle->cond, handle->cond_lock);
          handle->can_sleep = true;
       }
@@ -1405,6 +1408,7 @@ static void ffmpeg_thread(void *data)
          if (ff->can_sleep)
          {
             ff->can_sleep = false;
+            LOGE("scond_wait, F:%s, L:%d", __FUNCTION__, __LINE__);
             scond_wait(ff->cond, ff->cond_lock);
             ff->can_sleep = true;
          }
