@@ -34,11 +34,7 @@
 #define LOG_TAG "GLES3JNI"
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__ );
-#if DEBUG
 #define LOGV(...) __android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, __VA_ARGS__)
-#else
-#define ALOGV(...)
-#endif
 
 // ----------------------------------------------------------------------------
 // Types, functions, and data used by both ES2 and ES3 renderers.

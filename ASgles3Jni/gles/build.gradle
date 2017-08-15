@@ -1,14 +1,13 @@
-apply plugin: 'com.android.model.application'
+apply plugin: 'com.android.application'
 
-model {
     android {
         compileSdkVersion 23
         buildToolsVersion "25.0.0"
 
         defaultConfig {
             applicationId "edu.wuwang.opengl"
-            minSdkVersion.apiLevel    = 24
-            targetSdkVersion.apiLevel = 25
+            minSdkVersion   24
+            targetSdkVersion 25
             versionCode 1
             versionName "1.0"
         }
@@ -19,7 +18,6 @@ model {
             }
         }
     }
-}
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')

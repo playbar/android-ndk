@@ -41,12 +41,7 @@ public class MojingActivity extends MojingVrActivity{
 	static String MJ5 = "9GEDFU-954ESX-QV9B2Y-YVXNEG-FLDWAY-ZFS99Z";
 	static String MJ_RIO = "SXF8DB-ZUSQS8-A2FMDC-SHHLHB-SZZNY3-DHC8Y7";
 	
-	
-	
-	
-	
-	
-	
+
 	//static String[] KeyList = {MJ2,MJ3,MJ3_96pmma,MJ3_88pmma,MJ4,MJ_RIO,MJ5};
 
 	static String Test1 = "9ZQRW8-CH9T98-WZYYF8-ZZY3DW-9YDWQ8-WGFUWU";
