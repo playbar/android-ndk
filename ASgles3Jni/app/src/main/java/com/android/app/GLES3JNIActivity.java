@@ -120,7 +120,7 @@ public class GLES3JNIActivity extends Activity {
 //        layout.addView(but, tparams);  
 
         GLES3Hook.initHook();
-        Log.e("hook", "after initHook");
+        Log.e("mjhook", "after initHook");
         mView = new GLES3JNIView(getApplication());
        
 //        mView.setZOrderOnTop(true);

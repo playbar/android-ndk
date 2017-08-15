@@ -392,11 +392,11 @@ enum ele7en_status inlineHook(uint32_t target_addr)
 	if (item->status == REGISTERED) {
 		pid_t pid;
 
-		pid = freeze(item, ACTION_ENABLE);
+//		pid = freeze(item, ACTION_ENABLE);
 
 		doInlineHook(item);
 
-		unFreeze(pid);
+//		unFreeze(pid);
 
 		return ELE7EN_OK;
 	}
