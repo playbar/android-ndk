@@ -56,6 +56,7 @@ public class GLES3JNIView extends GLSurfaceView {
 
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             Logger.printTime();
+//            GLES3Hook.hookTest();
             GLES3JNILib.init();
         }
     }

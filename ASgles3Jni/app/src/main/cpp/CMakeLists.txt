@@ -12,11 +12,16 @@ add_library(gles3jni SHARED
            ImageSobelFilter.cpp
            gl3stub_wrapper.c
            aopencl.c
+           inlineHook.c
+           relocate.c
+           gleshook.c
             )
 
 target_link_libraries(gles3jni
                       android
                       log
                       GLESv3
-                      EGL
-                      )
+                      EGL )
+
+
+

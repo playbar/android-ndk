@@ -22,6 +22,7 @@
 #include <EGL/egl.h>
 
 #include "gles3jni.h"
+#include "inlineHook.h"
 
 const Vertex QUAD[4] = {
     // Square with diagonal < 2 so that it fits in a [-1 .. 1]^2 square
@@ -542,14 +543,15 @@ Java_com_android_gles3jni_GLES3JNILib_init(JNIEnv* env, jobject obj) {
     printGlString("Extensions", GL_EXTENSIONS);
 
     const char* versionStr = (const char*)glGetString(GL_VERSION);
-    if (strstr(versionStr, "OpenGL ES 3.") && gl3stubInit()) {
-        g_renderer = createES3Renderer();
-    } else if (strstr(versionStr, "OpenGL ES 2.")) {
-        g_renderer = createES2Renderer();
-    } else {
-        LOGE("Unsupported OpenGL ES version");
-    }
+//    if (strstr(versionStr, "OpenGL ES 3.") && gl3stubInit()) {
+//        g_renderer = createES3Renderer();
+//    } else if (strstr(versionStr, "OpenGL ES 2.")) {
+//        g_renderer = createES2Renderer();
+//    } else {
+//        LOGE("Unsupported OpenGL ES version");
+//    }
 
+    g_renderer = createES2Renderer();
 
 //    GPU_Sobel();
     Init();
