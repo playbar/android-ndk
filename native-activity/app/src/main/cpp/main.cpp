@@ -79,7 +79,7 @@ static int engine_init_display(struct engine* engine) {
             EGL_RED_SIZE, 8,
             EGL_NONE
     };
-    EGLint w, h, dummy, format;
+    EGLint w, h, format;
     EGLint numConfigs;
     EGLConfig config;
     EGLSurface surface;
@@ -281,6 +281,53 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
     }
 }
 
+/*
+ * AcquireASensorManagerInstance(void)
+ *    Workaround ASensorManager_getInstance() deprecation false alarm
+ *    for Android-N and before, when compiling with NDK-r15
+ */
+#include <dlfcn.h>
+ASensorManager* AcquireASensorManagerInstance(android_app* app) {
+
+  if(!app)
+    return nullptr;
+
+  typedef ASensorManager *(*PF_GETINSTANCEFORPACKAGE)(const char *name);
+  void* androidHandle = dlopen("libandroid.so", RTLD_NOW);
+  PF_GETINSTANCEFORPACKAGE getInstanceForPackageFunc = (PF_GETINSTANCEFORPACKAGE)
+      dlsym(androidHandle, "ASensorManager_getInstanceForPackage");
+  if (getInstanceForPackageFunc) {
+    JNIEnv* env = nullptr;
+    app->activity->vm->AttachCurrentThread(&env, NULL);
+
+    jclass android_content_Context = env->GetObjectClass(app->activity->clazz);
+    jmethodID midGetPackageName = env->GetMethodID(android_content_Context,
+                                                   "getPackageName",
+                                                   "()Ljava/lang/String;");
+    jstring packageName= (jstring)env->CallObjectMethod(app->activity->clazz,
+                                                        midGetPackageName);
+
+    const char *nativePackageName = env->GetStringUTFChars(packageName, 0);
+    ASensorManager* mgr = getInstanceForPackageFunc(nativePackageName);
+    env->ReleaseStringUTFChars(packageName, nativePackageName);
+    app->activity->vm->DetachCurrentThread();
+    if (mgr) {
+      dlclose(androidHandle);
+      return mgr;
+    }
+  }
+
+  typedef ASensorManager *(*PF_GETINSTANCE)();
+  PF_GETINSTANCE getInstanceFunc = (PF_GETINSTANCE)
+      dlsym(androidHandle, "ASensorManager_getInstance");
+  // by all means at this point, ASensorManager_getInstance should be available
+  assert(getInstanceFunc);
+  dlclose(androidHandle);
+
+  return getInstanceFunc();
+}
+
+
 /**
  * This is the main entry point of a native application that is using
  * android_native_app_glue.  It runs in its own thread, with its own
@@ -289,9 +336,6 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 void android_main(struct android_app* state) {
     struct engine engine;
 
-    // Make sure glue isn't stripped.
-    app_dummy();
-
     memset(&engine, 0, sizeof(engine));
     state->userData = &engine;
     state->onAppCmd = engine_handle_cmd;
@@ -299,7 +343,7 @@ void android_main(struct android_app* state) {
     engine.app = state;
 
     // Prepare to monitor accelerometer
-    engine.sensorManager = ASensorManager_getInstance();
+    engine.sensorManager = AcquireASensorManagerInstance(state);
     engine.accelerometerSensor = ASensorManager_getDefaultSensor(
                                         engine.sensorManager,
                                         ASENSOR_TYPE_ACCELEROMETER);
