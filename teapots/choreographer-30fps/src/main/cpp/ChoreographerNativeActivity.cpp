@@ -41,7 +41,8 @@ enum APIMode {
 };
 
 const int32_t kFPSThrottleInterval = 2;
-const int64_t kFPSThrottlePresentationInterval = (2.0f / 60.0f) * 1000000000;
+const int64_t kFPSThrottlePresentationInterval = (kFPSThrottleInterval / 60.0f) * 1000000000;
+#define COULD_RENDER(now, last) (((now) - (last)) >= kFPSThrottlePresentationInterval)
 
 // Declaration for native chreographer API.
 struct AChoreographer;
@@ -56,6 +57,8 @@ typedef void (*func_AChoreographer_postFrameCallback)(
 //-------------------------------------------------------------------------
 struct android_app;
 class Engine {
+  android_app* app_;
+
   TeapotRenderer renderer_;
 
   ndk_helper::GLContext* gl_context_;
@@ -70,8 +73,6 @@ class Engine {
   ndk_helper::PerfMonitor monitor_;
 
   ndk_helper::TapCamera tap_camera_;
-
-  android_app* app_;
 
   APIMode api_mode_;
   APIMode original_api_mode_;
@@ -101,7 +102,8 @@ class Engine {
   int64_t presentation_time_;
   bool (*eglPresentationTimeANDROID_)(EGLDisplay dpy, EGLSurface sur,
                                       khronos_stime_nanoseconds_t time);
-  int32_t render_cycle_;
+
+  int64_t prevFrameTimeNanos_;
   bool should_render_;
   std::mutex mtx_;              // mutex for critical section
   std::condition_variable cv_;  // condition variable for critical section
@@ -124,20 +126,20 @@ class Engine {
 
   // Do swap operation while Choreographer callback. Need to be a public method
   // since it's called from JNI callback.
-  void SynchInCallback();
+  void SynchInCallback(jlong frameTimeNamos);
 };
 
 // Global instance of the Engine class.
 Engine g_engine;
 
 Engine::Engine()
-    : initialized_resources_(false),
-      has_focus_(false),
-      app_(NULL),
-      fps_throttle_(true),
-      api_mode_(kAPINone),
-      render_cycle_(0),
-      should_render_(true) {
+    :app_(NULL),
+     initialized_resources_(false),
+     has_focus_(false),
+     fps_throttle_(true),
+     api_mode_(kAPINone),
+     prevFrameTimeNanos_(static_cast<int64_t>(0)),
+     should_render_(true) {
   gl_context_ = ndk_helper::GLContext::GetInstance();
 }
 
@@ -251,15 +253,15 @@ void Engine::choreographer_callback(long frameTimeNanos, void* data) {
     engine->StartChoreographer();
   }
 
-  // Swap buffer if the render cycle meet the condition.
+  // Swap buffer if the timing meets the 30fps time interval condition.
   // The callback is in the same thread context, so that we can just invoke
   // eglSwapBuffers().
-  if (--engine->render_cycle_ <= 0) {
-    engine->render_cycle_ = kFPSThrottleInterval;
+  if (COULD_RENDER(frameTimeNanos, engine->prevFrameTimeNanos_)) {
     engine->should_render_ = true;
     engine->Swap();
     // Wake up main looper so that it will continue rendering.
     ALooper_wake(engine->app_->looper);
+    engine->prevFrameTimeNanos_ = frameTimeNanos;
   }
 }
 
@@ -290,18 +292,18 @@ void Engine::StopJavaChoreographer() {
   return;
 }
 
-void Engine::SynchInCallback() {
-  // Signal render thread if the render cycle meet the condition.
-  if (--render_cycle_ <= 0) {
-    render_cycle_ = kFPSThrottleInterval;
+void Engine::SynchInCallback(jlong frameTimeInNanos) {
+  // Signal render thread if the timing meets the 30fps time interval condition.
+  if (COULD_RENDER(frameTimeInNanos, prevFrameTimeNanos_)) {
+    prevFrameTimeNanos_ = frameTimeInNanos;
     cv_.notify_one();
   }
 };
 
 extern "C" JNIEXPORT void JNICALL
 Java_com_sample_choreographer_ChoreographerNativeActivity_choregrapherCallback(
-    JNIEnv* env, jobject instance) {
-  g_engine.SynchInCallback();
+    JNIEnv* env, jobject instance, jlong frameTimeInNanos) {
+  g_engine.SynchInCallback(frameTimeInNanos);
 }
 
 // Helper functions.
@@ -562,7 +564,6 @@ void Engine::UpdateFPS(float fFPS) {
  * event loop for receiving input events and doing other things.
  */
 void android_main(android_app* state) {
-  app_dummy();
 
   g_engine.SetState(state);
 
