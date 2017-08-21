@@ -21,11 +21,8 @@ import android.view.View;
 import android.widget.TextView;
 
 public class ArrTest extends AppCompatActivity {
-
-    class Father{
-        int age;
-        int num;
-    }
+    static int[] arrays = {4,3,12,56,1,23,45,67};
+    static String str[] = new String[] { "we", "are", "friends" };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,10 +32,15 @@ public class ArrTest extends AppCompatActivity {
          */
         setContentView(R.layout.activity_hello_jni);
         TextView tv = (TextView)findViewById(R.id.hello_textview);
+        nativeIntSum(arrays);
+        nativeStrSum(str);
         tv.setText( "arrtest" );
-        int[] arrays = {4,3,12,56,1,23,45,67};
-        Father[] objArrays = {new Father(),new Father(),new Father()};
-        nativeArrTest(arrays, objArrays);
+        Father[] objArrays = {
+                new Father(1, 10),
+                new Father(2, 20),
+                new Father(3, 30)
+        };
+        nativeArrTest(objArrays);
     }
 
     public void onClick(View v){
@@ -51,7 +53,9 @@ public class ArrTest extends AppCompatActivity {
      * with this application.
      */
 
-    public native void nativeArrTest(int []intArr, Father[] objArr);
+    public native void nativeArrTest(Father[] objArr);
+    public native int nativeIntSum(int[] num);
+    public native int nativeStrSum(String[] str);
 
     /* This is another native method declaration that is *not*
      * implemented by 'hello-jni'. This is simply to show that
