@@ -1,4 +1,5 @@
 #include <jni/jni.hpp>
+#include "javahello.h"
 
 // The global references created during registration are purposefully leaked. Due to
 // the design of Java/JNI, there is virtually no way to reliably release them. See
@@ -86,8 +87,11 @@ static void RegisterPeer(JavaVM* vm)
 
 extern "C" JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*)
 {
+    JNIEnv* env = NULL;
+    vm->GetEnv( (void**)&env, JNI_VERSION_1_6);
+    registerNatives(env);
     RegisterPeer(vm);
     RegisterLowLevel(vm);
     RegisterHighLevel(vm);
-    return jni::Unwrap(jni::jni_version_1_2);
+    return jni::Unwrap(jni::jni_version_1_6);
 }
