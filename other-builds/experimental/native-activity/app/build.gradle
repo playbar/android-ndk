@@ -14,10 +14,11 @@ model {
             targetSdkVersion.apiLevel = 23
         }
         ndk {
+            abiFilters.addAll(['armeabi-v7a', 'arm64-v8a', 'x86', 'x86-64'])
             platformVersion = 21
             moduleName ='native-activity'
             toolchain = 'clang'
-            stl = 'gnustl_static'
+            stl = 'c++_static'
             cppFlags.addAll(['-std=c++11'])
             ldLibs.addAll(['log', 'android', 'EGL', 'GLESv1_CM'])
             ldFlags.addAll(["-uANativeActivity_onCreate"])
@@ -49,5 +50,5 @@ model {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0'
 }

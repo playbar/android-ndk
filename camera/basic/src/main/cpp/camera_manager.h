@@ -44,6 +44,8 @@ class RangeValue {
     return static_cast<T>(min_ + (max_ - min_) * percent / 100);
   }
   RangeValue() { min_ = max_ = static_cast<T>(0); }
+
+  bool Supported(void) const { return (min_ != max_); }
 };
 
 enum PREVIEW_INDICES {
@@ -105,7 +107,6 @@ class NDKCamera {
                             int64_t frameNumber);
   void OnCaptureFailed(ACameraCaptureSession* session, ACaptureRequest* request,
                        ACameraCaptureFailure* failure);
-
   void StartPreview(bool start);
   bool TakePhoto(void);
   bool GetExposureRange(int64_t* min, int64_t* max, int64_t* curVal);

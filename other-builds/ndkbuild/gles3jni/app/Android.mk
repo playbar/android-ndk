@@ -14,7 +14,9 @@
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
-JNI_SRC_PATH := $(LOCAL_PATH)/../../../../gles3jni/app/src/main/cpp
+abspath_wa = $(join $(filter %:,$(subst :,: ,$1)),$(abspath $(filter-out %:,$(subst :,: ,$1))))
+
+JNI_SRC_PATH := $(call abspath_wa, $(LOCAL_PATH)/../../../../gles3jni/app/src/main/cpp)
 
 LOCAL_MODULE    := libgles3jni
 LOCAL_CPPFLAGS    := -Werror -std=c++11 -fno-rtti -fno-exceptions -Wall
@@ -23,9 +25,10 @@ LOCAL_SRC_FILES := $(JNI_SRC_PATH)/gles3jni.cpp    \
 				   $(JNI_SRC_PATH)/RendererES3.cpp
 
 OPENGL_LIB := GLESv3
-#  openGL ES2 platforms, enable the following to use stub
+#  To build for openGL ES2 compatible platforms,
+#  enable the following to use stub
 #   OPENGL_LIB := GLESv2
-#   LOCAL_SRC_FILES += $(JNI_SRC_PATH)/gl3stub_wrapper.c
+#   LOCAL_SRC_FILES += $(JNI_SRC_PATH)/gl3stub.c
 #   LOCAL_CFLAGS += -DDYNAMIC_ES3
 
 LOCAL_LDLIBS    := -llog -l$(OPENGL_LIB) -lEGL

@@ -15,6 +15,7 @@
  *
  */
 #include <string.h>
+#include <inttypes.h>
 #include <pthread.h>
 #include <jni.h>
 #include <android/log.h>
@@ -130,7 +131,7 @@ void queryRuntimeInfo(JNIEnv *env, jobject instance) {
         return;
     }
     jlong result = (*env)->CallLongMethod(env, instance, memFunc);
-    LOGI("Runtime free memory size: %lld", result);
+    LOGI("Runtime free memory size: %" PRId64, result);
     (void)result;  // silence the compiler warning
 }
 
@@ -271,6 +272,9 @@ Java_com_example_hellojnicallback_MainActivity_startTicks(JNIEnv *env, jobject i
 
     int result  = pthread_create( &threadInfo_, &threadAttr_, UpdateTicks, &g_ctx);
     assert(result == 0);
+
+    pthread_attr_destroy(&threadAttr_);
+
     (void)result;
 }
 

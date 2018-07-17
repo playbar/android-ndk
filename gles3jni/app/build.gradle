@@ -1,26 +1,19 @@
 apply plugin: 'com.android.application'
 
-def platformVersion = 18    //openGLES 3 min Version
-//def platformVersion = 12 //openGLES 2 min version
+def platformVersion = 24      // openGLES 3.2 min api level
+// def platformVersion = 18    //openGLES 3 min api level
+// def platformVersion = 12    //openGLES 2 min api level
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.2'
 
     defaultConfig {
         applicationId 'com.android.gles3jni'
-        minSdkVersion 18
+        minSdkVersion "${platformVersion}"
         targetSdkVersion 25
-        ndk {
-            abiFilters 'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'arm64-v8a'
-        }
         externalNativeBuild {
             cmake {
-                    // pass command line arguments to cmake: our CMakeLists.txt needs it
-                    // to load the right openGL lib (gles2 vs. gles3 )
-                    // other ndk flags could also be configured there [cppFlags, cFlags...]
-                arguments "-DANDROID_PLATFORM_LEVEL=${platformVersion}",
-                          '-DANDROID_TOOLCHAIN=clang', '-DANDROID_STL=gnustl_static'
+                arguments '-DANDROID_STL=c++_static'
             }
         }
     }
@@ -37,5 +30,3 @@ android {
         }
     }
 }
-
-

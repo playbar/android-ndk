@@ -58,9 +58,6 @@ void CameraEngine::EnableUI(void) {
   app_->activity->vm->AttachCurrentThread(&jni, NULL);
   int64_t range[3];
 
-  camera_->GetExposureRange(&range[0], &range[1], &range[2]);
-  camera_->GetSensitivityRange(&range[0], &range[1], &range[2]);
-
   // Default class retrieval
   jclass clazz = jni->GetObjectClass(app_->activity->clazz);
   jmethodID methodID = jni->GetMethodID(clazz, "EnableUI", "([J)V");
@@ -69,9 +66,15 @@ void CameraEngine::EnableUI(void) {
   ASSERT(initData && methodID, "JavaUI interface Object failed(%p, %p)",
          methodID, initData);
 
-  camera_->GetExposureRange(&range[0], &range[1], &range[2]);
+  if (!camera_->GetExposureRange(&range[0], &range[1], &range[2])) {
+    memset(range, 0, sizeof(int64_t) * 3);
+  }
+
   jni->SetLongArrayRegion(initData, 0, 3, range);
-  camera_->GetSensitivityRange(&range[0], &range[1], &range[2]);
+
+  if (!camera_->GetSensitivityRange(&range[0], &range[1], &range[2])) {
+    memset(range, 0, sizeof(int64_t) * 3);
+  }
   jni->SetLongArrayRegion(initData, 3, 3, range);
   jni->CallVoidMethod(app_->activity->clazz, methodID, initData);
   app_->activity->vm->DetachCurrentThread();
@@ -87,6 +90,19 @@ void CameraEngine::OnTakePhoto() {
   }
 }
 
+void CameraEngine::OnPhotoTaken(const char* fileName) {
+  int32_t nameLen = strlen(fileName);
+  JNIEnv *jni;
+  app_->activity->vm->AttachCurrentThread(&jni, NULL);
+
+  // Default class retrieval
+  jclass clazz = jni->GetObjectClass(app_->activity->clazz);
+  jmethodID methodID = jni->GetMethodID(clazz, "OnPhotoTaken", "(Ljava/lang/String;)V");
+  jstring javaName = jni->NewStringUTF(fileName);
+
+  jni->CallVoidMethod(app_->activity->clazz, methodID, javaName);
+  app_->activity->vm->DetachCurrentThread();
+}
 /**
  * Process user camera and disk writing permission
  * Resume application initialization after user granted camera and disk usage

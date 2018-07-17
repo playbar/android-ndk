@@ -17,7 +17,7 @@
 #ifndef CAMERA_IMAGE_READER_H
 #define CAMERA_IMAGE_READER_H
 #include <media/NdkImageReader.h>
-
+#include <functional>
 /*
  * ImageFormat:
  *     A Data Structure to communicate resolution between camera and ImageReader
@@ -51,6 +51,11 @@ class ImageReader {
   AImage* GetNextImage(void);
 
   /**
+  * Retrieve Image on the back of Reader's queue, dropping older images
+  */
+  AImage* GetLatestImage(void);
+
+  /**
    * Delete Image
    * @param image {@link AImage} instance to be deleted
    */
@@ -71,11 +76,11 @@ class ImageReader {
    *      WINDOW_FORMAT_RGBX_8888
    *      WINDOW_FORMAT_RGBA_8888
    *   @param buf {@link ANativeWindow_Buffer} for image to display to.
-   *   @param img a {@link AImage} instance, source of image conversion.
+   *   @param image a {@link AImage} instance, source of image conversion.
    *            it will be deleted via {@link AImage_delete}
    *   @return true on success, false on failure
    */
-  bool DisplayImage(ANativeWindow_Buffer* buf, AImage* img);
+  bool DisplayImage(ANativeWindow_Buffer* buf, AImage* image);
   /**
    * Configure the rotation angle necessary to apply to
    * Camera image when presenting: all rotations should be accumulated:
@@ -84,16 +89,26 @@ class ImageReader {
    */
   void SetPresentRotation(int32_t angle);
 
+  /**
+   * regsiter a callback function for client to be notified that jpeg already
+   * written out.
+   * @param ctx is client context when callback is invoked
+   * @param callback is the actual callback function
+   */
+  void RegisterCallback(void* ctx, std::function<void(void* ctx, const char* fileName)>);
  private:
   int32_t presentRotation_;
   AImageReader* reader_;
 
-  void PresentImage(ANativeWindow_Buffer* buf, AImage* img);
-  void PresentImage90(ANativeWindow_Buffer* buf, AImage* img);
-  void PresentImage180(ANativeWindow_Buffer* buf, AImage* img);
-  void PresentImage270(ANativeWindow_Buffer* buf, AImage* img);
+  std::function<void(void *ctx, const char* fileName)> callback_;
+  void *callbackCtx_;
 
-  bool WriteFile(void* buf, int32_t size);
+  void PresentImage(ANativeWindow_Buffer* buf, AImage* image);
+  void PresentImage90(ANativeWindow_Buffer* buf, AImage* image);
+  void PresentImage180(ANativeWindow_Buffer* buf, AImage* image);
+  void PresentImage270(ANativeWindow_Buffer* buf, AImage* image);
+
+  void WriteFile(AImage* image);
 };
 
 #endif  // CAMERA_IMAGE_READER_H
